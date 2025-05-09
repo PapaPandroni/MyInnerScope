@@ -10,5 +10,10 @@
     <p> This is my app. I'ts a micro diary focused on self improvement. Try it!</p>
     <label for="diary">Enter a diary entry</label>
     <input id="diary" type="text"><button>submit</button>
+    <p>Thanks to all theese users who signed up: 
+        {% for user in signed %}
+            <div>{{user["id"]}}</div>
+        {% endfor %}
+    </p>
 </body>
 </html>
