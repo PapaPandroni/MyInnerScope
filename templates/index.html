@@ -8,15 +8,15 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/custom_css.css') }}">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary navbar-dark custom-nav">
         <div class="container-fluid d-flex justify-content-between">
-            <a class="navbar-brand" href="#">Aim for the stars</a>
+            <a class="navbar-brand" href="/">Aim for the stars</a>
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Dropdown link
+                        <b>Menu</b>
                     </a>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu custom-nav">
                         <li><a class="dropdown-item" href="#">Register</a></li>
                         <li><a class="dropdown-item" href="#">Log in</a></li>
                         <li><a class="dropdown-item" href="#">About</a></li>
@@ -31,8 +31,8 @@
             class="w-100 h-100 object-fit-cover" alt="A starry night sky">
 
         <div class="position-absolute top-50 start-50 translate-middle text-center text-white">
-            <h1 class="display-5">Start your self reflecting journey today</h1>
-            <a href="/diary" class="btn btn-light m-2">Sign up</a>-
+            <h1 class="display-5 text-with-shadow"><b>Start your self reflecting journey today</b></h1>
+            <a href="#" class="btn btn-dark m-2 btn-lg">Sign up</a>-
         </div>
     </div>
     <div class="container text-center">

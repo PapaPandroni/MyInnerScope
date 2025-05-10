@@ -1,0 +1,19 @@
+.custom-nav {
+    background-color: rgb(23, 26, 37) !important
+}
+.dropdown-item{
+    color: whitesmoke
+}
+
+.btn-dark {
+    background-color: rgb(23, 26, 37);
+}
+
+body {
+    background-color: rgb(23, 26, 37);
+    color: whitesmoke
+}
+
+.text-with-shadow {
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.8), 0 0 5px #fff
+}
