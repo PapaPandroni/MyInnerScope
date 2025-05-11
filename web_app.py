@@ -5,6 +5,9 @@ app = Flask(__name__)
 def hello():
     return render_template("index.html")
 
+@app.route("/diary")
+def diary_entry():
+    return render_template("diary.html")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)
