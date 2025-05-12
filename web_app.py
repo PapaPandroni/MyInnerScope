@@ -9,5 +9,9 @@ def hello():
 def diary_entry():
     return render_template("diary.html")
 
+@app.route("/login")
+def login_page():
+    return render_template("login.html")
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)
