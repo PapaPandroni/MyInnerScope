@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -27,12 +27,48 @@ def hello():
 def diary_entry():
     return render_template("diary.html")
 
-@app.route("/login")
+@app.route("/login", methods=["GET", "POST"])
 def login_page():
+    if request.method == "POST":
+        email = request.form["email"]
+        password = request.form["password"]
+
+        # Try to find a user with that email
+        user = User.query.filter_by(email=email).first()
+
+        if not user:
+            return "No user found with that email."
+
+        if user.password != password:
+            return "Incorrect password."
+
+        # Success! You could later set a session here.
+        return redirect("/diary")
+
+    # If GET request, show login form
     return render_template("login.html")
 
-@app.route("/register")
+
+@app.route("/register", methods=["GET", "POST"])
 def register():
+    if request.method == "POST":
+        email = request.form["email"]
+        password = request.form["password"]
+        password_again = request.form["password_again"]
+        user_name = request.form.get("user_name", None)
+
+        if password != password_again:
+            return "Passwords do not match!"
+
+        # Check if email already exists
+        if User.query.filter_by(email=email).first():
+            return "Email already registered."
+
+        new_user = User(email=email, password=password, user_name=user_name)
+        db.session.add(new_user)
+        db.session.commit()
+        return redirect("/login")
+
     return render_template("register.html")
 
 if __name__ == "__main__":
