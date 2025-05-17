@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
+
 
 app = Flask(__name__)
 
@@ -39,8 +41,9 @@ def login_page():
         if not user:
             return "No user found with that email."
 
-        if user.password != password:
+        if not check_password_hash(user.password, password):
             return "Incorrect password."
+
 
         # Success! You could later set a session here.
         return redirect("/diary")
@@ -64,7 +67,9 @@ def register():
         if User.query.filter_by(email=email).first():
             return "Email already registered."
 
-        new_user = User(email=email, password=password, user_name=user_name)
+        hashed_password = generate_password_hash(password)
+        new_user = User(email=email, password=hashed_password, user_name=user_name)
+
         db.session.add(new_user)
         db.session.commit()
         return redirect("/login")
