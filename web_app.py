@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import date
 
 
 app = Flask(__name__)
@@ -19,15 +20,43 @@ class User(db.Model):
     password = db.Column(db.String(120), nullable=False)
     user_name = db.Column(db.String(200), nullable = True)
 
+from datetime import date  # add this at the top if it's not there already
+
+class DiaryEntry(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    entry_date = db.Column(db.Date, default=date.today, nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
+
+    user = db.relationship('User', backref='entries')
 
 
 @app.route("/")
 def hello():
     return render_template("index.html")
 
-@app.route("/diary")
+@app.route("/diary", methods=["GET", "POST"])
 def diary_entry():
+    if request.method == "POST":
+        content = request.form["content"]
+        rating = int(request.form["rating"])
+
+        # For now, we'll use a placeholder user_id = 1
+        # Later this will come from session. REMOVE ONCE ADDED FLASK SESSIONS
+        new_entry = DiaryEntry(
+            user_id=1,
+            content=content,
+            rating=rating
+        )
+
+        db.session.add(new_entry)
+        db.session.commit()
+
+        return redirect("/progress")
+
     return render_template("diary.html")
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login_page():
