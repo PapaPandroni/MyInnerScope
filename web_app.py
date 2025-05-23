@@ -1,10 +1,11 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import date
 
 
 app = Flask(__name__)
+app.secret_key = "AgjkAGaoi)&%!909!)!?#=9751"
 
 # Tell Flask where the database is
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'  # Creates users.db in your folder
@@ -38,24 +39,25 @@ def hello():
 
 @app.route("/diary", methods=["GET", "POST"])
 def diary_entry():
+    if "user_id" not in session:
+        return redirect("/login")
+
     if request.method == "POST":
         content = request.form["content"]
         rating = int(request.form["rating"])
+        user_id = session["user_id"]
 
-        # For now, we'll use a placeholder user_id = 1
-        # Later this will come from session. REMOVE ONCE ADDED FLASK SESSIONS
         new_entry = DiaryEntry(
-            user_id=1,
+            user_id=user_id,
             content=content,
             rating=rating
         )
-
         db.session.add(new_entry)
         db.session.commit()
-
         return redirect("/progress")
 
     return render_template("diary.html")
+
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -74,8 +76,10 @@ def login_page():
             return "Incorrect password."
 
 
-        # Success! You could later set a session here.
+        # Success! Session!
+        session["user_id"] = user.id
         return redirect("/diary")
+
 
     # If GET request, show login form
     return render_template("login.html")
@@ -107,7 +111,14 @@ def register():
 
 @app.route("/progress")
 def progress():
+    if "user_id" not in session:
+        return redirect("/login")
     return render_template("progress.html")
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect("/")
 
 if __name__ == "__main__":
     with app.app_context():
