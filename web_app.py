@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-from datetime import date
+from datetime import date, timedelta
 
 
 app = Flask(__name__)
@@ -46,7 +46,45 @@ def diary_entry():
         content = request.form["content"]
         rating = int(request.form["rating"])
         user_id = session["user_id"]
+        today = date.today()
 
+        # Check if DailyStats exists for today
+        stats = DailyStats.query.filter_by(user_id=user_id, date=today).first()
+
+        if not stats:
+            # Check if user had an entry yesterday
+            yesterday = today - timedelta(days=1)
+            yesterdays_stats = DailyStats.query.filter_by(user_id=user_id, date=yesterday).first()
+            
+            # Start a new streak or continue it
+            if yesterdays_stats and yesterdays_stats.current_streak > 0:
+                new_streak = yesterdays_stats.current_streak + 1
+            else:
+                new_streak = 1
+
+            # Create today's stats entry
+            stats = DailyStats(
+                user_id=user_id,
+                date=today,
+                current_streak=new_streak,
+                longest_streak=new_streak,  # May be overwritten below
+                points=0  # We'll add below
+            )
+
+            # Check and update longest streak
+            longest = DailyStats.query.filter_by(user_id=user_id).order_by(DailyStats.longest_streak.desc()).first()
+            if longest and longest.longest_streak > new_streak:
+                stats.longest_streak = longest.longest_streak
+
+            db.session.add(stats)
+
+        # Add points based on rating
+        if rating == 1:
+            stats.points += 5
+        elif rating == -1:
+            stats.points += 2
+
+        # Save diary entry
         new_entry = DiaryEntry(
             user_id=user_id,
             content=content,
@@ -54,10 +92,26 @@ def diary_entry():
         )
         db.session.add(new_entry)
         db.session.commit()
-        return redirect("/progress")
+
+        return redirect("/diary")
 
     return render_template("diary.html")
 
+
+class DailyStats(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    date = db.Column(db.Date, nullable=False)
+
+    points = db.Column(db.Integer, default=0)
+    current_streak = db.Column(db.Integer, default=0)
+    longest_streak = db.Column(db.Integer, default=0)
+
+    user = db.relationship('User', backref='daily_stats')
+
+    __table_args__ = (
+        db.UniqueConstraint('user_id', 'date', name='user_date_uc'),
+    )
 
 
 @app.route("/login", methods=["GET", "POST"])
