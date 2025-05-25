@@ -51,7 +51,8 @@ def diary_entry():
         # Check if DailyStats exists for today
         stats = DailyStats.query.filter_by(user_id=user_id, date=today).first()
 
-        if not stats:
+        if stats is None or (stats.current_streak == 0 and not DiaryEntry.query.filter_by(user_id=user_id, entry_date=today).first()):
+
             # Check if user had an entry yesterday
             yesterday = today - timedelta(days=1)
             yesterdays_stats = DailyStats.query.filter_by(user_id=user_id, date=yesterday).first()
@@ -132,6 +133,18 @@ def login_page():
 
         # Success! Session!
         session["user_id"] = user.id
+
+        # Inside login route, after login is successful
+        today = date.today()
+        user_id = user.id
+
+        stats = DailyStats.query.filter_by(user_id=user_id, date=today).first()
+
+        if not stats:
+            stats = DailyStats(user_id=user_id, date=today, points=1)
+            db.session.add(stats)
+            db.session.commit()
+
         return redirect("/diary")
 
 
