@@ -167,7 +167,40 @@ def register():
 def progress():
     if "user_id" not in session:
         return redirect("/login")
-    return render_template("progress.html")
+
+    user_id = session["user_id"]
+    today = date.today()
+
+    # Today's stats
+    stats_today = DailyStats.query.filter_by(user_id=user_id, date=today).first()
+    points_today = stats_today.points if stats_today else 0
+
+    # All-time total points
+    total_points = db.session.query(db.func.sum(DailyStats.points))\
+        .filter_by(user_id=user_id).scalar() or 0
+
+    # Most recent current streak
+    current_streak_row = DailyStats.query.filter_by(user_id=user_id)\
+        .order_by(DailyStats.date.desc()).first()
+    current_streak = current_streak_row.current_streak if current_streak_row else 0
+
+    # All-time longest streak
+    longest_streak_row = DailyStats.query.filter_by(user_id=user_id)\
+        .order_by(DailyStats.longest_streak.desc()).first()
+    longest_streak = longest_streak_row.longest_streak if longest_streak_row else 0
+    
+    # All time numnber of entries
+    total_entries = DiaryEntry.query.filter_by(user_id=user_id).count()
+
+    return render_template(
+        "progress.html",
+        points_today=points_today,
+        total_points=total_points,
+        current_streak=current_streak,
+        longest_streak=longest_streak,
+        total_entries=total_entries
+    )
+
 
 @app.route("/logout")
 def logout():

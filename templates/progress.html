@@ -32,24 +32,54 @@
         <h1 class="display-4 text-center">Your Progress</h1>
         <p class="lead text-center">A summary of your journey so far.</p>
     </div>
-    
-
     <div class="container mt-4">
-        <div class="row text-center">
-            <div class="col">
-                <h3>Total Points</h3>
-                <p>Coming soon...</p>
+    <div class="row text-center">
+        <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+            <h5 class="card-title">Points Today</h5>
+            <p class="display-6">{{ points_today }}</p>
             </div>
-            <div class="col">
-                <h3>Current Streak</h3>
-                <p>Coming soon...</p>
+        </div>
+        </div>
+
+        <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+            <h5 class="card-title">Total Points</h5>
+            <p class="display-6">{{ total_points }}</p>
             </div>
-            <div class="col">
-                <h3>Weekly Summary</h3>
-                <p>Coming soon...</p>
+        </div>
+        </div>
+
+        <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+            <h5 class="card-title">Current Streak</h5>
+            <p class="display-6">{{ current_streak }}</p>
+            </div>
+        </div>
+        </div>
+
+        <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+            <h5 class="card-title">Longest Streak</h5>
+            <p class="display-6">{{ longest_streak }}</p>
+            </div>
+        </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                <h5 class="card-title">Total Entries</h5>
+                <p class="display-6">{{ total_entries }}</p>
+                </div>
             </div>
         </div>
     </div>
+    </div>
+    
     
 
 
