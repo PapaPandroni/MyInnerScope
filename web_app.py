@@ -51,8 +51,7 @@ def diary_entry():
         # Check if DailyStats exists for today
         stats = DailyStats.query.filter_by(user_id=user_id, date=today).first()
 
-        if stats is None or (stats.current_streak == 0 and not DiaryEntry.query.filter_by(user_id=user_id, entry_date=today).first()):
-
+        if stats is None:
             # Check if user had an entry yesterday
             yesterday = today - timedelta(days=1)
             yesterdays_stats = DailyStats.query.filter_by(user_id=user_id, date=yesterday).first()
@@ -68,8 +67,8 @@ def diary_entry():
                 user_id=user_id,
                 date=today,
                 current_streak=new_streak,
-                longest_streak=new_streak,  # May be overwritten below
-                points=0  # We'll add below
+                longest_streak=new_streak,
+                points=0
             )
 
             # Check and update longest streak
@@ -78,6 +77,21 @@ def diary_entry():
                 stats.longest_streak = longest.longest_streak
 
             db.session.add(stats)
+
+        elif stats.current_streak == 0:
+            # This row was created by login, now update streaks
+            yesterday = today - timedelta(days=1)
+            yesterdays_stats = DailyStats.query.filter_by(user_id=user_id, date=yesterday).first()
+    
+            if yesterdays_stats and yesterdays_stats.current_streak > 0:
+                stats.current_streak = yesterdays_stats.current_streak + 1
+            else:
+                stats.current_streak = 1
+
+            # Update longest streak if needed
+            if stats.current_streak > stats.longest_streak:
+                stats.longest_streak = stats.current_streak
+
 
         # Add points based on rating
         if rating == 1:
