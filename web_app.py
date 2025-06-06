@@ -219,14 +219,32 @@ def progress():
     # All time numnber of entries
     total_entries = DiaryEntry.query.filter_by(user_id=user_id).count()
 
+        # Fetch points for graph (list of (date, points))
+    raw_data = DailyStats.query \
+        .filter_by(user_id=user_id) \
+        .order_by(DailyStats.date) \
+        .with_entities(DailyStats.date, DailyStats.points) \
+        .all()
+
+    cumulative_points = 0
+    cumulative_data = []
+    for row in raw_data:
+        cumulative_points += row.points
+        cumulative_data.append([str(row.date), cumulative_points])
+
+    
+    points_data = cumulative_data
+
     return render_template(
         "progress.html",
         points_today=points_today,
         total_points=total_points,
         current_streak=current_streak,
         longest_streak=longest_streak,
-        total_entries=total_entries
+        total_entries=total_entries,
+        points_data=points_data  
     )
+
 
 
 @app.route("/logout")

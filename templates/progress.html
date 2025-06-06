@@ -33,6 +33,10 @@
         <p class="lead text-center">A summary of your journey so far.</p>
     </div>
     <div class="container mt-4">
+        <div class="container mt-5">
+            <h2 class="text-center">Points Over Time</h2>
+            <canvas id="pointsChart" width="400" height="200"></canvas>
+        </div>
     <div class="row text-center">
         <div class="col-md-3">
         <div class="card">
@@ -77,6 +81,7 @@
                 </div>
             </div>
         </div>
+
     </div>
     </div>
     
@@ -84,5 +89,35 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.0/build/global/luxon.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.1"></script>
+
+
+    <script>
+        const pointsData = JSON.parse('{{ points_data|tojson|safe }}');
+        console.log(pointsData);
+        console.log(Chart.version);
+
+        // Create {x: date, y: points} objects for Chart.js
+        const dataPoints = pointsData.map(item => ({
+            x: item[0],  // "YYYY-MM-DD"
+            y: item[1]
+            }));
+
+            const ctx = document.getElementById('pointsChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: { datasets: [{ label: 'Points Earned', data: dataPoints, borderColor: 'teal', tension: 0.1 }] },
+                options: {
+                    scales: {
+                        x: { type: 'time', time: { parser: 'yyyy-MM-dd', unit: 'day' } },
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+
+    </script>
+
   </body>
 </html>
