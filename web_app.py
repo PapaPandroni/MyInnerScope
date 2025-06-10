@@ -21,7 +21,7 @@ class User(db.Model):
     password = db.Column(db.String(120), nullable=False)
     user_name = db.Column(db.String(200), nullable = True)
 
-from datetime import date  # add this at the top if it's not there already
+#from datetime import date  # add this at the top if it's not there already
 
 class DiaryEntry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -253,6 +253,55 @@ def progress():
             'entries': entries
         })
 
+    import random
+    from datetime import datetime
+
+    # Get average points per day of the week
+    day_analysis = db.session.query(
+        db.func.strftime('%w', DailyStats.date).label('weekday'),
+        db.func.avg(DailyStats.points).label('avg_points'),
+        db.func.count(DailyStats.id).label('entry_count')
+    ).filter_by(user_id=user_id)\
+    .filter(DailyStats.points > 0)\
+    .group_by(db.func.strftime('%w', DailyStats.date))\
+    .having(db.func.count(DailyStats.id) >= 2)\
+    .all()
+
+    # Convert to list and find best/worst days
+    weekday_names = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    best_day_text = None
+    worst_day_text = None
+
+    if len(day_analysis) >= 2:  # Need at least 2 different days to compare
+        best_day = max(day_analysis, key=lambda x: x.avg_points)
+        worst_day = min(day_analysis, key=lambda x: x.avg_points)
+        
+        best_day_name = weekday_names[int(best_day.weekday)]
+        worst_day_name = weekday_names[int(worst_day.weekday)]
+        
+        # Random messages for best days
+        best_messages = [
+            f"{best_day_name}s are your power days!",
+            f"You're crushing it on {best_day_name}s!",
+            f"{best_day_name}s bring out your best!",
+            f"{best_day_name} motivation is on fire!",
+            f"You own {best_day_name}s!"
+        ]
+        
+        # Random messages for worst days
+        worst_messages = [
+            f"{worst_day_name}s seem tough for you",
+            f"{worst_day_name}s could use some attention",
+            f"{worst_day_name} motivation needs a boost",
+            f"Consider planning something special for {worst_day_name}s",
+            f"{worst_day_name}s are your growth opportunity"
+        ]
+        
+        best_day_text = random.choice(best_messages)
+        worst_day_text = random.choice(worst_messages)
+
+
+
     return render_template(
         "progress.html",
         points_today=points_today,
@@ -261,7 +310,9 @@ def progress():
         longest_streak=longest_streak,
         total_entries=total_entries,
         points_data=points_data,
-        top_days=top_days_with_entries  
+        top_days=top_days_with_entries,
+        best_day_text=best_day_text,      
+        worst_day_text=worst_day_text  
     )
 
 

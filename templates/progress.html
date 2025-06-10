@@ -81,6 +81,42 @@
                 </div>
             </div>
         </div>
+        {% if best_day_text and worst_day_text %}
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                <h5 class="card-title">Your Best Day</h5>
+                <p class="card-text">{{ best_day_text }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                <h5 class="card-title">Room for Growth</h5>
+                <p class="card-text">{{ worst_day_text }}</p>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                <h5 class="card-title">Your Best Day</h5>
+                <p class="card-text text-muted">Keep writing to discover your best days and gain more insights about your weekly patterns!</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                <h5 class="card-title">Room for Growth</h5>
+                <p class="card-text text-muted">Keep writing to discover days with low inspiration and gain more insights about your weekly patterns!</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
         <!-- Top 5 Days Section -->
         <div class="container mt-5">
             <h2 class="text-center mb-4">Your Top 3 Days</h2>
