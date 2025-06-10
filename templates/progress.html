@@ -81,6 +81,54 @@
                 </div>
             </div>
         </div>
+        <!-- Top 5 Days Section -->
+        <div class="container mt-5">
+            <h2 class="text-center mb-4">Your Top 3 Days</h2>
+            {% if top_days %}
+                <div class="row">
+                    {% for day in top_days %}
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <strong>{{ day.date.strftime('%B %d, %Y') }}</strong>
+                                <span class="badge bg-primary">{{ day.points }} points</span>
+                            </div>
+                            <div class="card-body">
+                                {% for entry in day.entries %}
+                                <div class="mb-2">
+                                    <div class="entry-preview" id="preview-{{ day.date }}-{{ loop.index }}">
+                                        <p class="mb-1">
+                                            {% if entry.content|length > 100 %}
+                                                {{ entry.content[:100] }}...
+                                                <button class="btn btn-sm btn-link p-0" onclick="toggleEntry('{{ day.date }}-{{ loop.index }}')">Read more</button>
+                                            {% else %}
+                                                {{ entry.content }}
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                    <div class="entry-full d-none" id="full-{{ day.date }}-{{ loop.index }}">
+                                        <p class="mb-1">{{ entry.content }}</p>
+                                        <button class="btn btn-sm btn-link p-0" onclick="toggleEntry('{{ day.date }}-{{ loop.index }}')">Show less</button>
+                                    </div>
+                                    <small class="text-muted">
+                                        {% if entry.rating == 1 %}
+                                            <span class="badge bg-success">Encouraged behavior</span>
+                                        {% else %}
+                                            <span class="badge bg-warning">Want to change</span>
+                                        {% endif %}
+                                    </small>
+                                </div>
+                                {% if not loop.last %}<hr>{% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-center text-muted">No diary entries yet. Start writing to see your top days!</p>
+            {% endif %}
+        </div>
 
     </div>
     </div>
@@ -118,6 +166,21 @@
             });
 
     </script>
-
+    <script>
+    function toggleEntry(entryId) {
+        const preview = document.getElementById('preview-' + entryId);
+        const full = document.getElementById('full-' + entryId);
+        
+        if (preview.classList.contains('d-none')) {
+            // Currently showing full, switch to preview
+            preview.classList.remove('d-none');
+            full.classList.add('d-none');
+        } else {
+            // Currently showing preview, switch to full
+            preview.classList.add('d-none');
+            full.classList.remove('d-none');
+        }
+    }
+    </script>
   </body>
 </html>

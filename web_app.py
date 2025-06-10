@@ -235,6 +235,24 @@ def progress():
     
     points_data = cumulative_data
 
+        # Top 5 days with most points (including their diary entries)
+    top_days = db.session.query(DailyStats)\
+        .filter_by(user_id=user_id)\
+        .filter(DailyStats.points > 0)\
+        .order_by(DailyStats.points.desc())\
+        .limit(3)\
+        .all()
+
+    # For each top day, get all diary entries
+    top_days_with_entries = []
+    for day in top_days:
+        entries = DiaryEntry.query.filter_by(user_id=user_id, entry_date=day.date).all()
+        top_days_with_entries.append({
+            'date': day.date,
+            'points': day.points,
+            'entries': entries
+        })
+
     return render_template(
         "progress.html",
         points_today=points_today,
@@ -242,7 +260,8 @@ def progress():
         current_streak=current_streak,
         longest_streak=longest_streak,
         total_entries=total_entries,
-        points_data=points_data  
+        points_data=points_data,
+        top_days=top_days_with_entries  
     )
 
 
