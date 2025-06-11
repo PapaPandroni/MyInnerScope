@@ -300,7 +300,43 @@ def progress():
         best_day_text = random.choice(best_messages)
         worst_day_text = random.choice(worst_messages)
 
+    # Calculate date ranges
+    last_7_start = today - timedelta(days=6)  # today-6 to today (7 days including today)
+    last_7_end = today
+    previous_7_start = today - timedelta(days=13)  # today-13 to today-7 (7 days)
+    previous_7_end = today - timedelta(days=7)
 
+    # Check if user has enough data (at least 14 days since registration)
+    user = User.query.get(user_id)
+    # We'll assume registration date exists, but if not we can use first diary entry
+    first_entry = DiaryEntry.query.filter_by(user_id=user_id).order_by(DiaryEntry.entry_date).first()
+    days_since_start = (today - first_entry.entry_date).days if first_entry else 0
+
+    if days_since_start < 13:  # Less than 14 days of potential data
+        trend_message = "Keep writing to unlock insights about your self-improvement journey!"
+    else:
+        # Calculate points for each period
+        last_7_points = db.session.query(db.func.sum(DailyStats.points))\
+            .filter_by(user_id=user_id)\
+            .filter(DailyStats.date >= last_7_start)\
+            .filter(DailyStats.date <= last_7_end)\
+            .scalar() or 0
+        
+        previous_7_points = db.session.query(db.func.sum(DailyStats.points))\
+            .filter_by(user_id=user_id)\
+            .filter(DailyStats.date >= previous_7_start)\
+            .filter(DailyStats.date <= previous_7_end)\
+            .scalar() or 0
+        
+        # Determine trend message
+        point_difference = last_7_points - previous_7_points
+        
+        if point_difference > 5:
+            trend_message = "You're earning more points than last week! Keep up the great self-improvement!"
+        elif point_difference < -5:
+            trend_message = "Let's beat last week! Keep reflecting to keep improving!"
+        else:
+            trend_message = "Steady progress! Consistency is key to self-improvement!"
 
     return render_template(
         "progress.html",
@@ -312,7 +348,8 @@ def progress():
         points_data=points_data,
         top_days=top_days_with_entries,
         best_day_text=best_day_text,      
-        worst_day_text=worst_day_text  
+        worst_day_text=worst_day_text,
+        trend_message=trend_message   
     )
 
 
