@@ -42,6 +42,14 @@ def diary_entry():
     if "user_id" not in session:
         return redirect("/login")
 
+    # Fetch user for display name
+    user_id = session["user_id"]
+    user = User.query.get(user_id)
+    if user.user_name:
+        display_name = user.user_name
+    else:
+        display_name = user.email.split('@')[0]
+
     if request.method == "POST":
         content = request.form["content"]
         rating = int(request.form["rating"])
@@ -110,7 +118,7 @@ def diary_entry():
 
         return redirect("/diary")
 
-    return render_template("diary.html")
+    return render_template("diary.html", display_name=display_name)
 
 
 class DailyStats(db.Model):
@@ -196,6 +204,14 @@ def progress():
         return redirect("/login")
 
     user_id = session["user_id"]
+
+    # Fetch user for display name
+    user = User.query.get(user_id)
+    if user.user_name:
+        display_name = user.user_name
+    else:
+        display_name = user.email.split('@')[0]
+
     today = date.today()
 
     # Today's stats
@@ -349,7 +365,8 @@ def progress():
         top_days=top_days_with_entries,
         best_day_text=best_day_text,      
         worst_day_text=worst_day_text,
-        trend_message=trend_message   
+        trend_message=trend_message,
+        display_name = display_name   
     )
 
 
