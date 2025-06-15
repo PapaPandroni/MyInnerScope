@@ -104,5 +104,18 @@ Performance optimizations
 Contributing
 This project is primarily for personal development and documentation purposes. The codebase serves as a learning project for Flask web development and user behavior gamification.
 
+## License & Copyright
+
+Aim for the Stars is licensed under the Apache License 2.0. See the [LICENSE](LICENSE) file for details.
+
+Copyright 2025 [Your Name]. All rights reserved.
+
+The unique combination of daily reflection, behavioral rating, and gamified self-improvement tracking represents the original creative work of the author.
+
+## Supporting This Project
+
+This project is provided free of charge. If you find it helpful for your self-improvement journey, consider supporting its development through donations at [your donation link].
+
+
 "Aim for the stars, even if you miss, you'll land among the clouds."
 
