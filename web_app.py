@@ -370,6 +370,38 @@ def progress():
     )
 
 
+@app.route("/read-diary")
+def read_diary():
+    if "user_id" not in session:
+        return redirect("/login")
+    
+    user_id = session["user_id"]
+    user = User.query.get(user_id)
+    
+    # Get display name
+    if user.user_name:
+        display_name = user.user_name
+    else:
+        display_name = user.email.split('@')[0]
+    
+    # Get first diary entry date
+    first_entry = DiaryEntry.query.filter_by(user_id=user_id).order_by(DiaryEntry.entry_date).first()
+    
+    if not first_entry:
+        # No entries yet - show empty state
+        return render_template("read_diary.html", 
+                             display_name=display_name, 
+                             no_entries=True)
+    
+    first_entry_date = first_entry.entry_date
+    
+    # For now, let's just show the front page
+    return render_template("read_diary.html", 
+                         display_name=display_name,
+                         first_entry_date=first_entry_date,
+                         show_front_page=True)
+
+
 
 @app.route("/logout")
 def logout():
