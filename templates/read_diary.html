@@ -28,10 +28,54 @@
         </div>
     </nav>
 
-    <div class="container mt-5">
-        <h1>Read Diary - Basic Template Working!</h1>
-        <p>Hello {{ display_name }}, this will be your diary reading page.</p>
+    {% if no_entries %}
+    <!-- Empty state: No diary entries yet -->
+    <div class="container mt-5 text-center">
+        <h1 class="display-4 text-muted">No diary entries yet</h1>
+        <p class="lead">Start writing your first diary entry to begin your self-reflection journey!</p>
+        <a href="/diary" class="btn btn-primary btn-lg">Write your first entry</a>
     </div>
+
+    {% elif show_front_page %}
+    <!-- Front page: Title page of the diary -->
+    <div class="container mt-5 text-center">
+        <h1 class="display-3 mb-4">{{ display_name }}'s Diary</h1>
+        <p class="lead mb-5">A self reflection journey started on {{ first_entry_date.strftime('%B %d, %Y') }}</p>
+        <a href="/read-diary?date={{ first_entry_date }}" class="btn btn-primary btn-lg">Next</a>
+    </div>
+
+    {% elif show_day_page %}
+    <!-- Day page: Show entries for a specific date -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-8 col-lg-6">
+                <h1 class="mb-4">{{ formatted_date }}</h1>
+                
+                {% for entry in entries %}
+                <p class="mb-3">{{ entry.content }}</p>
+                {% if not loop.last %}
+                <hr class="my-4" style="opacity: 0.3;">
+                {% endif %}
+                {% endfor %}
+                
+                <!-- Navigation buttons -->
+                <div class="d-flex justify-content-between mt-5">
+                    {% if prev_date %}
+                    <a href="/read-diary?date={{ prev_date }}" class="btn btn-outline-secondary">Previous</a>
+                    {% else %}
+                    <a href="/read-diary" class="btn btn-outline-secondary">Previous</a>
+                    {% endif %}
+                    
+                    {% if next_date %}
+                    <a href="/read-diary?date={{ next_date }}" class="btn btn-outline-secondary">Next</a>
+                    {% else %}
+                    <span class="btn btn-outline-secondary disabled">Next</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
   </body>

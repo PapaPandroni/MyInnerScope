@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 
 
 app = Flask(__name__)
@@ -270,7 +270,7 @@ def progress():
         })
 
     import random
-    from datetime import datetime
+    
 
     # Get average points per day of the week
     day_analysis = db.session.query(
@@ -384,22 +384,81 @@ def read_diary():
     else:
         display_name = user.email.split('@')[0]
     
-    # Get first diary entry date
-    first_entry = DiaryEntry.query.filter_by(user_id=user_id).order_by(DiaryEntry.entry_date).first()
+    # Get all dates that have diary entries (sorted chronologically)
+    diary_dates = db.session.query(DiaryEntry.entry_date)\
+        .filter_by(user_id=user_id)\
+        .distinct()\
+        .order_by(DiaryEntry.entry_date)\
+        .all()
     
-    if not first_entry:
+    # Convert to list of date objects
+    diary_dates = [row.entry_date for row in diary_dates]
+    
+    if not diary_dates:
         # No entries yet - show empty state
         return render_template("read_diary.html", 
                              display_name=display_name, 
                              no_entries=True)
     
-    first_entry_date = first_entry.entry_date
+    # Get the date parameter from URL
+    date_param = request.args.get('date')
     
-    # For now, let's just show the front page
-    return render_template("read_diary.html", 
+    if not date_param:
+        # Show front page
+        first_entry_date = diary_dates[0]
+        return render_template("read_diary.html", 
+                             display_name=display_name,
+                             first_entry_date=first_entry_date,
+                             show_front_page=True,
+                             diary_dates=diary_dates)
+    
+    # Parse the date parameter
+    try:
+        current_date = datetime.strptime(date_param, '%Y-%m-%d').date()
+    except ValueError:
+        # Invalid date format, redirect to front page
+        return redirect("/read-diary")
+    
+    # Check if this date has entries
+    if current_date not in diary_dates:
+        # No entries for this date, redirect to front page
+        return redirect("/read-diary")
+    
+    # Get entries for this date
+    entries = DiaryEntry.query.filter_by(user_id=user_id, entry_date=current_date)\
+        .order_by(DiaryEntry.id)\
+        .all()
+    
+    # Find current date index for navigation
+    current_index = diary_dates.index(current_date)
+    
+    # Determine previous and next dates
+    prev_date = diary_dates[current_index - 1] if current_index > 0 else None
+    next_date = diary_dates[current_index + 1] if current_index < len(diary_dates) - 1 else None
+    
+    # Format the date for display (e.g., "Monday, May 5th 2025")
+    day_name = current_date.strftime('%A')
+    month_name = current_date.strftime('%B')
+    day_num = current_date.day
+    year = current_date.year
+    
+    # Add ordinal suffix (1st, 2nd, 3rd, 4th, etc.)
+    if 4 <= day_num <= 20 or 24 <= day_num <= 30:
+        suffix = "th"
+    else:
+        suffix = ["st", "nd", "rd"][day_num % 10 - 1]
+    
+    formatted_date = f"{day_name}, {month_name} {day_num}{suffix} {year}"
+    
+    return render_template("read_diary.html",
                          display_name=display_name,
-                         first_entry_date=first_entry_date,
-                         show_front_page=True)
+                         entries=entries,
+                         current_date=current_date,
+                         formatted_date=formatted_date,
+                         prev_date=prev_date,
+                         next_date=next_date,
+                         diary_dates=diary_dates,
+                         show_day_page=True)
 
 
 
