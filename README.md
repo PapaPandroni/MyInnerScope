@@ -108,7 +108,7 @@ This project is primarily for personal development and documentation purposes. T
 
 Aim for the Stars is licensed under the Apache License 2.0. See the [LICENSE](LICENSE) file for details.
 
-Copyright 2025 [Your Name]. All rights reserved.
+Copyright 2025 Peremil Starklint Söderström. All rights reserved.
 
 The unique combination of daily reflection, behavioral rating, and gamified self-improvement tracking represents the original creative work of the author.
 
