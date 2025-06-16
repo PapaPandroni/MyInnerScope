@@ -16,16 +16,19 @@ limitations under the License.
 """
 
 
-
+import os
 from flask import Flask, render_template, request, redirect, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import date, timedelta, datetime
+from dotenv import load_dotenv
 
-
+load_dotenv()
 app = Flask(__name__)
-app.secret_key = "AgjkAGaoi)&%!909!)!?#=9751"
-
+# Get secret key from environment variable
+app.secret_key = os.environ.get('SECRET_KEY')
+if not app.secret_key:
+    raise ValueError("No SECRET_KEY environment variable set. Please create a .env file with SECRET_KEY=your-secret-key")
 # Tell Flask where the database is
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'  # Creates users.db in your folder
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Avoids warning
