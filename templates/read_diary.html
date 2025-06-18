@@ -28,12 +28,89 @@
         </div>
     </nav>
 
+    <!-- Search Form - appears on all pages except empty state -->
+    {% if not no_entries %}
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-8 col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Search Your Diary</h5>
+                        <form method="GET" action="/read-diary">
+                            <div class="row g-3">
+                                <div class="col-md-8">
+                                    <input type="text" 
+                                           class="form-control" 
+                                           name="search" 
+                                           placeholder="Search for text..." 
+                                           value="{{ request.args.get('search', '') }}">
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-select" name="search_date">
+                                        <option value="">All days</option>
+                                        {% for diary_date in diary_dates %}
+                                        <option value="{{ diary_date }}" 
+                                                {% if request.args.get('search_date') == diary_date|string %}selected{% endif %}>
+                                            {{ diary_date.strftime('%b %d, %Y') }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <button type="submit" class="btn btn-primary">Search</button>
+                                <a href="/read-diary" class="btn btn-outline-secondary">Clear</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
     {% if no_entries %}
     <!-- Empty state: No diary entries yet -->
     <div class="container mt-5 text-center">
         <h1 class="display-4 text-muted">No diary entries yet</h1>
         <p class="lead">Start writing your first diary entry to begin your self-reflection journey!</p>
         <a href="/diary" class="btn btn-primary btn-lg">Write your first entry</a>
+    </div>
+
+    {% elif show_search_results %}
+    <!-- Search Results -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-lg-6">
+                <h2 class="mb-4">Search Results</h2>
+                
+                {% if search_results %}
+                    <p class="text-muted mb-4">Found {{ search_results|length }} result(s)</p>
+                    
+                    {% for result in search_results %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">{{ result.formatted_date }}</h6>
+                            <p class="card-text">{{ result.snippet|safe }}</p>
+                            <a href="/read-diary?date={{ result.date }}" class="btn btn-sm btn-outline-primary">View full day</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="alert alert-info">
+                        <h5 class="alert-heading">No results found</h5>
+                        <p class="mb-0">
+                            {% if request.args.get('search_date') %}
+                                No entries found for "{{ request.args.get('search') }}" on {{ request.args.get('search_date') }}.
+                                <br>Try searching on a different date or leave the date as "All days".
+                            {% else %}
+                                No entries found containing "{{ request.args.get('search') }}".
+                            {% endif %}
+                        </p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
     </div>
 
     {% elif show_front_page %}
@@ -46,7 +123,7 @@
 
     {% elif show_day_page %}
     <!-- Day page: Show entries for a specific date -->
-    <div class="container mt-4">
+    <div class="container">
         <div class="row">
             <div class="col-md-8 col-lg-6">
                 <h1 class="mb-4">{{ formatted_date }}</h1>

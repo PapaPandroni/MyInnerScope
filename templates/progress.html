@@ -203,7 +203,8 @@
 
             const ctx = document.getElementById('pointsChart').getContext('2d');
             Chart.register(ChartZoom);
-            //console.log('ChartZoom plugin:', ChartZoom);
+            console.log('ChartZoom plugin:', ChartZoom);
+            console.log('Registered plugins:', Chart.registry.plugins);
 
             new Chart(ctx, {
                 type: 'line',
@@ -215,26 +216,23 @@
                     },
                     plugins: {
                         zoom: {
-                            wheel: {
-                                enabled: true,
+                            zoom: {
+                                wheel: {
+                                    enabled: true,
+                                    modifierKey: "ctrl"
+                                },
+                                pinch: {
+                                    enabled: true
+                                },
+                                mode: 'x'
                             },
-                            pinch: {
-                                enabled: true
-                            },
-                            mode: 'x',
-                            
                             pan: {
                                 enabled: true,
                                 mode: 'x',
-                                rangeMin: {
-                                    x: null
-                                },
-                                rangeMax: {
-                                    x: null
-                                }
-                            }
+                                modifierKey: null 
+                                
+                            },
                         }   
-                    
                     }
                 }
             });
