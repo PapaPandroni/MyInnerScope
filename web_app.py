@@ -16,43 +16,47 @@ limitations under the License.
 """
 
 import os
-from flask import Flask, render_template, request, redirect, session
-from werkzeug.security import generate_password_hash, check_password_hash
-from datetime import date, timedelta, datetime
-from dotenv import load_dotenv
+from flask import Flask, render_template
+from config import config
 
 # Import database and models
-from models import db, User, DiaryEntry, DailyStats
+from models import db
 
-#import search functions
-from utils import handle_search, create_search_snippet
-
-#import
+# Import routes
 from routes import register_blueprints
 
-load_dotenv()
-app = Flask(__name__)
-
-#load the blueprints (routes)
-register_blueprints(app)
-
-# Get secret key from environment variable
-app.secret_key = os.environ.get('SECRET_KEY')
-if not app.secret_key:
-    raise ValueError("No SECRET_KEY environment variable set. Please create a .env file with SECRET_KEY=your-secret-key")
-
-# Configure database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-# Initialize database with app
-db.init_app(app)
-
-@app.route("/")
-def hello():
-    return render_template("index.html")
+def create_app(config_name=None):
+    """Application factory function"""
+    if config_name is None:
+        config_name = os.environ.get('FLASK_ENV', 'development')
+    
+    app = Flask(__name__)
+    
+    # Load configuration
+    app.config.from_object(config[config_name])
+    
+    # Validate configuration
+    config[config_name].validate()
+    
+    # Initialize database with app
+    db.init_app(app)
+    
+    # Register blueprints (routes)
+    register_blueprints(app)
+    
+    @app.route("/")
+    def hello():
+        return render_template("index.html")
+    
+    return app
 
 if __name__ == "__main__":
+    # Create the app
+    app = create_app()
+    
+    # Create database tables
     with app.app_context():
         db.create_all()
-    app.run(host="0.0.0.0", debug=True)
+    
+    # Run the app
+    app.run(host="0.0.0.0", debug=app.config['DEBUG'])
