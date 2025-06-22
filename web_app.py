@@ -15,45 +15,29 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-
 import os
 from flask import Flask, render_template, request, redirect, session
-from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import date, timedelta, datetime
 from dotenv import load_dotenv
 
+# Import database and models
+from models import db, User, DiaryEntry, DailyStats
+
 load_dotenv()
 app = Flask(__name__)
+
 # Get secret key from environment variable
 app.secret_key = os.environ.get('SECRET_KEY')
 if not app.secret_key:
     raise ValueError("No SECRET_KEY environment variable set. Please create a .env file with SECRET_KEY=your-secret-key")
-# Tell Flask where the database is
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'  # Creates users.db in your folder
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Avoids warning
 
-# Connect SQLAlchemy to your app
-db = SQLAlchemy(app)
+# Configure database
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Define a User model (a table)
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)  # Auto-increment ID
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(120), nullable=False)
-    user_name = db.Column(db.String(200), nullable = True)
-
-#from datetime import date  # add this at the top if it's not there already
-
-class DiaryEntry(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    entry_date = db.Column(db.Date, default=date.today, nullable=False)
-    content = db.Column(db.Text, nullable=False)
-    rating = db.Column(db.Integer, nullable=False)
-
-    user = db.relationship('User', backref='entries')
-
+# Initialize database with app
+db.init_app(app)
 
 @app.route("/")
 def hello():
@@ -122,7 +106,6 @@ def diary_entry():
             if stats.current_streak > stats.longest_streak:
                 stats.longest_streak = stats.current_streak
 
-
         # Add points based on rating
         if rating == 1:
             stats.points += 5
@@ -142,23 +125,6 @@ def diary_entry():
 
     return render_template("diary.html", display_name=display_name)
 
-
-class DailyStats(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    date = db.Column(db.Date, nullable=False)
-
-    points = db.Column(db.Integer, default=0)
-    current_streak = db.Column(db.Integer, default=0)
-    longest_streak = db.Column(db.Integer, default=0)
-
-    user = db.relationship('User', backref='daily_stats')
-
-    __table_args__ = (
-        db.UniqueConstraint('user_id', 'date', name='user_date_uc'),
-    )
-
-
 @app.route("/login", methods=["GET", "POST"])
 def login_page():
     if request.method == "POST":
@@ -173,7 +139,6 @@ def login_page():
 
         if not check_password_hash(user.password, password):
             return "Incorrect password."
-
 
         # Success! Session!
         session["user_id"] = user.id
@@ -191,10 +156,8 @@ def login_page():
 
         return redirect("/diary")
 
-
     # If GET request, show login form
     return render_template("login.html")
-
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -254,10 +217,10 @@ def progress():
         .order_by(DailyStats.longest_streak.desc()).first()
     longest_streak = longest_streak_row.longest_streak if longest_streak_row else 0
     
-    # All time numnber of entries
+    # All time number of entries
     total_entries = DiaryEntry.query.filter_by(user_id=user_id).count()
 
-        # Fetch points for graph (list of (date, points))
+    # Fetch points for graph (list of (date, points))
     raw_data = DailyStats.query \
         .filter_by(user_id=user_id) \
         .order_by(DailyStats.date) \
@@ -270,10 +233,9 @@ def progress():
         cumulative_points += row.points
         cumulative_data.append([str(row.date), cumulative_points])
 
-    
     points_data = cumulative_data
 
-        # Top 5 days with most points (including their diary entries)
+    # Top 5 days with most points (including their diary entries)
     top_days = db.session.query(DailyStats)\
         .filter_by(user_id=user_id)\
         .filter(DailyStats.points > 0)\
@@ -292,7 +254,6 @@ def progress():
         })
 
     import random
-    
 
     # Get average points per day of the week
     day_analysis = db.session.query(
@@ -388,9 +349,8 @@ def progress():
         best_day_text=best_day_text,      
         worst_day_text=worst_day_text,
         trend_message=trend_message,
-        display_name = display_name   
+        display_name=display_name   
     )
-
 
 @app.route("/read-diary")
 def read_diary():
