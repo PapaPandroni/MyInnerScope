@@ -1,4 +1,3 @@
-# routes/progress.py
 from flask import Blueprint, render_template, redirect, session
 from datetime import date, timedelta
 import random
@@ -76,7 +75,7 @@ def progress():
             'entries': entries
         })
 
-    # Get average points per day of the week
+    # Get average points per day of the week for bar chart
     day_analysis = db.session.query(
         db.func.strftime('%w', DailyStats.date).label('weekday'),
         db.func.avg(DailyStats.points).label('avg_points'),
@@ -84,51 +83,50 @@ def progress():
     ).filter_by(user_id=user_id)\
     .filter(DailyStats.points > 0)\
     .group_by(db.func.strftime('%w', DailyStats.date))\
-    .having(db.func.count(DailyStats.id) >= 2)\
     .all()
 
-    # Convert to list and find best/worst days
+    # Create full weekday data for bar chart
     weekday_names = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-    best_day_text = None
-    worst_day_text = None
+    weekday_data = []
+    sufficient_data_count = 0
+    
+    for i in range(7):  # 0-6 for Sunday-Saturday
+        # Find data for this weekday
+        day_data = next((d for d in day_analysis if int(d.weekday) == i), None)
+        
+        if day_data and day_data.entry_count >= 2:
+            weekday_data.append({
+                'name': weekday_names[i],
+                'avg_points': round(day_data.avg_points, 1)
+            })
+            sufficient_data_count += 1
+        else:
+            weekday_data.append({
+                'name': weekday_names[i],
+                'avg_points': 0
+            })
+    
+    # Check if we have enough data overall (at least 2 different weekdays with 2+ entries each)
+    has_sufficient_weekday_data = sufficient_data_count >= 2
+    
+    # Fake sample data for placeholder
+    sample_weekday_data = [
+        {'name': 'Sunday', 'avg_points': 3.2},
+        {'name': 'Monday', 'avg_points': 5.8},
+        {'name': 'Tuesday', 'avg_points': 7.1},
+        {'name': 'Wednesday', 'avg_points': 4.5},
+        {'name': 'Thursday', 'avg_points': 6.3},
+        {'name': 'Friday', 'avg_points': 2.9},
+        {'name': 'Saturday', 'avg_points': 8.4}
+    ]
 
-    if len(day_analysis) >= 2:  # Need at least 2 different days to compare
-        best_day = max(day_analysis, key=lambda x: x.avg_points)
-        worst_day = min(day_analysis, key=lambda x: x.avg_points)
-        
-        best_day_name = weekday_names[int(best_day.weekday)]
-        worst_day_name = weekday_names[int(worst_day.weekday)]
-        
-        # Random messages for best days
-        best_messages = [
-            f"{best_day_name}s are your power days!",
-            f"You're crushing it on {best_day_name}s!",
-            f"{best_day_name}s bring out your best!",
-            f"{best_day_name} motivation is on fire!",
-            f"You own {best_day_name}s!"
-        ]
-        
-        # Random messages for worst days
-        worst_messages = [
-            f"{worst_day_name}s seem tough for you",
-            f"{worst_day_name}s could use some attention",
-            f"{worst_day_name} motivation needs a boost",
-            f"Consider planning something special for {worst_day_name}s",
-            f"{worst_day_name}s are your growth opportunity"
-        ]
-        
-        best_day_text = random.choice(best_messages)
-        worst_day_text = random.choice(worst_messages)
-
-    # Calculate date ranges
+    # Calculate date ranges for trend analysis
     last_7_start = today - timedelta(days=6)  # today-6 to today (7 days including today)
     last_7_end = today
     previous_7_start = today - timedelta(days=13)  # today-13 to today-7 (7 days)
     previous_7_end = today - timedelta(days=7)
 
     # Check if user has enough data (at least 14 days since registration)
-    user = User.query.get(user_id)
-    # We'll assume registration date exists, but if not we can use first diary entry
     first_entry = DiaryEntry.query.filter_by(user_id=user_id).order_by(DiaryEntry.entry_date).first()
     days_since_start = (today - first_entry.entry_date).days if first_entry else 0
 
@@ -167,8 +165,9 @@ def progress():
         total_entries=total_entries,
         points_data=points_data,
         top_days=top_days_with_entries,
-        best_day_text=best_day_text,      
-        worst_day_text=worst_day_text,
+        weekday_data=weekday_data,
+        has_sufficient_weekday_data=has_sufficient_weekday_data,
+        sample_weekday_data=sample_weekday_data,
         trend_message=trend_message,
         display_name=display_name   
     )

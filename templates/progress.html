@@ -38,6 +38,22 @@
             <h2 class="text-center">Points Over Time</h2>
             <canvas id="pointsChart" width="400" height="200"></canvas>
         </div>
+
+        <div class="container mt-5">
+            <h2 class="text-center">Average Points by Day of Week</h2>
+            <div class="position-relative">
+                <canvas id="weekdayChart" width="400" height="200"></canvas>
+                {% if not has_sufficient_weekday_data %}
+                <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" style="background-color: rgba(248, 249, 250, 0.85); z-index: 10;">
+                    <div class="text-center p-4 bg-white rounded shadow">
+                        <h5 class="mb-3">Keep writing to unlock weekday insights!</h5>
+                        <p class="text-muted mb-0">Write diary entries on at least 2 different days of the week to see your patterns.</p>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
     <div class="row text-center">
         <div class="col-md-3">
         <div class="card">
@@ -82,41 +98,7 @@
                 </div>
             </div>
         </div>
-        {% if best_day_text and worst_day_text %}
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-body">
-                <h5 class="card-title">Your Best Day</h5>
-                <p class="card-text">{{ best_day_text }}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-body">
-                <h5 class="card-title">Room for Growth</h5>
-                <p class="card-text">{{ worst_day_text }}</p>
-                </div>
-            </div>
-        </div>
-        {% else %}
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-body">
-                <h5 class="card-title">Your Best Day</h5>
-                <p class="card-text text-muted">Keep writing to discover your best days and gain more insights about your weekly patterns!</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-body">
-                <h5 class="card-title">Room for Growth</h5>
-                <p class="card-text text-muted">Keep writing to discover days with low inspiration and gain more insights about your weekly patterns!</p>
-                </div>
-            </div>
-        </div>
-        {% endif %}
+    
 
         <div class="col-md-3">
             <div class="card">
@@ -253,6 +235,75 @@
             full.classList.remove('d-none');
         }
     }
+    </script>
+    <script type="application/json" id="weekday-data">
+    {
+        "weekdayData": {{ weekday_data|tojson|safe }},
+        "hasSufficientWeekdayData": {{ has_sufficient_weekday_data|tojson|safe }},
+        "sampleWeekdayData": {{ sample_weekday_data|tojson|safe }}
+    }
+    </script>
+
+    <script>
+        // Get weekday data from the JSON script tag
+        const weekdayDataElement = document.getElementById('weekday-data');
+        const weekdayConfig = JSON.parse(weekdayDataElement.textContent);
+        
+        const weekdayData = weekdayConfig.weekdayData;
+        const hasSufficientWeekdayData = weekdayConfig.hasSufficientWeekdayData;
+        const sampleWeekdayData = weekdayConfig.sampleWeekdayData;
+
+        // Choose which data to display
+        const displayData = hasSufficientWeekdayData ? weekdayData : sampleWeekdayData;
+
+        // Rest of your chart code remains the same...
+        const weekdayLabels = displayData.map(item => item.name);
+        const weekdayPoints = displayData.map(item => item.avg_points);
+
+        // Create the weekday bar chart
+        const weekdayCtx = document.getElementById('weekdayChart').getContext('2d');
+        const weekdayChart = new Chart(weekdayCtx, {
+            type: 'bar',
+            data: {
+                labels: weekdayLabels,
+                datasets: [{
+                    label: 'Average Points',
+                    data: weekdayPoints,
+                    backgroundColor: 'rgba(0, 128, 128, 0.6)',
+                    borderColor: 'teal',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Average Points'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Day of Week'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        // Apply blur effect if showing sample data
+        if (!hasSufficientWeekdayData) {
+            weekdayChart.canvas.style.filter = 'blur(5px) brightness(0.7)';
+            weekdayChart.canvas.style.pointerEvents = 'none'; // Disable interactions
+        }
     </script>
   </body>
 </html>
