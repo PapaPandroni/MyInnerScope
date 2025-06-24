@@ -1,7 +1,8 @@
-from flask import Blueprint, render_template, redirect, session
+from flask import Blueprint, render_template, redirect, session, send_file
 from datetime import date, timedelta
 import random
 from models import User, DiaryEntry, DailyStats, db
+from utils.pdf_generator import generate_journey_pdf
 
 progress_bp = Blueprint('progress', __name__)
 
@@ -170,4 +171,99 @@ def progress():
         sample_weekday_data=sample_weekday_data,
         trend_message=trend_message,
         display_name=display_name   
+    )
+
+@progress_bp.route("/export-journey", methods=["POST"])
+def export_journey():
+    if "user_id" not in session:
+        return "Unauthorized", 401
+    
+    user_id = session["user_id"]
+    user = User.query.get(user_id)
+    
+    # Get all entries without any date filtering, and ensure they're loaded
+    entries = DiaryEntry.query\
+        .filter_by(user_id=user_id)\
+        .order_by(DiaryEntry.entry_date.asc())\
+        .options(db.joinedload(DiaryEntry.user))\
+        .all()
+    
+    # Force load the content and dates to prevent detachment issues
+    for entry in entries:
+        _ = entry.content
+        _ = entry.entry_date
+        _ = entry.rating
+    
+    # Log entry details
+    print(f"Total entries found: {len(entries)}")
+    if entries:
+        print("Entry dates:")
+        for entry in entries:
+            print(f"- {entry.entry_date}: {entry.content[:50]}...")
+    
+    # Get points data for graph
+    raw_data = DailyStats.query\
+        .filter_by(user_id=user_id)\
+        .order_by(DailyStats.date)\
+        .with_entities(DailyStats.date, DailyStats.points)\
+        .all()
+    
+    cumulative_points = 0
+    points_data = []
+    for row in raw_data:
+        cumulative_points += row.points
+        points_data.append([str(row.date), cumulative_points])
+    
+    # Get weekday performance data
+    day_analysis = db.session.query(
+        db.func.strftime('%w', DailyStats.date).label('weekday'),
+        db.func.avg(DailyStats.points).label('avg_points'),
+        db.func.count(DailyStats.id).label('entry_count')
+    ).filter_by(user_id=user_id)\
+    .filter(DailyStats.points > 0)\
+    .group_by(db.func.strftime('%w', DailyStats.date))\
+    .all()
+    
+    weekday_names = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    weekday_data = []
+    
+    for i in range(7):
+        day_data = next((d for d in day_analysis if int(d.weekday) == i), None)
+        if day_data and day_data.entry_count >= 2:
+            weekday_data.append({
+                'name': weekday_names[i],
+                'avg_points': round(day_data.avg_points, 1)
+            })
+        else:
+            weekday_data.append({
+                'name': weekday_names[i],
+                'avg_points': 0
+            })
+    
+    # Get current stats
+    stats = {
+        'total_points': db.session.query(db.func.sum(DailyStats.points))
+            .filter_by(user_id=user_id).scalar() or 0,
+        'current_streak': DailyStats.query.filter_by(user_id=user_id)
+            .order_by(DailyStats.date.desc()).first().current_streak,
+        'longest_streak': DailyStats.query.filter_by(user_id=user_id)
+            .order_by(DailyStats.longest_streak.desc()).first().longest_streak,
+        'total_entries': len(entries)  # Use actual length
+    }
+    
+    # Generate PDF within the same session
+    pdf_buffer = generate_journey_pdf(
+        user=user,
+        entries=entries,
+        points_data=points_data,
+        weekday_data=weekday_data,
+        top_days=[],  # Empty list since we're not using top days
+        stats=stats
+    )
+    
+    return send_file(
+        pdf_buffer,
+        mimetype='application/pdf',
+        as_attachment=True,
+        download_name=f'self-reflective-journey-{date.today()}.pdf'
     )

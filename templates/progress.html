@@ -161,15 +161,28 @@
     </div>
     </div>
     
-    
+    <!-- Export Section -->
+    <div class="container mt-5 mb-5 text-center">
+        <button id="exportButton" class="btn btn-primary btn-lg" data-bs-toggle="tooltip" data-bs-placement="top" title="Export all your diary entries and progress as a PDF file">
+            Export Journey
+        </button>
+    </div>
 
+    <!-- Generating Overlay -->
+    <div id="generatingOverlay" class="generating-overlay d-none">
+        <div class="generating-content">
+            <div class="spinner-border text-light" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <h3 class="text-light mt-3">Generating your journey...</h3>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.0/build/global/luxon.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.1"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
-
 
     <script>
         const pointsData = JSON.parse('{{ points_data|tojson|safe }}');
@@ -304,6 +317,49 @@
             weekdayChart.canvas.style.filter = 'blur(5px) brightness(0.7)';
             weekdayChart.canvas.style.pointerEvents = 'none'; // Disable interactions
         }
+    </script>
+
+    <!-- Initialize tooltips -->
+    <script>
+        // Initialize tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        });
+
+        // Export button click handler
+        document.getElementById('exportButton').addEventListener('click', async function() {
+            const overlay = document.getElementById('generatingOverlay');
+            overlay.classList.remove('d-none');
+            
+            try {
+                const response = await fetch('/export-journey', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Export failed');
+                }
+                
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'my-self-reflective-journey.pdf';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                a.remove();
+            } catch (error) {
+                console.error('Export failed:', error);
+                alert('Failed to generate export. Please try again.');
+            } finally {
+                overlay.classList.add('d-none');
+            }
+        });
     </script>
   </body>
 </html>
