@@ -178,77 +178,11 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.0/build/global/luxon.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.1"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
-
-    <script>
-        const pointsData = JSON.parse('{{ points_data|tojson|safe }}');
-        //console.log(pointsData);
-        //console.log(Chart.version);
-        
-
-        // Create {x: date, y: points} objects for Chart.js
-        const dataPoints = pointsData.map(item => ({
-            x: item[0],  // "YYYY-MM-DD"
-            y: item[1]
-            }));
-
-            const ctx = document.getElementById('pointsChart').getContext('2d');
-            Chart.register(ChartZoom);
-            console.log('ChartZoom plugin:', ChartZoom);
-            console.log('Registered plugins:', Chart.registry.plugins);
-
-            new Chart(ctx, {
-                type: 'line',
-                data: { datasets: [{ label: 'Points Earned', data: dataPoints, borderColor: 'teal', tension: 0.1 }] },
-                options: {
-                    scales: {
-                        x: { type: 'time', time: { parser: 'yyyy-MM-dd', unit: 'day' } },
-                        y: { beginAtZero: true }
-                    },
-                    plugins: {
-                        zoom: {
-                            zoom: {
-                                wheel: {
-                                    enabled: true,
-                                    modifierKey: "ctrl"
-                                },
-                                pinch: {
-                                    enabled: true
-                                },
-                                mode: 'x'
-                            },
-                            pan: {
-                                enabled: true,
-                                mode: 'x',
-                                modifierKey: null 
-                                
-                            },
-                        }   
-                    }
-                }
-            });
-
+    <!-- Data Scripts -->
+    <script type="application/json" id="points-data">
+        {{ points_data|tojson|safe }}
     </script>
-    <script>
-    function toggleEntry(entryId) {
-        const preview = document.getElementById('preview-' + entryId);
-        const full = document.getElementById('full-' + entryId);
-        
-        if (preview.classList.contains('d-none')) {
-            // Currently showing full, switch to preview
-            preview.classList.remove('d-none');
-            full.classList.add('d-none');
-        } else {
-            // Currently showing preview, switch to full
-            preview.classList.add('d-none');
-            full.classList.remove('d-none');
-        }
-    }
-    </script>
+    
     <script type="application/json" id="weekday-data">
     {
         "weekdayData": {{ weekday_data|tojson|safe }},
@@ -257,109 +191,17 @@
     }
     </script>
 
-    <script>
-        // Get weekday data from the JSON script tag
-        const weekdayDataElement = document.getElementById('weekday-data');
-        const weekdayConfig = JSON.parse(weekdayDataElement.textContent);
-        
-        const weekdayData = weekdayConfig.weekdayData;
-        const hasSufficientWeekdayData = weekdayConfig.hasSufficientWeekdayData;
-        const sampleWeekdayData = weekdayConfig.sampleWeekdayData;
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.0/build/global/luxon.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.1"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
 
-        // Choose which data to display
-        const displayData = hasSufficientWeekdayData ? weekdayData : sampleWeekdayData;
-
-        // Rest of your chart code remains the same...
-        const weekdayLabels = displayData.map(item => item.name);
-        const weekdayPoints = displayData.map(item => item.avg_points);
-
-        // Create the weekday bar chart
-        const weekdayCtx = document.getElementById('weekdayChart').getContext('2d');
-        const weekdayChart = new Chart(weekdayCtx, {
-            type: 'bar',
-            data: {
-                labels: weekdayLabels,
-                datasets: [{
-                    label: 'Average Points',
-                    data: weekdayPoints,
-                    backgroundColor: 'rgba(0, 128, 128, 0.6)',
-                    borderColor: 'teal',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Average Points'
-                        }
-                    },
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Day of Week'
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                }
-            }
-        });
-
-        // Apply blur effect if showing sample data
-        if (!hasSufficientWeekdayData) {
-            weekdayChart.canvas.style.filter = 'blur(5px) brightness(0.7)';
-            weekdayChart.canvas.style.pointerEvents = 'none'; // Disable interactions
-        }
-    </script>
-
-    <!-- Initialize tooltips -->
-    <script>
-        // Initialize tooltips
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl)
-        });
-
-        // Export button click handler
-        document.getElementById('exportButton').addEventListener('click', async function() {
-            const overlay = document.getElementById('generatingOverlay');
-            overlay.classList.remove('d-none');
-            
-            try {
-                const response = await fetch('/export-journey', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
-                
-                if (!response.ok) {
-                    throw new Error('Export failed');
-                }
-                
-                const blob = await response.blob();
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'my-self-reflective-journey.pdf';
-                document.body.appendChild(a);
-                a.click();
-                window.URL.revokeObjectURL(url);
-                a.remove();
-            } catch (error) {
-                console.error('Export failed:', error);
-                alert('Failed to generate export. Please try again.');
-            } finally {
-                overlay.classList.add('d-none');
-            }
-        });
-    </script>
+    <!-- Application Scripts -->
+    <script src="{{ url_for('static', filename='js/progress/entries.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/progress/export.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/progress/charts.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/progress/main.js') }}"></script>
   </body>
 </html>

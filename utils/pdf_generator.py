@@ -3,8 +3,9 @@ import base64
 from io import BytesIO
 from weasyprint import HTML, CSS
 from weasyprint.fonts import FontConfiguration
-from flask import render_template
+from flask import render_template, current_app
 import matplotlib.pyplot as plt
+import os
 
 def generate_journey_pdf(user, entries, points_data, weekday_data, top_days, stats):
     """Generate a PDF containing the user's self-reflective journey.
@@ -55,8 +56,11 @@ def generate_journey_pdf(user, entries, points_data, weekday_data, top_days, sta
     # Configure fonts
     font_config = FontConfiguration()
     
-    # Define CSS for PDF styling
-    css = CSS(string='''
+    # Load external CSS file
+    css_file_path = os.path.join(current_app.static_folder, 'css', 'pdf_journey.css')
+    
+    # Define page-specific CSS for PDF styling
+    page_css = CSS(string='''
         @page {
             margin: 1cm;
             size: letter;
@@ -84,39 +88,15 @@ def generate_journey_pdf(user, entries, points_data, weekday_data, top_days, sta
             opacity: 0.1;
             z-index: -1;
         }
-        .section {
-            margin-bottom: 20px;
-            page-break-inside: auto;
-        }
-        .diary-entry {
-            margin-bottom: 15px;
-            padding: 10px;
-            background-color: #f8f9fa;
-            border: 1px solid #ddd;
-            page-break-inside: avoid;
-        }
-        .entry-content {
-            margin: 10px 0;
-        }
-        .entry-date {
-            color: #666;
-            font-weight: bold;
-        }
-        .debug-info {
-            color: #999;
-            font-size: 8pt;
-        }
-        .entry-separator {
-            border: none;
-            border-top: 1px solid #eee;
-            margin: 10px 0;
-        }
     ''', font_config=font_config)
     
-    # Generate PDF
+    # Load external CSS file
+    external_css = CSS(filename=css_file_path, font_config=font_config)
+    
+    # Generate PDF with both CSS files
     HTML(string=html_content).write_pdf(
         pdf_buffer,
-        stylesheets=[css],
+        stylesheets=[external_css, page_css],
         font_config=font_config
     )
     
