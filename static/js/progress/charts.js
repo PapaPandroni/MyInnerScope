@@ -77,7 +77,7 @@ class ProgressCharts {
         const hasSufficientWeekdayData = weekdayConfig.hasSufficientWeekdayData;
         const sampleWeekdayData = weekdayConfig.sampleWeekdayData;
 
-        // Choose which data to display
+        // Always show sample data in background, real data if available
         const displayData = hasSufficientWeekdayData ? weekdayData : sampleWeekdayData;
 
         const weekdayLabels = displayData.map(item => item.name);
@@ -92,25 +92,40 @@ class ProgressCharts {
                 datasets: [{
                     label: 'Average Points',
                     data: weekdayPoints,
-                    backgroundColor: 'rgba(0, 128, 128, 0.6)',
-                    borderColor: 'teal',
+                    backgroundColor: hasSufficientWeekdayData ? 'rgba(0, 212, 255, 0.6)' : 'rgba(0, 212, 255, 0.2)',
+                    borderColor: hasSufficientWeekdayData ? '#00d4ff' : 'rgba(0, 212, 255, 0.3)',
                     borderWidth: 1
                 }]
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 scales: {
                     y: {
                         beginAtZero: true,
                         title: {
                             display: true,
-                            text: 'Average Points'
+                            text: 'Average Points',
+                            color: '#ffffff'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#ffffff'
                         }
                     },
                     x: {
                         title: {
                             display: true,
-                            text: 'Day of Week'
+                            text: 'Day of Week',
+                            color: '#ffffff'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#ffffff'
                         }
                     }
                 },
@@ -122,10 +137,11 @@ class ProgressCharts {
             }
         });
 
-        // Apply blur effect if showing sample data
+        // Apply visual effects for insufficient data
         if (!hasSufficientWeekdayData) {
-            this.weekdayChart.canvas.style.filter = 'blur(5px) brightness(0.7)';
-            this.weekdayChart.canvas.style.pointerEvents = 'none'; // Disable interactions
+            // The overlay will handle the visual blocking, chart stays visible but dimmed
+            this.weekdayChart.canvas.style.opacity = '0.3';
+            this.weekdayChart.canvas.style.pointerEvents = 'none';
         }
     }
 }

@@ -12,64 +12,97 @@
         </div>
         <div class="container mt-5">
             <h2 class="text-center">Average Points by Day of Week</h2>
-            <div class="position-relative">
+            <div class="chart-container">
                 <canvas id="weekdayChart" width="400" height="200"></canvas>
                 {% if not has_sufficient_weekday_data %}
-                <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" style="background-color: rgba(248, 249, 250, 0.85); z-index: 10;">
-                    <div class="text-center p-4 bg-white rounded shadow">
-                        <h5 class="mb-3">Keep writing to unlock weekday insights!</h5>
-                        <p class="text-muted mb-0">Write diary entries on at least 2 different days of the week to see your patterns.</p>
+                <div class="chart-overlay">
+                    <div class="overlay-content">
+                        <div class="overlay-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <h4 class="overlay-title">Weekday Insights Locked</h4>
+                        <p class="overlay-message">Write diary entries on at least 2 different days of the week to unlock your weekly patterns.</p>
+                        <div class="overlay-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <span class="progress-text">0/2 days completed</span>
+                        </div>
                     </div>
                 </div>
                 {% endif %}
             </div>
         </div>
     <div class="row text-center">
-        <div class="col-md-3">
-        <div class="card">
-            <div class="card-body">
-            <h5 class="card-title">Points Today</h5>
-            <p class="display-6">{{ points_today }}</p>
+        <div class="col-md-3 mb-4">
+        <div class="sci-fi-card points-today">
+            <div class="card-glow"></div>
+            <div class="card-content">
+                <div class="card-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <h5 class="card-title">Points Today</h5>
+                <p class="card-value">{{ points_today }}</p>
             </div>
         </div>
         </div>
-        <div class="col-md-3">
-        <div class="card">
-            <div class="card-body">
-            <h5 class="card-title">Total Points</h5>
-            <p class="display-6">{{ total_points }}</p>
+        <div class="col-md-3 mb-4">
+        <div class="sci-fi-card total-points">
+            <div class="card-glow"></div>
+            <div class="card-content">
+                <div class="card-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <h5 class="card-title">Total Points</h5>
+                <p class="card-value">{{ total_points }}</p>
             </div>
         </div>
         </div>
-        <div class="col-md-3">
-        <div class="card">
-            <div class="card-body">
-            <h5 class="card-title">Current Streak</h5>
-            <p class="display-6">{{ current_streak }}</p>
+        <div class="col-md-3 mb-4">
+        <div class="sci-fi-card current-streak">
+            <div class="card-glow"></div>
+            <div class="card-content">
+                <div class="card-icon">
+                    <i class="fas fa-fire"></i>
+                </div>
+                <h5 class="card-title">Current Streak</h5>
+                <p class="card-value">{{ current_streak }}</p>
             </div>
         </div>
         </div>
-        <div class="col-md-3">
-        <div class="card">
-            <div class="card-body">
-            <h5 class="card-title">Longest Streak</h5>
-            <p class="display-6">{{ longest_streak }}</p>
+        <div class="col-md-3 mb-4">
+        <div class="sci-fi-card longest-streak">
+            <div class="card-glow"></div>
+            <div class="card-content">
+                <div class="card-icon">
+                    <i class="fas fa-crown"></i>
+                </div>
+                <h5 class="card-title">Longest Streak</h5>
+                <p class="card-value">{{ longest_streak }}</p>
             </div>
         </div>
         </div>
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-body">
-                <h5 class="card-title">Total Entries</h5>
-                <p class="display-6">{{ total_entries }}</p>
+        <div class="col-md-3 mb-4">
+            <div class="sci-fi-card total-entries">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <div class="card-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h5 class="card-title">Total Entries</h5>
+                    <p class="card-value">{{ total_entries }}</p>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-body">
-                <h5 class="card-title">Weekly Trend</h5>
-                <p class="card-text">{{ trend_message }}</p>
+        <div class="col-md-3 mb-4">
+            <div class="sci-fi-card weekly-trend">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h5 class="card-title">Weekly Trend</h5>
+                    <p class="card-text">{{ trend_message }}</p>
                 </div>
             </div>
         </div>
@@ -79,38 +112,48 @@
             {% if top_days %}
                 <div class="row">
                     {% for day in top_days %}
-                    <div class="col-md-6 col-lg-4 mb-3">
-                        <div class="card">
-                            <div class="card-header d-flex justify-content-between align-items-center">
-                                <strong>{{ day.date.strftime('%B %d, %Y') }}</strong>
-                                <span class="badge bg-primary">{{ day.points }} points</span>
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="sci-fi-entry-card">
+                            <div class="entry-card-glow"></div>
+                            <div class="entry-card-header">
+                                <div class="entry-date">
+                                    <i class="fas fa-calendar-alt me-2"></i>
+                                    {{ day.date.strftime('%B %d, %Y') }}
+                                </div>
+                                <div class="entry-points">
+                                    <span class="points-badge">{{ day.points }} pts</span>
+                                </div>
                             </div>
-                            <div class="card-body">
+                            <div class="entry-card-body">
                                 {% for entry in day.entries %}
-                                <div class="mb-2">
+                                <div class="entry-item">
                                     <div class="entry-preview" id="preview-{{ day.date }}-{{ loop.index }}">
-                                        <p class="mb-1">
+                                        <p class="entry-text">
                                             {% if entry.content|length > 100 %}
                                                 {{ entry.content[:100] }}...
-                                                <button class="btn btn-sm btn-link p-0" onclick="toggleEntry('{{ day.date }}-{{ loop.index }}')">Read more</button>
+                                                <button class="entry-toggle-btn" onclick="toggleEntry('{{ day.date }}-{{ loop.index }}')">Read more</button>
                                             {% else %}
                                                 {{ entry.content }}
                                             {% endif %}
                                         </p>
                                     </div>
                                     <div class="entry-full d-none" id="full-{{ day.date }}-{{ loop.index }}">
-                                        <p class="mb-1">{{ entry.content }}</p>
-                                        <button class="btn btn-sm btn-link p-0" onclick="toggleEntry('{{ day.date }}-{{ loop.index }}')">Show less</button>
+                                        <p class="entry-text">{{ entry.content }}</p>
+                                        <button class="entry-toggle-btn" onclick="toggleEntry('{{ day.date }}-{{ loop.index }}')">Show less</button>
                                     </div>
-                                    <small class="text-muted">
+                                    <div class="entry-rating">
                                         {% if entry.rating == 1 %}
-                                            <span class="badge bg-success">Encouraged behavior</span>
+                                            <span class="rating-badge positive">
+                                                <i class="fas fa-thumbs-up me-1"></i>Encouraged
+                                            </span>
                                         {% else %}
-                                            <span class="badge bg-warning">Want to change</span>
+                                            <span class="rating-badge negative">
+                                                <i class="fas fa-thumbs-down me-1"></i>Want to change
+                                            </span>
                                         {% endif %}
-                                    </small>
+                                    </div>
                                 </div>
-                                {% if not loop.last %}<hr>{% endif %}
+                                {% if not loop.last %}<div class="entry-divider"></div>{% endif %}
                                 {% endfor %}
                             </div>
                         </div>
@@ -118,7 +161,12 @@
                     {% endfor %}
                 </div>
             {% else %}
-                <p class="text-center text-muted">No diary entries yet. Start writing to see your top days!</p>
+                <div class="text-center">
+                    <div class="empty-state-card">
+                        <i class="fas fa-book-open empty-icon"></i>
+                        <p class="empty-text">No diary entries yet. Start writing to see your top days!</p>
+                    </div>
+                </div>
             {% endif %}
         </div>
     </div>
@@ -149,8 +197,557 @@
         "sampleWeekdayData": {{ sample_weekday_data|tojson|safe }}
     }
     </script>
+
+<style>
+/* Sci-Fi Card Styles */
+.sci-fi-card {
+    position: relative;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    border: 2px solid transparent;
+    border-radius: 20px;
+    padding: 2rem;
+    margin: 1rem 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.sci-fi-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+}
+
+.sci-fi-card:hover::before {
+    transform: translateX(100%);
+}
+
+.sci-fi-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.card-glow {
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #00d4ff, #ff00ff, #00ff88, #ff8800);
+    border-radius: 20px;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    animation: glow 4s ease-in-out infinite alternate;
+}
+
+.sci-fi-card:hover .card-glow {
+    opacity: 0.3;
+}
+
+.card-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+
+.card-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(45deg, #00d4ff, #ff00ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: iconPulse 2s ease-in-out infinite;
+}
+
+.card-title {
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.card-value {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #00d4ff;
+    text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+    margin: 0;
+    animation: valueGlow 2s ease-in-out infinite alternate;
+}
+
+.card-text {
+    color: #ffffff;
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* Specific card themes */
+.points-today .card-glow {
+    background: linear-gradient(45deg, #00ff88, #00d4ff);
+}
+
+.total-points .card-glow {
+    background: linear-gradient(45deg, #ff8800, #ff00ff);
+}
+
+.current-streak .card-glow {
+    background: linear-gradient(45deg, #ff0066, #ff8800);
+}
+
+.longest-streak .card-glow {
+    background: linear-gradient(45deg, #ff00ff, #00ff88);
+}
+
+.total-entries .card-glow {
+    background: linear-gradient(45deg, #00d4ff, #ff0066);
+}
+
+.weekly-trend .card-glow {
+    background: linear-gradient(45deg, #00ff88, #ff8800);
+}
+
+/* Animations */
+@keyframes glow {
+    0% { opacity: 0.1; }
+    100% { opacity: 0.4; }
+}
+
+@keyframes iconPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+@keyframes valueGlow {
+    0% { text-shadow: 0 0 20px rgba(0, 212, 255, 0.5); }
+    100% { text-shadow: 0 0 30px rgba(0, 212, 255, 0.8), 0 0 40px rgba(0, 212, 255, 0.3); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .sci-fi-card {
+        padding: 1.5rem;
+        margin: 0.5rem 0;
+    }
+    
+    .card-icon {
+        font-size: 2rem;
+    }
+    
+    .card-value {
+        font-size: 2.5rem;
+    }
+    
+    .card-title {
+        font-size: 1rem;
+    }
+}
+
+/* Sci-Fi Entry Cards */
+.sci-fi-entry-card {
+    position: relative;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.sci-fi-entry-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    border-color: rgba(0, 212, 255, 0.4);
+}
+
+.entry-card-glow {
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    right: -1px;
+    bottom: -1px;
+    background: linear-gradient(45deg, #00d4ff, #ff00ff, #00ff88);
+    border-radius: 16px;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    animation: entryGlow 6s ease-in-out infinite alternate;
+}
+
+.sci-fi-entry-card:hover .entry-card-glow {
+    opacity: 0.2;
+}
+
+.entry-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 1.5rem 1rem;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+    background: linear-gradient(90deg, rgba(0, 212, 255, 0.05) 0%, transparent 100%);
+}
+
+.entry-date {
+    color: #00d4ff;
+    font-weight: 600;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+}
+
+.entry-date i {
+    color: #ff00ff;
+    font-size: 1rem;
+}
+
+.points-badge {
+    background: linear-gradient(45deg, #00d4ff, #ff00ff);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 10px rgba(0, 212, 255, 0.3);
+}
+
+.entry-card-body {
+    padding: 1.5rem;
+}
+
+.entry-item {
+    margin-bottom: 1.5rem;
+}
+
+.entry-item:last-child {
+    margin-bottom: 0;
+}
+
+.entry-text {
+    color: #ffffff;
+    line-height: 1.6;
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+}
+
+.entry-toggle-btn {
+    background: none;
+    border: none;
+    color: #00d4ff;
+    font-size: 0.85rem;
+    padding: 0;
+    text-decoration: underline;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.entry-toggle-btn:hover {
+    color: #ff00ff;
+    text-shadow: 0 0 8px rgba(255, 0, 255, 0.5);
+}
+
+.entry-rating {
+    margin-top: 0.5rem;
+}
+
+.rating-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.4rem 0.8rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.rating-badge.positive {
+    background: linear-gradient(45deg, #00ff88, #00d4ff);
+    color: #1a1a2e;
+    box-shadow: 0 2px 8px rgba(0, 255, 136, 0.3);
+}
+
+.rating-badge.negative {
+    background: linear-gradient(45deg, #ff0066, #ff8800);
+    color: white;
+    box-shadow: 0 2px 8px rgba(255, 0, 102, 0.3);
+}
+
+.entry-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.2), transparent);
+    margin: 1.5rem 0;
+}
+
+.empty-state-card {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 16px;
+    padding: 3rem 2rem;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.empty-icon {
+    font-size: 3rem;
+    color: #00d4ff;
+    margin-bottom: 1rem;
+    opacity: 0.7;
+}
+
+.empty-text {
+    color: #ffffff;
+    font-size: 1.1rem;
+    margin: 0;
+    opacity: 0.8;
+}
+
+@keyframes entryGlow {
+    0% { opacity: 0.05; }
+    100% { opacity: 0.15; }
+}
+
+/* Chart Overlay Styles */
+.chart-container {
+    position: relative;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    min-height: 400px;
+}
+
+.chart-container canvas {
+    filter: blur(0px);
+    transition: filter 0.3s ease;
+}
+
+.chart-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, 
+        rgba(26, 26, 46, 0.95) 0%, 
+        rgba(22, 33, 62, 0.95) 50%, 
+        rgba(15, 52, 96, 0.95) 100%);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    border-radius: 16px;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+.chart-overlay::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(0, 212, 255, 0.1) 50%, transparent 70%);
+    animation: overlayShine 3s ease-in-out infinite;
+    display: none;
+}
+
+.overlay-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
+    padding: 2rem;
+}
+
+.overlay-icon {
+    font-size: 4rem;
+    color: #00d4ff;
+    margin-bottom: 2rem;
+    animation: iconFloat 2s ease-in-out infinite;
+}
+
+.overlay-title {
+    color: #ffffff;
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+}
+
+.overlay-message {
+    color: #ffffff;
+    font-size: 1.2rem;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+    opacity: 0.9;
+}
+
+.overlay-progress {
+    margin-top: 2rem;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+    border: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00d4ff, #ff00ff);
+    border-radius: 6px;
+    transition: width 0.5s ease;
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+}
+
+.progress-text {
+    color: #00d4ff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+@keyframes overlayShine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+@keyframes iconFloat {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-5px); }
+}
+
+/* Mobile responsiveness for overlay */
+@media (max-width: 768px) {
+    .chart-container {
+        padding: 1rem;
+        margin: 0 -0.5rem;
+    }
+    
+    .overlay-content {
+        max-width: 100%;
+        padding: 1.5rem 1rem;
+    }
+    
+    .overlay-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .overlay-title {
+        font-size: 1.3rem;
+        margin-bottom: 0.75rem;
+        line-height: 1.3;
+    }
+    
+    .overlay-message {
+        font-size: 0.95rem;
+        line-height: 1.5;
+        margin-bottom: 1.5rem;
+    }
+    
+    .overlay-progress {
+        margin-top: 1rem;
+    }
+    
+    .progress-bar {
+        height: 8px;
+        margin-bottom: 0.5rem;
+    }
+    
+    .progress-text {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .overlay-content {
+        padding: 1rem 0.5rem;
+    }
+    
+    .overlay-icon {
+        font-size: 2rem;
+    }
+    
+    .overlay-title {
+        font-size: 1.1rem;
+    }
+    
+    .overlay-message {
+        font-size: 0.9rem;
+    }
+}
+
+/* Ensure desktop styles work properly */
+@media screen and (min-width: 769px) {
+    .chart-container {
+        padding: 2rem;
+    }
+    
+    .overlay-content {
+        max-width: 500px;
+        padding: 3rem;
+    }
+    
+    .overlay-icon {
+        font-size: 4rem;
+        margin-bottom: 2rem;
+    }
+    
+    .overlay-title {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+        line-height: 1.2;
+    }
+    
+    .overlay-message {
+        font-size: 1.2rem;
+        line-height: 1.7;
+        margin-bottom: 2.5rem;
+    }
+    
+    .overlay-progress {
+        margin-top: 2rem;
+    }
+    
+    .progress-bar {
+        height: 12px;
+        margin-bottom: 0.75rem;
+    }
+    
+    .progress-text {
+        font-size: 1.1rem;
+    }
+}
+</style>
 {% endblock %}
 {% block scripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.0/build/global/luxon.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.1"></script>
