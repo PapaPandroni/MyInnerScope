@@ -11,7 +11,22 @@
 
 body {
     background-color: rgb(23, 26, 37);
-    color: whitesmoke
+    color: whitesmoke;
+}
+
+.hero-section {
+    background-color: rgb(23, 26, 37);
+    padding: 100px 0;
+}
+
+.card.bg-dark {
+    background-color: rgb(30, 33, 45) !important; /* Slightly lighter dark for cards */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer {
+    background-color: rgb(18, 20, 28) !important; /* Even darker for footer */
+    color: rgba(255, 255, 255, 0.6) !important;
 }
 
 .text-with-shadow {

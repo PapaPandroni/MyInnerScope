@@ -26,28 +26,48 @@
             </ul>
         </div>
     </nav>
-    <div class="position-relative overflow-hidden" style="height: 300px;">
-        <img src="{{ url_for('static', filename='assets/starry_sky.jpg') }}"
-            class="w-100 h-100 object-fit-cover" alt="A starry night sky">
+    <div class="hero-section text-center text-white py-5">
+        <div class="container">
+            <h1 class="display-4 text-with-shadow">Uncover Your Potential. Chart Your Growth.</h1>
+            <p class="lead">Your daily companion for self-discovery and personal evolution.</p>
+            <a href="/register" class="btn btn-light btn-lg mt-3">Start Your Journey</a>
+        </div>
+    </div>
 
-        <div class="position-absolute top-50 start-50 translate-middle text-center text-white">
-            <h1 class="display-5 text-with-shadow"><b>Start your self reflecting journey today</b></h1>
-            <a href="/register" class="btn btn-dark m-2 btn-lg">Sign up</a>-
+    <div class="container text-center py-5">
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 bg-dark text-white border-0">
+                    <div class="card-body">
+                        <h2 class="card-title">Embark on Your Path</h2>
+                        <p class="card-text">Begin your personal growth adventure by creating an account or logging in to access your self-reflection tools.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 bg-dark text-white border-0">
+                    <div class="card-body">
+                        <h2 class="card-title">Document Your Discoveries</h2>
+                        <p class="card-text">Capture your daily thoughts and actions, categorizing them to gain clarity on your behaviors and progress.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 bg-dark text-white border-0">
+                    <div class="card-body">
+                        <h2 class="card-title">Chart Your Evolution</h2>
+                        <p class="card-text">Visualize your journey with insightful charts and statistics, tracking your points, streaks, and overall development.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="container text-center">
-        <div class="row align-items-start">
-            <div class="col">
-                <h2>Step 1: Sign up and log in</h2>
-            </div>
-            <div class="col">
-                <h2>Step 2: Start writing diary entries</h2>
-            </div>
-            <div class="col">
-                <h2>Step 3: Review your progress to becoming a better you</h2>
-            </div>
+
+    <footer class="footer mt-auto py-3 bg-dark text-white-50">
+        <div class="container text-center">
+            <small>Copyright &copy; 2025 Aim for the Stars. All rights reserved.</small>
         </div>
-    </div>
+    </footer>
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
