@@ -128,4 +128,9 @@ def get_trend_message(user_id: int, today: date) -> str:
     elif point_difference < -5:
         return "Let's beat last week! Keep reflecting to keep improving!"
     else:
-        return "Steady progress! Consistency is key to self-improvement!" 
+        return "Steady progress! Consistency is key to self-improvement!"
+
+def get_recent_entries(user_id: int, limit: int = 3) -> List[DiaryEntry]:
+    """Get the most recent diary entries for the user."""
+    return DiaryEntry.query.filter_by(user_id=user_id)\
+        .order_by(DiaryEntry.id.desc()).limit(limit).all() 

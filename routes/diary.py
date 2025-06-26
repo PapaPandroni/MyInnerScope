@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, session
 from datetime import date, timedelta
 from models import User, DiaryEntry, DailyStats, db
+from utils.progress_helpers import get_recent_entries
 
 diary_bp = Blueprint('diary', __name__)
 
@@ -84,4 +85,7 @@ def diary_entry():
 
         return redirect("/diary")
 
-    return render_template("diary.html", display_name=display_name)
+    # Get recent entries for display
+    recent_entries = get_recent_entries(user_id)
+
+    return render_template("diary.html", display_name=display_name, recent_entries=recent_entries)
