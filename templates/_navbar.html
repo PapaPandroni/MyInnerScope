@@ -1,0 +1,44 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary navbar-dark custom-nav">
+    <div class="container-fluid d-flex justify-content-between">
+        <a class="navbar-brand"
+           href="{% if session.get('user_id') %}
+                    {% if request.path == '/diary' %}/progress
+                    {% elif request.path == '/progress' %}/diary
+                    {% else %}/diary
+                    {% endif %}
+                 {% else %}/
+                 {% endif %}">
+            Aim for the stars
+        </a>
+        <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <b>Menu</b>
+                </a>
+                <ul class="dropdown-menu custom-nav">
+                    {% if session.get('user_id') %}
+                        {% if request.path != '/diary' %}
+                            <li><a class="dropdown-item" href="/diary">Diary</a></li>
+                        {% endif %}
+                        {% if request.path != '/read-diary' %}
+                            <li><a class="dropdown-item" href="/read-diary">Read diary</a></li>
+                        {% endif %}
+                        {% if request.path != '/progress' %}
+                            <li><a class="dropdown-item" href="/progress">Progress</a></li>
+                        {% endif %}
+                        <li><a class="dropdown-item" href="/logout">Log out</a></li>
+                    {% else %}
+                        {% if request.path != '/register' %}
+                            <li><a class="dropdown-item" href="/register">Register</a></li>
+                        {% endif %}
+                        {% if request.path != '/login' %}
+                            <li><a class="dropdown-item" href="/login">Log in</a></li>
+                        {% endif %}
+                    {% endif %}
+                    <li><a class="dropdown-item" href="#">About</a></li>
+                    <li><a class="dropdown-item" href="#">Donate</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav> 
