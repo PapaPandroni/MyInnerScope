@@ -482,4 +482,42 @@
     .overlay-message {
         font-size: 0.9rem;
     }
+}
+
+/* Goal Card Styles */
+.sci-fi-card.current-goal .card-icon {
+    color: #4fd1c7;
+}
+
+.sci-fi-card.no-goal .card-icon {
+    color: #a0aec0;
+}
+
+.goal-progress {
+    margin-top: 1rem;
+}
+
+.goal-progress .progress {
+    background: rgba(45, 55, 72, 0.5);
+    border-radius: 10px;
+    height: 8px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.goal-progress .progress-bar {
+    background: linear-gradient(90deg, #4fd1c7 0%, #38b2ac 100%);
+    border-radius: 10px;
+    transition: width 0.6s ease;
+}
+
+.sci-fi-card.current-goal .card-text {
+    color: #e2e8f0;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.sci-fi-card.no-goal .card-text {
+    color: #a0aec0;
+    margin-bottom: 1rem;
 } 

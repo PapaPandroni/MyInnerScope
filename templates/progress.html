@@ -109,6 +109,52 @@
                 </div>
             </div>
         </div>
+        {% set primary_goal = None %}
+        {% if current_goals %}
+            {% set sorted_goals = current_goals|sort(attribute='week_end') %}
+            {% set soonest_end = sorted_goals[0].week_end %}
+            {% set soonest_goals = sorted_goals|selectattr('week_end', 'equalto', soonest_end)|list %}
+            {% set primary_goal = soonest_goals|sort(attribute='created_at')|first %}
+        {% endif %}
+        {% if primary_goal %}
+        <div class="col-md-6 mb-4">
+            <div class="sci-fi-card current-goal">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <div class="card-icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <h5 class="card-title">Weekly Goal</h5>
+                    <p class="card-text">{{ primary_goal.title }}</p>
+                    <div class="goal-progress">
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" 
+                                 style="width: {{ primary_goal.progress_percentage }}%"
+                                 aria-valuenow="{{ primary_goal.progress_percentage }}" 
+                                 aria-valuemin="0" aria-valuemax="100">
+                            </div>
+                        </div>
+                        <small class="text-white">{{ primary_goal.days_remaining }} days remaining</small>
+                    </div>
+                    <a href="/goals" class="btn btn-outline-primary btn-sm mt-2">View Details</a>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-md-6 mb-4">
+            <div class="sci-fi-card no-goal">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <div class="card-icon">
+                        <i class="fas fa-plus-circle"></i>
+                    </div>
+                    <h5 class="card-title">Set a Weekly Goal</h5>
+                    <p class="card-text">Track your progress towards a specific objective this week</p>
+                    <a href="/goals" class="btn btn-primary btn-sm mt-2">Create Goal</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
         <!-- Top 5 Days Section -->
         <div class="container mt-5">
             <h2 class="text-center mb-4">Your Top 3 Days</h2>

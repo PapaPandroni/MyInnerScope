@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+
+{% block title %}Weekly Goals{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/goals.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="text-center mb-3">
+                <i class="fas fa-bullseye me-2"></i>
+                Weekly Goals
+            </h1>
+            <p class="text-center" style="color: #fff;">Set and track your weekly objectives</p>
+        </div>
+    </div>
+    <div class="row">
+        <!-- Left Column: Create New Goal + Recent Goals -->
+        <div class="col-lg-6 mb-4">
+            <!-- Create New Goal Card -->
+            <div class="card goal-card create-goal mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0 text-white">
+                        <i class="fas fa-plus-circle me-2"></i>
+                        Set Your Weekly Goal
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form action="{{ url_for('goals.create_new_goal') }}" method="POST">
+                        <div class="mb-3">
+                            <label for="category" class="form-label text-white">Goal Category</label>
+                            <select class="form-select" id="category" name="category" required>
+                                <option value="">Choose a category...</option>
+                                {% for category in categories %}
+                                    <option value="{{ category.value }}">{{ category.value }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="title" class="form-label text-white">Goal Title</label>
+                            <input type="text" class="form-control" id="title" name="title" 
+                                   placeholder="Enter your goal..." required>
+                            <div id="suggestions" class="suggestions-container mt-2" style="display: none;">
+                                <small class="text-muted">Suggestions:</small>
+                                <div id="suggestions-list" class="suggestions-list"></div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label text-white">Description (Optional)</label>
+                            <textarea class="form-control" id="description" name="description" 
+                                      rows="3" placeholder="Add more details about your goal..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-rocket me-1"></i>Create Goal
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <!-- Recent Goals List -->
+            <div class="card goal-card">
+                <div class="card-header">
+                    <h5 class="mb-0 text-white">
+                        <i class="fas fa-history me-2"></i>
+                        Recent Goals
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if goal_history %}
+                        <div class="goal-history">
+                            {% for goal in goal_history %}
+                                <div class="history-item">
+                                    <div class="history-header">
+                                        <h6 class="history-title text-white">{{ goal.title }}</h6>
+                                        <span class="badge bg-{{ 'success' if goal.status.value == 'completed' else 'danger' if goal.status.value == 'failed' else 'secondary' }}">
+                                            {{ goal.status.value|title }}
+                                        </span>
+                                    </div>
+                                    <small class="text-white">{{ goal.category.value }}</small>
+                                    <small class="text-white d-block">{{ goal.created_at.strftime('%b %d, %Y') }}</small>
+                                </div>
+                                {% if not loop.last %}
+                                    <hr class="history-divider">
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-white text-center">No previous goals yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <!-- Right Column: Active Goals -->
+        <div class="col-lg-6 mb-4">
+            <div class="mb-4">
+                {% set active_count = current_goals|length if current_goals else 0 %}
+                {% set overdue_count = overdue_goals|length if overdue_goals else 0 %}
+                {% if overdue_count > 0 %}
+                <div class="alert alert-warning text-center">
+                    <strong>You have {{ overdue_count }} overdue goal{{ 's' if overdue_count > 1 else '' }} that need review!</strong>
+                </div>
+                {% endif %}
+            </div>
+            {% if current_goals %}
+                {% for goal in current_goals %}
+                <div class="card goal-card current-goal mb-4 {% if goal in overdue_goals %}border border-danger overdue-goal{% endif %}">
+                    <div class="card-header {% if goal in overdue_goals %}bg-danger text-white{% endif %}">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0 text-white">
+                                <i class="fas fa-target me-2"></i>
+                                Active Goal
+                            </h5>
+                            <span class="badge bg-primary">{{ goal.category.value }}</span>
+                            {% if goal in overdue_goals %}
+                                <span class="badge bg-danger ms-2">Overdue</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="goal-title text-white">{{ goal.title }}</h4>
+                        {% if goal.description %}
+                            <p class="goal-description text-white">{{ goal.description }}</p>
+                        {% endif %}
+                        <div class="mb-2">
+                            <span class="badge bg-secondary">Start: {{ goal.week_start.strftime('%b %d, %Y') }}</span>
+                            <span class="badge bg-dark">End: {{ goal.week_end.strftime('%b %d, %Y') }}</span>
+                        </div>
+                        <div class="progress-section mb-3">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="progress-label text-white">Week Progress</span>
+                                <span class="progress-percentage text-white">{{ goal.progress_percentage|round(1) }}%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" 
+                                     style="width: {{ goal.progress_percentage }}%"
+                                     aria-valuenow="{{ goal.progress_percentage }}" 
+                                     aria-valuemin="0" aria-valuemax="100">
+                                </div>
+                            </div>
+                            <small class="text-white">
+                                {{ goal.days_remaining }} days remaining
+                            </small>
+                        </div>
+                        <form action="{{ url_for('goals.mark_goal_complete', goal_id=goal.id) }}" method="POST" class="d-inline">
+                            <button type="submit" class="btn btn-success btn-sm me-2">
+                                <i class="fas fa-check"></i> Mark as Complete
+                            </button>
+                        </form>
+                        <form action="{{ url_for('goals.mark_goal_failed', goal_id=goal.id) }}" method="POST" class="d-inline">
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                <i class="fas fa-times"></i> Mark as Failed
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="card goal-card mb-4">
+                    <div class="card-body text-center">
+                        <p class="text-white">No active goals. Set a new goal to get started!</p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/goals.js') }}"></script>
+{% endblock %} 

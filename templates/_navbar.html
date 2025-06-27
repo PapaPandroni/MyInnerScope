@@ -26,6 +26,9 @@
                         {% if request.path != '/progress' %}
                             <li><a class="dropdown-item" href="/progress">Progress</a></li>
                         {% endif %}
+                        {% if request.path != '/goals' %}
+                            <li><a class="dropdown-item" href="/goals">Goals</a></li>
+                        {% endif %}
                         <li><a class="dropdown-item" href="/logout">Log out</a></li>
                     {% else %}
                         {% if request.path != '/register' %}

@@ -7,6 +7,7 @@ from utils.progress_helpers import (
     get_longest_streak, get_total_entries, get_points_data, get_top_days_with_entries,
     get_weekday_data, get_sample_weekday_data, get_trend_message
 )
+from utils.goal_helpers import get_current_goals
 
 progress_bp = Blueprint('progress', __name__)
 
@@ -29,6 +30,9 @@ def progress():
     weekday_data, has_sufficient_weekday_data = get_weekday_data(user_id)
     sample_weekday_data = get_sample_weekday_data()
     trend_message = get_trend_message(user_id, today)
+    
+    # Get all current goals
+    current_goals = get_current_goals(user_id)
 
     return render_template(
         "progress.html",
@@ -43,7 +47,8 @@ def progress():
         has_sufficient_weekday_data=has_sufficient_weekday_data,
         sample_weekday_data=sample_weekday_data,
         trend_message=trend_message,
-        display_name=display_name   
+        display_name=display_name,
+        current_goals=current_goals
     )
 
 @progress_bp.route("/export-journey", methods=["POST"])
