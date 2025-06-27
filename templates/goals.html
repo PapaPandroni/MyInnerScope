@@ -71,7 +71,7 @@
                     {% if goal_history %}
                         <div class="goal-history">
                             {% for goal in goal_history %}
-                                <div class="history-item">
+                                <div class="history-item{% if loop.index > 5 %} d-none extra-goal{% endif %}">
                                     <div class="history-header">
                                         <h6 class="history-title text-white">{{ goal.title }}</h6>
                                         <span class="badge bg-{{ 'success' if goal.status.value == 'completed' else 'danger' if goal.status.value == 'failed' else 'secondary' }}">
@@ -82,9 +82,12 @@
                                     <small class="text-white d-block">{{ goal.created_at.strftime('%b %d, %Y') }}</small>
                                 </div>
                                 {% if not loop.last %}
-                                    <hr class="history-divider">
+                                    <hr class="history-divider{% if loop.index >= 5 %} d-none extra-goal{% endif %}">
                                 {% endif %}
                             {% endfor %}
+                            {% if goal_history|length > 5 %}
+                                <button class="btn btn-outline-primary btn-sm mt-2" type="button" onclick="toggleExtraGoals()" id="show-more-goals-btn">Show more</button>
+                            {% endif %}
                         </div>
                     {% else %}
                         <p class="text-white text-center">No previous goals yet.</p>

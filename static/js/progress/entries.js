@@ -57,4 +57,22 @@ window.toggleExtraEntries = function(dayIndex) {
     if (btn) {
         btn.textContent = expanded ? 'Show less' : 'Show more';
     }
+}
+
+// Toggle extra goals in Recent Goals section
+window.toggleExtraGoals = function() {
+    const extraGoals = document.querySelectorAll('.extra-goal');
+    const btn = document.getElementById('show-more-goals-btn');
+    let expanded = false;
+    extraGoals.forEach(goal => {
+        if (goal.classList.contains('d-none')) {
+            goal.classList.remove('d-none');
+            expanded = true;
+        } else {
+            goal.classList.add('d-none');
+        }
+    });
+    if (btn) {
+        btn.textContent = expanded ? 'Show less' : 'Show more';
+    }
 } 
