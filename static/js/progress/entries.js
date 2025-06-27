@@ -39,4 +39,22 @@ window.entryManager = new EntryManager();
 // Keep the global function for backward compatibility with inline onclick handlers
 window.toggleEntry = function(entryId) {
     window.entryManager.toggleEntry(entryId);
-}; 
+};
+
+// Toggle extra entries for Top 3 Days
+window.toggleExtraEntries = function(dayIndex) {
+    const extraEntries = document.querySelectorAll('.extra-entry-' + dayIndex);
+    const btn = document.getElementById('show-more-btn-' + dayIndex);
+    let expanded = false;
+    extraEntries.forEach(entry => {
+        if (entry.classList.contains('d-none')) {
+            entry.classList.remove('d-none');
+            expanded = true;
+        } else {
+            entry.classList.add('d-none');
+        }
+    });
+    if (btn) {
+        btn.textContent = expanded ? 'Show less' : 'Show more';
+    }
+} 

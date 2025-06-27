@@ -161,52 +161,56 @@
             {% if top_days %}
                 <div class="row">
                     {% for day in top_days %}
-                    <div class="col-md-6 col-lg-4 mb-4">
-                        <div class="sci-fi-entry-card">
-                            <div class="entry-card-glow"></div>
-                            <div class="entry-card-header">
-                                <div class="entry-date">
-                                    <i class="fas fa-calendar-alt me-2"></i>
-                                    {{ day.date.strftime('%B %d, %Y') }}
-                                </div>
-                                <div class="entry-points">
-                                    <span class="points-badge">{{ day.points }} pts</span>
-                                </div>
-                            </div>
-                            <div class="entry-card-body">
-                                {% for entry in day.entries %}
-                                <div class="entry-item">
-                                    <div class="entry-preview" id="preview-{{ day.date }}-{{ loop.index }}">
-                                        <p class="entry-text">
-                                            {% if entry.content|length > 100 %}
-                                                {{ entry.content[:100] }}...
-                                                <button class="entry-toggle-btn" onclick="toggleEntry('{{ day.date }}-{{ loop.index }}')">Read more</button>
-                                            {% else %}
-                                                {{ entry.content }}
-                                            {% endif %}
-                                        </p>
+                        {% set day_index = loop.index0 %}
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="sci-fi-entry-card">
+                                <div class="entry-card-glow"></div>
+                                <div class="entry-card-header">
+                                    <div class="entry-date">
+                                        <i class="fas fa-calendar-alt me-2"></i>
+                                        {{ day.date.strftime('%B %d, %Y') }}
                                     </div>
-                                    <div class="entry-full d-none" id="full-{{ day.date }}-{{ loop.index }}">
-                                        <p class="entry-text">{{ entry.content }}</p>
-                                        <button class="entry-toggle-btn" onclick="toggleEntry('{{ day.date }}-{{ loop.index }}')">Show less</button>
-                                    </div>
-                                    <div class="entry-rating">
-                                        {% if entry.rating == 1 %}
-                                            <span class="rating-badge positive">
-                                                <i class="fas fa-thumbs-up me-1"></i>Encouraged
-                                            </span>
-                                        {% else %}
-                                            <span class="rating-badge negative">
-                                                <i class="fas fa-thumbs-down me-1"></i>Want to change
-                                            </span>
-                                        {% endif %}
+                                    <div class="entry-points">
+                                        <span class="points-badge">{{ day.points }} pts</span>
                                     </div>
                                 </div>
-                                {% if not loop.last %}<div class="entry-divider"></div>{% endif %}
-                                {% endfor %}
+                                <div class="entry-card-body">
+                                    {% set entry_count = day.entries|length %}
+                                    {% for entry in day.entries %}
+                                        <div class="entry-item {% if loop.index > 3 %}d-none extra-entry extra-entry-{{ day_index }}{% endif %}" id="entry-{{ day.date }}-{{ loop.index }}">
+                                            <div class="entry-preview" id="preview-{{ day.date }}-{{ loop.index }}">
+                                                <p class="entry-text">
+                                                    {% if entry.content|length > 100 %}
+                                                        {{ entry.content[:100] }}...
+                                                        <button class="entry-toggle-btn" onclick="toggleEntry('{{ day.date }}-{{ loop.index }}')">Read more</button>
+                                                    {% else %}
+                                                        {{ entry.content }}
+                                                    {% endif %}
+                                                </p>
+                                            </div>
+                                            <div class="entry-full d-none" id="full-{{ day.date }}-{{ loop.index }}">
+                                                <p class="entry-text">{{ entry.content }}</p>
+                                                <button class="entry-toggle-btn" onclick="toggleEntry('{{ day.date }}-{{ loop.index }}')">Show less</button>
+                                            </div>
+                                            <div class="entry-rating">
+                                                {% if entry.rating == 1 %}
+                                                    <span class="rating-badge positive">
+                                                        <i class="fas fa-thumbs-up me-1"></i>Encouraged
+                                                    </span>
+                                                {% else %}
+                                                    <span class="rating-badge negative">
+                                                        <i class="fas fa-thumbs-down me-1"></i>Want to change
+                                                    </span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                    {% if entry_count > 3 %}
+                                        <button class="btn btn-outline-primary btn-sm mt-2 show-more-btn" type="button" onclick="toggleExtraEntries({{ day_index }})" id="show-more-btn-{{ day_index }}">Show more</button>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
-                    </div>
                     {% endfor %}
                 </div>
             {% else %}

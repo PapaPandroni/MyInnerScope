@@ -66,6 +66,18 @@ class ProgressCharts {
                             modifierKey: null 
                         },
                     }   
+                },
+                onClick: (event, elements, chart) => {
+                    if (elements && elements.length > 0) {
+                        const element = elements[0];
+                        const datasetIndex = element.datasetIndex;
+                        const index = element.index;
+                        const point = chart.data.datasets[datasetIndex].data[index];
+                        const date = point.x;
+                        if (date) {
+                            window.location.href = `/read-diary?date=${date}`;
+                        }
+                    }
                 }
             }
         });
