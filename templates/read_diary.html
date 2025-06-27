@@ -75,17 +75,43 @@
     }
 }
 .search-result-card {
-    padding: 1rem 1.2rem !important;
+    padding: 0.7rem 1.1rem !important;
     font-size: 1rem !important;
-    margin-bottom: 1.2rem !important;
+    margin-bottom: 0.8rem !important;
     box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 48px;
+}
+.search-result-main {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    flex: 1 1 auto;
+    min-width: 0;
 }
 .search-result-date {
     font-size: 0.98rem;
-    margin-bottom: 0.5rem;
+    color: #e2e8f0;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+.search-result-snippet {
+    color: #e2e8f0;
+    font-size: 1rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-left: 0.5rem;
+    flex: 1 1 auto;
+    min-width: 0;
 }
 .search-result-btn {
-    margin-top: 1rem;
+    margin-left: 1.2rem;
+    flex-shrink: 0;
 }
 </style>
 {% endblock %}
@@ -134,12 +160,14 @@
                     <p class="text-muted mb-4 text-center">Found {{ search_results|length }} result(s)</p>
                     {% for result in search_results %}
                     <div class="diary-entry-content search-result-card">
-                        <div class="d-flex align-items-center search-result-date">
-                            <i class="fas fa-calendar-alt me-2" style="color:#4fd1c7;"></i>
-                            <span>{{ result.formatted_date }}</span>
+                        <div class="search-result-main">
+                            <span class="search-result-date">
+                                <i class="fas fa-calendar-alt" style="color:#4fd1c7;"></i>
+                                {{ result.formatted_date }}
+                            </span>
+                            <span class="search-result-snippet">{{ result.snippet|safe }}</span>
                         </div>
-                        {{ result.snippet|safe }}
-                        <div class="text-end search-result-btn">
+                        <div class="search-result-btn">
                             <a href="/read-diary?date={{ result.date }}" class="btn btn-outline-primary btn-sm">Read Full Day</a>
                         </div>
                     </div>
