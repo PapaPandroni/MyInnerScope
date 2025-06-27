@@ -43,6 +43,12 @@
         <div class="chart-container">
             <img src="data:image/png;base64,{{ points_chart }}" alt="Points Over Time" class="chart-image">
         </div>
+        {% if wordcloud_chart %}
+        <div class="chart-container">
+            <h3 class="section-title" style="margin-top: 2rem;">Words Discovered</h3>
+            <img src="data:image/png;base64,{{ wordcloud_chart }}" alt="Word Cloud" class="chart-image">
+        </div>
+        {% endif %}
         <div class="chart-container">
             <img src="data:image/png;base64,{{ weekday_chart }}" alt="Average Points by Day" class="chart-image">
         </div>

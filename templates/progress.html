@@ -35,6 +35,7 @@
                     </div>
                     {% else %}
                     <div id="wordcloud" style="width:100%; aspect-ratio: 2.5 / 1; min-height: 300px; max-width: none; margin: 0 auto;"></div>
+                    <canvas id="wordcloud-canvas" style="display:none;"></canvas>
                     <style>#wordcloud canvas { cursor: pointer !important; }</style>
                     <script>
                         window.wordcloudData = {{ wordcloud_data|tojson|safe }};

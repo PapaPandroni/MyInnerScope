@@ -7,7 +7,7 @@ from flask import render_template, current_app
 import matplotlib.pyplot as plt
 import os
 
-def generate_journey_pdf(user, entries, points_data, weekday_data, top_days, stats):
+def generate_journey_pdf(user, entries, points_data, weekday_data, top_days, stats, wordcloud_image=None):
     """Generate a PDF containing the user's self-reflective journey.
     
     Args:
@@ -17,6 +17,7 @@ def generate_journey_pdf(user, entries, points_data, weekday_data, top_days, sta
         weekday_data: List of weekday performance data
         top_days: List of top performing days with entries
         stats: Dictionary containing user statistics
+        wordcloud_image: Optional base64 data URL of the word cloud image
     
     Returns:
         BytesIO object containing the generated PDF
@@ -34,6 +35,13 @@ def generate_journey_pdf(user, entries, points_data, weekday_data, top_days, sta
     points_chart = _generate_points_chart(points_data)
     weekday_chart = _generate_weekday_chart(weekday_data)
     
+    # Prepare wordcloud image (strip data URL prefix if present)
+    wordcloud_chart = None
+    if wordcloud_image and wordcloud_image.startswith('data:image/png;base64,'):
+        wordcloud_chart = wordcloud_image.split(',', 1)[1]
+    elif wordcloud_image:
+        wordcloud_chart = wordcloud_image
+
     # Sort entries chronologically (earliest first)
     sorted_entries = sorted(entries, key=lambda x: x.entry_date)
     print(f"Sorted {len(sorted_entries)} entries for PDF")
@@ -45,6 +53,7 @@ def generate_journey_pdf(user, entries, points_data, weekday_data, top_days, sta
         entries=sorted_entries,  # Pass the sorted entries
         points_chart=points_chart,
         weekday_chart=weekday_chart,
+        wordcloud_chart=wordcloud_chart,
         top_days=top_days,
         stats=stats,
         generation_date=datetime.now().strftime('%B %d, %Y')

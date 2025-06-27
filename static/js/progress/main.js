@@ -56,23 +56,60 @@ document.addEventListener('DOMContentLoaded', function() {
 // Word Cloud rendering
 // Requires wordcloud2.js to be loaded on the page
 if (window.wordcloudData && document.getElementById('wordcloud')) {
+    console.log('Wordcloud data available:', window.wordcloudData);
+    console.log('Wordcloud element found:', document.getElementById('wordcloud'));
+    
     // Dynamically load wordcloud2.js if not already loaded
     function loadWordCloudScript(callback) {
         if (window.WordCloud) {
+            console.log('WordCloud library already loaded');
             callback();
             return;
         }
+        console.log('Loading WordCloud library...');
         var script = document.createElement('script');
-        script.src = 'https://cdn.jsdelivr.net/npm/wordcloud@1.2.2/src/wordcloud2.min.js';
-        script.onload = callback;
+        // Try a different CDN
+        script.src = 'https://unpkg.com/wordcloud@1.2.2/src/wordcloud2.min.js';
+        script.onload = function() {
+            console.log('WordCloud library loaded successfully');
+            console.log('WordCloud function available:', typeof window.WordCloud);
+            callback();
+        };
+        script.onerror = function() {
+            console.error('Failed to load WordCloud library from unpkg, trying jsdelivr...');
+            // Fallback to jsdelivr
+            var fallbackScript = document.createElement('script');
+            fallbackScript.src = 'https://cdn.jsdelivr.net/npm/wordcloud@1.2.2/src/wordcloud2.min.js';
+            fallbackScript.onload = function() {
+                console.log('WordCloud library loaded successfully from jsdelivr');
+                console.log('WordCloud function available:', typeof window.WordCloud);
+                callback();
+            };
+            fallbackScript.onerror = function() {
+                console.error('Failed to load WordCloud library from both CDNs');
+            };
+            document.head.appendChild(fallbackScript);
+        };
         document.head.appendChild(script);
     }
 
     loadWordCloudScript(function() {
+        console.log('Creating wordcloud with data:', window.wordcloudData);
+        console.log('Raw wordcloud data type:', typeof window.wordcloudData);
+        console.log('Raw wordcloud data length:', window.wordcloudData.length);
+        console.log('First few raw items:', window.wordcloudData.slice(0, 3));
+        
         var words = window.wordcloudData.map(function(item) {
             return [item[0], item[1]];
         });
+        console.log('Processed words:', words);
+        console.log('Sample word data:', words.slice(0, 3));
+        console.log('Word data types:', words.slice(0, 3).map(w => [typeof w[0], typeof w[1]]));
+        
         var wordcloudElem = document.getElementById('wordcloud');
+        console.log('Wordcloud element:', wordcloudElem);
+        
+        // Render to visible div with real data
         WordCloud(wordcloudElem, {
             list: words,
             gridSize: 12,
@@ -81,7 +118,6 @@ if (window.wordcloudData && document.getElementById('wordcloud')) {
             },
             fontFamily: 'Orbitron, Arial, sans-serif',
             color: function() {
-                // Sci-fi gradient colors
                 var colors = ['#00d4ff', '#ff00ff', '#4fd1c7', '#fff', '#00ffb3', '#ff6ec7'];
                 return colors[Math.floor(Math.random() * colors.length)];
             },
@@ -97,10 +133,43 @@ if (window.wordcloudData && document.getElementById('wordcloud')) {
             shuffle: true,
             hover: window.innerWidth > 600
         });
-        // Set pointer cursor on hover
-        var canvas = wordcloudElem.querySelector('canvas');
-        if (canvas) {
-            canvas.style.cursor = 'pointer';
+
+        // Render to hidden canvas for export with real data, matching the visible wordcloud's size
+        var exportCanvas = document.getElementById('wordcloud-canvas');
+        if (exportCanvas && wordcloudElem) {
+            // Match the export canvas size to the visible wordcloud div
+            var rect = wordcloudElem.getBoundingClientRect();
+            exportCanvas.width = Math.floor(rect.width);
+            exportCanvas.height = Math.floor(rect.height);
+
+            WordCloud(exportCanvas, {
+                list: words,
+                gridSize: 12,
+                weightFactor: function (size) {
+                    return 18 + size * 5;
+                },
+                fontFamily: 'Orbitron, Arial, sans-serif',
+                color: function() {
+                    var colors = ['#00d4ff', '#ff00ff', '#4fd1c7', '#fff', '#00ffb3', '#ff6ec7'];
+                    return colors[Math.floor(Math.random() * colors.length)];
+                },
+                backgroundColor: 'rgba(26, 26, 46, 1)',
+                rotateRatio: 0.2,
+                rotationSteps: 2,
+                minSize: 14,
+                drawOutOfBound: false,
+                shuffle: true
+            });
+            console.log('Wordcloud rendered to export canvas');
+        } else {
+            console.error('Export canvas or wordcloud element not found!');
         }
     });
+} else {
+    console.log('Wordcloud conditions not met:');
+    console.log('- wordcloudData available:', !!window.wordcloudData);
+    console.log('- wordcloud element exists:', !!document.getElementById('wordcloud'));
+    if (window.wordcloudData) {
+        console.log('- wordcloudData:', window.wordcloudData);
+    }
 } 

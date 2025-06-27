@@ -20,25 +20,70 @@ class ExportManager {
     }
 
     /**
+     * Wait for wordcloud to be fully rendered
+     * @returns {Promise<string|null>} Base64 image data or null if not available
+     */
+    async waitForWordcloud() {
+        return new Promise((resolve) => {
+            const maxAttempts = 50; // 5 seconds max wait
+            let attempts = 0;
+            
+            const checkWordcloud = () => {
+                attempts++;
+                console.log(`Checking export wordcloud canvas (attempt ${attempts}/${maxAttempts})...`);
+                const wordcloudCanvas = document.getElementById('wordcloud-canvas');
+                if (wordcloudCanvas) {
+                    // Check if canvas has content (not just empty)
+                    const ctx = wordcloudCanvas.getContext('2d');
+                    const imageData = ctx.getImageData(0, 0, wordcloudCanvas.width, wordcloudCanvas.height);
+                    const hasContent = imageData.data.some(pixel => pixel !== 0);
+                    console.log('Export canvas has content:', hasContent);
+                    if (hasContent) {
+                        const imageDataUrl = wordcloudCanvas.toDataURL('image/png');
+                        console.log('Export canvas image data length:', imageDataUrl.length);
+                        resolve(imageDataUrl);
+                        return;
+                    }
+                }
+                if (attempts >= maxAttempts) {
+                    console.log('Export wordcloud canvas not found or empty after maximum attempts');
+                    resolve(null);
+                    return;
+                }
+                setTimeout(checkWordcloud, 100);
+            };
+            checkWordcloud();
+        });
+    }
+
+    /**
      * Handle the export button click
      */
     async handleExport() {
         this.showOverlay();
         
         try {
+            console.log('Starting PDF export...');
+            
+            // Wait for wordcloud to be ready
+            const wordcloudImage = await this.waitForWordcloud();
+            console.log('Wordcloud image captured:', wordcloudImage ? 'Yes' : 'No');
+            
             const response = await fetch('/export-journey', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                body: JSON.stringify({ wordcloud_image: wordcloudImage })
             });
             
             if (!response.ok) {
-                throw new Error('Export failed');
+                throw new Error(`Export failed: ${response.status} ${response.statusText}`);
             }
             
             const blob = await response.blob();
             this.downloadFile(blob, 'my-self-reflective-journey.pdf');
+            console.log('PDF export completed successfully');
         } catch (error) {
             console.error('Export failed:', error);
             this.showError('Failed to generate export. Please try again.');
