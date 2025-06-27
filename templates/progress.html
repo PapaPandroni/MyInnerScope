@@ -14,6 +14,36 @@
             <canvas id="pointsChart" width="400" height="200"></canvas>
         </div>
         <div class="container mt-5">
+            <h2 class="text-center">Words Discovered</h2>
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    {% if not has_sufficient_wordcloud_data %}
+                    <div class="chart-overlay" style="position:relative; min-height: 300px;">
+                        <div class="overlay-content">
+                            <div class="overlay-icon">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                            <h4 class="overlay-title">Word Cloud Locked</h4>
+                            <p class="overlay-message">Write at least 10 diary entries to unlock your personal word cloud and see your most-used words!</p>
+                            <div class="overlay-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: {{ (wordcloud_entry_count/10*100) if wordcloud_entry_count < 10 else 100 }}%"></div>
+                                </div>
+                                <span class="progress-text">{{ wordcloud_entry_count }}/10 entries completed</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div id="wordcloud" style="width:100%; aspect-ratio: 2.5 / 1; min-height: 300px; max-width: none; margin: 0 auto;"></div>
+                    <style>#wordcloud canvas { cursor: pointer !important; }</style>
+                    <script>
+                        window.wordcloudData = {{ wordcloud_data|tojson|safe }};
+                    </script>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="container mt-5">
             <h2 class="text-center">Average Points by Day of Week</h2>
             <div class="chart-container">
                 <canvas id="weekdayChart" width="400" height="200"></canvas>
@@ -35,6 +65,9 @@
                 </div>
                 {% endif %}
             </div>
+        </div>
+        <div class="container mt-5">
+            <h2 class="text-center mb-4">Exploration Overview</h2>
         </div>
     <div class="row text-center">
         <div class="col-md-3 mb-4">
