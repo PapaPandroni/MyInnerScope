@@ -20,43 +20,35 @@ def diary_entry():
     else:
         display_name = user.email.split('@')[0]
 
+    # Manually set the rating from the button pressed
+    if request.method == 'POST' and 'rating' in request.form:
+        form.rating.data = int(request.form['rating'])
+
     if form.validate_on_submit():
         content = form.content.data
         rating = form.rating.data
         today = date.today()
 
-        # Check if DailyStats exists for today
         stats = DailyStats.query.filter_by(user_id=user_id, date=today).first()
 
         if stats is None:
-            # Check if user had an entry yesterday
             yesterday = today - timedelta(days=1)
             yesterdays_stats = DailyStats.query.filter_by(user_id=user_id, date=yesterday).first()
             
-            # Start a new streak or continue it
+            new_streak = 1
             if yesterdays_stats and yesterdays_stats.current_streak > 0:
                 new_streak = yesterdays_stats.current_streak + 1
-            else:
-                new_streak = 1
 
-            # Create today's stats entry
-            stats = DailyStats(
-                user_id=user_id,
-                date=today,
-                current_streak=new_streak,
-                longest_streak=new_streak,
-                points=0
-            )
-
-            # Check and update longest streak
+            stats = DailyStats(user_id=user_id, date=today, current_streak=new_streak, points=0)
+            
             longest = DailyStats.query.filter_by(user_id=user_id).order_by(DailyStats.longest_streak.desc()).first()
-            if longest and longest.longest_streak > new_streak:
-                stats.longest_streak = longest.longest_streak
+            stats.longest_streak = longest.longest_streak if longest else new_streak
+            if new_streak > stats.longest_streak:
+                stats.longest_streak = new_streak
 
             db.session.add(stats)
 
         elif stats.current_streak == 0:
-            # This row was created by login, now update streaks
             yesterday = today - timedelta(days=1)
             yesterdays_stats = DailyStats.query.filter_by(user_id=user_id, date=yesterday).first()
     
@@ -65,39 +57,22 @@ def diary_entry():
             else:
                 stats.current_streak = 1
 
-            # Update longest streak if needed
             if stats.current_streak > stats.longest_streak:
                 stats.longest_streak = stats.current_streak
 
-        # Add points based on rating
-        if rating == 1:
-            stats.points += 5
-        elif rating == -1:
-            stats.points += 2
+        stats.points += 5 if rating == 1 else 2
 
-        # Save diary entry
-        new_entry = DiaryEntry(
-            user_id=user_id,
-            content=content,
-            rating=rating
-        )
+        new_entry = DiaryEntry(user_id=user_id, content=content, rating=rating)
         db.session.add(new_entry)
         db.session.commit()
 
         return redirect("/diary")
-    
-    elif request.method == 'POST':
-        # This handles the case where the form is submitted but fails validation
-        # The rating is not directly available in form.errors, so we check the form data
-        if 'rating' not in request.form:
-            flash('Please select a rating for your entry.', 'danger')
-        # Other validation errors are handled by WTForms and will be displayed in the template
+
+    # Flash errors if validation fails
+    if form.errors:
         for field, errors in form.errors.items():
             for error in errors:
                 flash(error, 'danger')
 
-
-    # Get recent entries for display
     recent_entries = get_recent_entries(user_id)
-
     return render_template("diary.html", display_name=display_name, recent_entries=recent_entries, form=form)
