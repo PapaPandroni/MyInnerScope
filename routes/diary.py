@@ -1,7 +1,8 @@
-from flask import Blueprint, render_template, request, redirect, session
+from flask import Blueprint, render_template, request, redirect, session, flash
 from datetime import date, timedelta
 from models import User, DiaryEntry, DailyStats, db
 from utils.progress_helpers import get_recent_entries
+from forms import DiaryEntryForm
 
 diary_bp = Blueprint('diary', __name__)
 
@@ -10,18 +11,18 @@ def diary_entry():
     if "user_id" not in session:
         return redirect("/login")
 
-    # Fetch user for display name
+    form = DiaryEntryForm()
     user_id = session["user_id"]
     user = User.query.get(user_id)
+
     if user.user_name:
         display_name = user.user_name
     else:
         display_name = user.email.split('@')[0]
 
-    if request.method == "POST":
-        content = request.form["content"]
-        rating = int(request.form["rating"])
-        user_id = session["user_id"]
+    if form.validate_on_submit():
+        content = form.content.data
+        rating = form.rating.data
         today = date.today()
 
         # Check if DailyStats exists for today
@@ -84,8 +85,19 @@ def diary_entry():
         db.session.commit()
 
         return redirect("/diary")
+    
+    elif request.method == 'POST':
+        # This handles the case where the form is submitted but fails validation
+        # The rating is not directly available in form.errors, so we check the form data
+        if 'rating' not in request.form:
+            flash('Please select a rating for your entry.', 'danger')
+        # Other validation errors are handled by WTForms and will be displayed in the template
+        for field, errors in form.errors.items():
+            for error in errors:
+                flash(error, 'danger')
+
 
     # Get recent entries for display
     recent_entries = get_recent_entries(user_id)
 
-    return render_template("diary.html", display_name=display_name, recent_entries=recent_entries)
+    return render_template("diary.html", display_name=display_name, recent_entries=recent_entries, form=form)
