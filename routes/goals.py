@@ -23,6 +23,7 @@ def goals_page():
     goal_stats = get_goal_stats(user_id)
     predefined_goals = get_predefined_goals()
     goal_form = GoalForm()
+    progress_form = GoalProgressForm()
     
     return render_template('goals.html', 
                          current_goals=current_goals,
@@ -31,7 +32,8 @@ def goals_page():
                          goal_stats=goal_stats,
                          predefined_goals=predefined_goals,
                          categories=GoalCategory,
-                         goal_form=goal_form)
+                         goal_form=goal_form,
+                         progress_form=progress_form)
 
 @goals_bp.route('/goals/create', methods=['POST'])
 def create_new_goal():
@@ -52,8 +54,8 @@ def create_new_goal():
             try:
                 category = GoalCategory(category_name)
             except ValueError:
-                flash('Invalid goal category selected.', 'error')
-                return redirect(url_for('goals.goals_page'))
+                flash('Invalid goal category selected.', 'danger')
+                return redirect(url_for('goals.goals_page'), 400)
             
             # Create the goal
             goal = create_goal(
@@ -67,14 +69,28 @@ def create_new_goal():
             return redirect(url_for('goals.goals_page'))
             
         except Exception as e:
-            flash('An error occurred while creating your goal.', 'error')
-            return redirect(url_for('goals.goals_page'))
+            flash('An error occurred while creating your goal.', 'danger')
+            return redirect(url_for('goals.goals_page'), 500)
     else:
+        user_id = session["user_id"]
+        current_goals = get_current_goals(user_id)
+        overdue_goals = get_overdue_goals(user_id)
+        goal_history = get_goal_history(user_id, limit=10)
+        goal_stats = get_goal_stats(user_id)
+        predefined_goals = get_predefined_goals()
+
         # Flash validation errors
         for field, errors in form.errors.items():
             for error in errors:
-                flash(error, 'error')
-        return redirect(url_for('goals.goals_page'))
+                flash(error, 'danger')
+        return render_template('goals.html',
+                             current_goals=current_goals,
+                             overdue_goals=overdue_goals,
+                             goal_history=goal_history,
+                             goal_stats=goal_stats,
+                             predefined_goals=predefined_goals,
+                             categories=GoalCategory,
+                             goal_form=form), 400
 
 @goals_bp.route('/goals/<int:goal_id>/update', methods=['POST'])
 def update_goal(goal_id):
@@ -93,19 +109,34 @@ def update_goal(goal_id):
             if goal:
                 flash('Goal progress updated successfully!', 'success')
             else:
-                flash('Goal not found.', 'error')
+                flash('Goal not found.', 'danger')
                 
             return redirect(url_for('goals.goals_page'))
             
         except Exception as e:
-            flash('An error occurred while updating your goal.', 'error')
-            return redirect(url_for('goals.goals_page'))
+            flash('An error occurred while updating your goal.', 'danger')
+            return redirect(url_for('goals.goals_page'), 500)
     else:
+        user_id = session["user_id"]
+        current_goals = get_current_goals(user_id)
+        overdue_goals = get_overdue_goals(user_id)
+        goal_history = get_goal_history(user_id, limit=10)
+        goal_stats = get_goal_stats(user_id)
+        predefined_goals = get_predefined_goals()
+
         # Flash validation errors
         for field, errors in form.errors.items():
             for error in errors:
-                flash(error, 'error')
-        return redirect(url_for('goals.goals_page'))
+                flash(error, 'danger')
+        return render_template('goals.html',
+                             current_goals=current_goals,
+                             overdue_goals=overdue_goals,
+                             goal_history=goal_history,
+                             goal_stats=goal_stats,
+                             predefined_goals=predefined_goals,
+                             categories=GoalCategory,
+                             goal_form=GoalForm(), # Pass a new GoalForm for the create section
+                             progress_form=form), 400 # Pass the progress form with errors
 
 @goals_bp.route('/goals/<int:goal_id>/complete', methods=['POST'])
 def mark_goal_complete(goal_id):
@@ -126,15 +157,68 @@ def mark_goal_complete(goal_id):
                 db.session.add(stats)
             stats.points += 10
             db.session.commit()
-            flash(f'Congratulations! You completed your goal: "{goal.title}" (+10 points)', 'success')
+            flash(f'Congratulations! You completed your goal: "{goal.title}"', 'success')
+            # Re-render the page with a 200 OK status for success
+            user_id = session["user_id"]
+            current_goals = get_current_goals(user_id)
+            overdue_goals = get_overdue_goals(user_id)
+            goal_history = get_goal_history(user_id, limit=10)
+            goal_stats = get_goal_stats(user_id)
+            predefined_goals = get_predefined_goals()
+            goal_form = GoalForm()
+            progress_form = GoalProgressForm()
+
+            return render_template('goals.html',
+                                 current_goals=current_goals,
+                                 overdue_goals=overdue_goals,
+                                 goal_history=goal_history,
+                                 goal_stats=goal_stats,
+                                 predefined_goals=predefined_goals,
+                                 categories=GoalCategory,
+                                 goal_form=goal_form,
+                                 progress_form=progress_form), 200
         else:
-            flash('Goal not found.', 'error')
+            flash('Goal not found.', 'danger')
             
-        return redirect(url_for('goals.goals_page'))
+        user_id = session["user_id"]
+        current_goals = get_current_goals(user_id)
+        overdue_goals = get_overdue_goals(user_id)
+        goal_history = get_goal_history(user_id, limit=10)
+        goal_stats = get_goal_stats(user_id)
+        predefined_goals = get_predefined_goals()
+        goal_form = GoalForm()
+        progress_form = GoalProgressForm()
+
+        return render_template('goals.html',
+                             current_goals=current_goals,
+                             overdue_goals=overdue_goals,
+                             goal_history=goal_history,
+                             goal_stats=goal_stats,
+                             predefined_goals=predefined_goals,
+                             categories=GoalCategory,
+                             goal_form=goal_form,
+                             progress_form=progress_form), 404
         
     except Exception as e:
-        flash('An error occurred while completing your goal.', 'error')
-        return redirect(url_for('goals.goals_page'))
+        flash('An error occurred while completing your goal.', 'danger')
+        user_id = session["user_id"]
+        current_goals = get_current_goals(user_id)
+        overdue_goals = get_overdue_goals(user_id)
+        goal_history = get_goal_history(user_id, limit=10)
+        goal_stats = get_goal_stats(user_id)
+        predefined_goals = get_predefined_goals()
+        goal_form = GoalForm()
+        progress_form = GoalProgressForm()
+
+        return render_template('goals.html',
+                             current_goals=current_goals,
+                             overdue_goals=overdue_goals,
+                             goal_history=goal_history,
+                             goal_stats=goal_stats,
+                             predefined_goals=predefined_goals,
+                             categories=GoalCategory,
+                             goal_form=goal_form,
+                             progress_form=progress_form), 500
 
 @goals_bp.route('/goals/<int:goal_id>/fail', methods=['POST'])
 def mark_goal_failed(goal_id):
@@ -152,13 +236,66 @@ def mark_goal_failed(goal_id):
                 db.session.add(stats)
             stats.points += 1
             db.session.commit()
-            flash(f'Goal marked as failed: "{goal.title}" (+1 point)', 'warning')
+            flash(f'Goal marked as failed: "{goal.title}"', 'warning')
+            # Re-render the page with a 200 OK status for success
+            user_id = session["user_id"]
+            current_goals = get_current_goals(user_id)
+            overdue_goals = get_overdue_goals(user_id)
+            goal_history = get_goal_history(user_id, limit=10)
+            goal_stats = get_goal_stats(user_id)
+            predefined_goals = get_predefined_goals()
+            goal_form = GoalForm()
+            progress_form = GoalProgressForm()
+
+            return render_template('goals.html',
+                                 current_goals=current_goals,
+                                 overdue_goals=overdue_goals,
+                                 goal_history=goal_history,
+                                 goal_stats=goal_stats,
+                                 predefined_goals=predefined_goals,
+                                 categories=GoalCategory,
+                                 goal_form=goal_form,
+                                 progress_form=progress_form), 200
         else:
-            flash('Goal not found.', 'error')
-        return redirect(url_for('goals.goals_page'))
+            flash('Goal not found.', 'danger')
+            user_id = session["user_id"]
+            current_goals = get_current_goals(user_id)
+            overdue_goals = get_overdue_goals(user_id)
+            goal_history = get_goal_history(user_id, limit=10)
+            goal_stats = get_goal_stats(user_id)
+            predefined_goals = get_predefined_goals()
+            goal_form = GoalForm()
+            progress_form = GoalProgressForm()
+
+            return render_template('goals.html',
+                                 current_goals=current_goals,
+                                 overdue_goals=overdue_goals,
+                                 goal_history=goal_history,
+                                 goal_stats=goal_stats,
+                                 predefined_goals=predefined_goals,
+                                 categories=GoalCategory,
+                                 goal_form=goal_form,
+                                 progress_form=progress_form), 404
     except Exception as e:
-        flash('An error occurred while failing your goal.', 'error')
-        return redirect(url_for('goals.goals_page'))
+        flash('An error occurred while failing your goal.', 'danger')
+        user_id = session["user_id"]
+        current_goals = get_current_goals(user_id)
+        overdue_goals = get_overdue_goals(user_id)
+        goal_history = get_goal_history(user_id, limit=10)
+        goal_stats = get_goal_stats(user_id)
+        predefined_goals = get_predefined_goals()
+        goal_form = GoalForm()
+        progress_form = GoalProgressForm()
+
+        return render_template('goals.html',
+                             current_goals=current_goals,
+                             overdue_goals=overdue_goals,
+                             goal_history=goal_history,
+                             goal_stats=goal_stats,
+                             predefined_goals=predefined_goals,
+                             categories=GoalCategory,
+                             goal_form=goal_form,
+                             progress_form=progress_form), 500
 
 @goals_bp.route('/api/goals/suggestions/<category>')
 def get_goal_suggestions(category):

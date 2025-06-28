@@ -73,6 +73,7 @@ def diary_entry():
         for field, errors in form.errors.items():
             for error in errors:
                 flash(error, 'danger')
+        return render_template("diary.html", display_name=display_name, recent_entries=get_recent_entries(user_id), form=form), 400
 
     recent_entries = get_recent_entries(user_id)
     return render_template("diary.html", display_name=display_name, recent_entries=recent_entries, form=form)
