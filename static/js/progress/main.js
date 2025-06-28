@@ -114,7 +114,10 @@ if (window.wordcloudData && document.getElementById('wordcloud')) {
             list: words,
             gridSize: 12,
             weightFactor: function (size) {
-                return 18 + size * 5;
+                // Better scaling with bounds - size comes from normalized backend data (10-100)
+                const minSize = 14;
+                const maxSize = 48;
+                return minSize + ((size - 10) / 90) * (maxSize - minSize);
             },
             fontFamily: 'Orbitron, Arial, sans-serif',
             color: function() {
@@ -131,7 +134,8 @@ if (window.wordcloudData && document.getElementById('wordcloud')) {
             },
             drawOutOfBound: false,
             shuffle: true,
-            hover: window.innerWidth > 600
+            hover: window.innerWidth > 600,
+            shrinkToFit: true  // Added this option
         });
 
         // Render to hidden canvas for export with real data, matching the visible wordcloud's size
@@ -146,7 +150,10 @@ if (window.wordcloudData && document.getElementById('wordcloud')) {
                 list: words,
                 gridSize: 12,
                 weightFactor: function (size) {
-                    return 18 + size * 5;
+                    // Same improved scaling for export canvas
+                    const minSize = 14;
+                    const maxSize = 48;
+                    return minSize + ((size - 10) / 90) * (maxSize - minSize);
                 },
                 fontFamily: 'Orbitron, Arial, sans-serif',
                 color: function() {
@@ -158,7 +165,8 @@ if (window.wordcloudData && document.getElementById('wordcloud')) {
                 rotationSteps: 2,
                 minSize: 14,
                 drawOutOfBound: false,
-                shuffle: true
+                shuffle: true,
+                shrinkToFit: true  // Added this option
             });
             console.log('Wordcloud rendered to export canvas');
         } else {
