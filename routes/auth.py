@@ -1,24 +1,28 @@
-from flask import Blueprint, render_template, request, redirect, session
+from flask import Blueprint, render_template, request, redirect, session, flash, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import date
 from models import User, DailyStats, db
+from forms import LoginForm, RegisterForm
 
 auth_bp = Blueprint('auth', __name__)
 
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login_page():
-    if request.method == "POST":
-        email = request.form["email"]
-        password = request.form["password"]
+    form = LoginForm()
+    if form.validate_on_submit():
+        email = form.email.data
+        password = form.password.data
 
         # Try to find a user with that email
         user = User.query.filter_by(email=email).first()
 
         if not user:
-            return "No user found with that email."
+            flash("No user found with that email.", "danger")
+            return render_template("login.html", form=form), 401
 
         if not check_password_hash(user.password, password):
-            return "Incorrect password."
+            flash("Incorrect password.", "danger")
+            return render_template("login.html", form=form), 401
 
         # Success! Session!
         session["user_id"] = user.id
@@ -36,34 +40,36 @@ def login_page():
 
         return redirect("/diary")
 
-    # If GET request, show login form
-    return render_template("login.html")
+    # If GET request or validation fails, show login form
+    return render_template("login.html", form=form)
 
 @auth_bp.route("/register", methods=["GET", "POST"])
 def register():
-    if request.method == "POST":
-        email = request.form["email"]
-        password = request.form["password"]
-        password_again = request.form["password_again"]
-        user_name = request.form.get("user_name", None)
-
-        if password != password_again:
-            return "Passwords do not match!"
+    form = RegisterForm()
+    if form.validate_on_submit():
+        email = form.email.data
+        password = form.password.data
+        password_again = form.password_again.data
+        user_name = form.user_name.data or None
 
         # Check if email already exists
         if User.query.filter_by(email=email).first():
-            return "Email already registered."
+            flash("Email already registered.", "danger")
+            return render_template("register.html", form=form), 400
 
         hashed_password = generate_password_hash(password)
         new_user = User(email=email, password=hashed_password, user_name=user_name)
 
         db.session.add(new_user)
         db.session.commit()
+        flash("Registration successful! Please log in.", "success")
         return redirect("/login")
 
-    return render_template("register.html")
+    # If GET request or validation fails, show registration form
+    return render_template("register.html", form=form)
 
 @auth_bp.route("/logout")
 def logout():
     session.clear()
+    flash("You have been logged out.", "info")
     return redirect("/")
