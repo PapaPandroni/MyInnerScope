@@ -5,6 +5,7 @@ from utils.goal_helpers import (
     get_current_goals, get_overdue_goals, create_goal, update_goal_progress, 
     complete_goal, fail_goal, get_goal_history, get_goal_stats, get_predefined_goals
 )
+from forms import GoalForm, GoalProgressForm
 from datetime import date
 
 goals_bp = Blueprint('goals', __name__)
@@ -21,6 +22,7 @@ def goals_page():
     goal_history = get_goal_history(user_id, limit=10)
     goal_stats = get_goal_stats(user_id)
     predefined_goals = get_predefined_goals()
+    goal_form = GoalForm()
     
     return render_template('goals.html', 
                          current_goals=current_goals,
@@ -28,7 +30,8 @@ def goals_page():
                          goal_history=goal_history,
                          goal_stats=goal_stats,
                          predefined_goals=predefined_goals,
-                         categories=GoalCategory)
+                         categories=GoalCategory,
+                         goal_form=goal_form)
 
 @goals_bp.route('/goals/create', methods=['POST'])
 def create_new_goal():
@@ -36,36 +39,41 @@ def create_new_goal():
     if "user_id" not in session:
         return redirect("/login")
     
-    try:
-        user_id = session["user_id"]
-        category_name = request.form.get('category')
-        title = request.form.get('title', '').strip()
-        description = request.form.get('description', '').strip()
-        
-        if not category_name or not title:
-            flash('Please select a category and enter a goal title.', 'error')
-            return redirect(url_for('goals.goals_page'))
-        
-        # Convert category name to enum
+    form = GoalForm()
+    
+    if form.validate_on_submit():
         try:
-            category = GoalCategory(category_name)
-        except ValueError:
-            flash('Invalid goal category selected.', 'error')
+            user_id = session["user_id"]
+            category_name = form.category.data
+            title = form.title.data.strip()
+            description = form.description.data.strip() if form.description.data else None
+            
+            # Convert category name to enum
+            try:
+                category = GoalCategory(category_name)
+            except ValueError:
+                flash('Invalid goal category selected.', 'error')
+                return redirect(url_for('goals.goals_page'))
+            
+            # Create the goal
+            goal = create_goal(
+                user_id=user_id,
+                category=category,
+                title=title,
+                description=description
+            )
+            
+            flash(f'Goal "{goal.title}" created successfully!', 'success')
             return redirect(url_for('goals.goals_page'))
-        
-        # Create the goal
-        goal = create_goal(
-            user_id=user_id,
-            category=category,
-            title=title,
-            description=description if description else None
-        )
-        
-        flash(f'Goal "{goal.title}" created successfully!', 'success')
-        return redirect(url_for('goals.goals_page'))
-        
-    except Exception as e:
-        flash('An error occurred while creating your goal.', 'error')
+            
+        except Exception as e:
+            flash('An error occurred while creating your goal.', 'error')
+            return redirect(url_for('goals.goals_page'))
+    else:
+        # Flash validation errors
+        for field, errors in form.errors.items():
+            for error in errors:
+                flash(error, 'error')
         return redirect(url_for('goals.goals_page'))
 
 @goals_bp.route('/goals/<int:goal_id>/update', methods=['POST'])
@@ -74,20 +82,29 @@ def update_goal(goal_id):
     if "user_id" not in session:
         return redirect("/login")
     
-    try:
-        progress_notes = request.form.get('progress_notes', '').strip()
-        
-        goal = update_goal_progress(goal_id, progress_notes)
-        
-        if goal:
-            flash('Goal progress updated successfully!', 'success')
-        else:
-            flash('Goal not found.', 'error')
+    form = GoalProgressForm()
+    
+    if form.validate_on_submit():
+        try:
+            progress_notes = form.progress_notes.data.strip() if form.progress_notes.data else None
             
-        return redirect(url_for('goals.goals_page'))
-        
-    except Exception as e:
-        flash('An error occurred while updating your goal.', 'error')
+            goal = update_goal_progress(goal_id, progress_notes)
+            
+            if goal:
+                flash('Goal progress updated successfully!', 'success')
+            else:
+                flash('Goal not found.', 'error')
+                
+            return redirect(url_for('goals.goals_page'))
+            
+        except Exception as e:
+            flash('An error occurred while updating your goal.', 'error')
+            return redirect(url_for('goals.goals_page'))
+    else:
+        # Flash validation errors
+        for field, errors in form.errors.items():
+            for error in errors:
+                flash(error, 'error')
         return redirect(url_for('goals.goals_page'))
 
 @goals_bp.route('/goals/<int:goal_id>/complete', methods=['POST'])

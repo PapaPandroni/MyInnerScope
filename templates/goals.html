@@ -30,28 +30,43 @@
                 </div>
                 <div class="card-body">
                     <form action="{{ url_for('goals.create_new_goal') }}" method="POST">
+                        {{ goal_form.hidden_tag() }}
                         <div class="mb-3">
                             <label for="category" class="form-label text-white">Goal Category</label>
-                            <select class="form-select" id="category" name="category" required>
-                                <option value="">Choose a category...</option>
-                                {% for category in categories %}
-                                    <option value="{{ category.value }}">{{ category.value }}</option>
-                                {% endfor %}
-                            </select>
+                            {{ goal_form.category(class="form-select", id="category") }}
+                            {% if goal_form.category.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in goal_form.category.errors %}
+                                        <span class="text-danger">{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
                         </div>
                         <div class="mb-3">
                             <label for="title" class="form-label text-white">Goal Title</label>
-                            <input type="text" class="form-control" id="title" name="title" 
-                                   placeholder="Enter your goal..." required>
+                            {{ goal_form.title(class="form-control", id="title", placeholder="Enter your goal...") }}
                             <div id="suggestions" class="suggestions-container mt-2" style="display: none;">
                                 <small class="text-muted">Suggestions:</small>
                                 <div id="suggestions-list" class="suggestions-list"></div>
                             </div>
+                            {% if goal_form.title.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in goal_form.title.errors %}
+                                        <span class="text-danger">{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
                         </div>
                         <div class="mb-3">
                             <label for="description" class="form-label text-white">Description (Optional)</label>
-                            <textarea class="form-control" id="description" name="description" 
-                                      rows="3" placeholder="Add more details about your goal..."></textarea>
+                            {{ goal_form.description(class="form-control", id="description", rows="3", placeholder="Add more details about your goal...") }}
+                            {% if goal_form.description.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in goal_form.description.errors %}
+                                        <span class="text-danger">{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
                         </div>
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-rocket me-1"></i>Create Goal
