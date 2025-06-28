@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Access Denied - Aim for the Stars{% endblock %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <h1 class="display-1 text-danger">403</h1>
+    <h2 class="text-light mb-4">Restricted Sector: Access Denied</h2>
+    <p class="lead text-light">You do not have the necessary clearance to access this area of the cosmos. Please verify your credentials or return to a permitted zone.</p>
+    <a href="{{ url_for('hello') }}" class="btn btn-outline-light mt-3">Return to Starbase</a>
+</div>
+{% endblock %}
