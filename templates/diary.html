@@ -20,7 +20,10 @@
                         {{ form.hidden_tag() }}
                         {{ form.rating(class="d-none", id="rating-input") }} 
                         <div class="mb-4">
-                            {{ form.content(class="form-control", rows="6", placeholder="Describe one specific moment from today... What happened? How did you feel? What would you do differently next time?", style="resize: none; border: 2px solid #2a2d3a; border-radius: 12px; padding: 12px; font-size: 16px; background-color: #2a2d3a; color: whitesmoke;", id="diary-textarea") }}
+                            {{ form.content(class="form-control", rows="6", placeholder="Describe one specific moment from today... What happened? How did you feel? What would you do differently next time?", style="resize: none; border: 2px solid #2a2d3a; border-radius: 12px; padding: 12px; font-size: 16px; background-color: #2a2d3a; color: whitesmoke;", id="diary-textarea", maxlength="2000") }}
+                            <div class="d-flex justify-content-end mt-2">
+                                <small id="char-counter" class="text-muted">0 / 2000</small>
+                            </div>
                             {% if form.content.errors %}
                                 <div class="invalid-feedback d-block">
                                     {% for error in form.content.errors %}
@@ -136,11 +139,28 @@
 <script>
 // Auto-focus the textarea when page loads
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('diary-textarea').focus();
+    const diaryTextarea = document.getElementById('diary-textarea');
+    const charCounter = document.getElementById('char-counter');
+    const ratingButtons = document.querySelectorAll('.rating-btn');
+    const maxLength = 2000;
+
+    diaryTextarea.focus();
+
+    diaryTextarea.addEventListener('input', function() {
+        const currentLength = diaryTextarea.value.length;
+        charCounter.textContent = currentLength + ' / ' + maxLength;
+
+        if (currentLength > maxLength) {
+            charCounter.style.color = '#dc3545'; // Red color for error
+            ratingButtons.forEach(button => button.disabled = true);
+        } else {
+            charCounter.style.color = '#6c757d'; // Default muted color
+            ratingButtons.forEach(button => button.disabled = false);
+        }
+    });
 
     const form = document.getElementById('diary-form');
     const ratingInput = document.getElementById('rating-input');
-    const ratingButtons = document.querySelectorAll('.rating-btn');
 
     ratingButtons.forEach(button => {
         button.addEventListener('click', function() {
