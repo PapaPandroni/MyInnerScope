@@ -22,7 +22,7 @@
                         <div class="mb-4">
                             {{ form.content(class="form-control", rows="6", placeholder="Describe one specific moment from today... What happened? How did you feel? What would you do differently next time?", style="resize: none; border: 2px solid #2a2d3a; border-radius: 12px; padding: 12px; font-size: 16px; background-color: #2a2d3a; color: whitesmoke;", id="diary-textarea", maxlength="2000") }}
                             <div class="d-flex justify-content-end mt-2">
-                                <small id="char-counter" class="text-muted">0 / 2000</small>
+                                <small id="char-counter" style="color: #FFFFFF;">0 / 2000</small>
                             </div>
                             {% if form.content.errors %}
                                 <div class="invalid-feedback d-block">
@@ -146,6 +146,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     diaryTextarea.focus();
 
+    // Set initial character count
+    charCounter.textContent = diaryTextarea.value.length + ' / ' + maxLength;
+
     diaryTextarea.addEventListener('input', function() {
         const currentLength = diaryTextarea.value.length;
         charCounter.textContent = currentLength + ' / ' + maxLength;
@@ -154,7 +157,7 @@ document.addEventListener('DOMContentLoaded', function() {
             charCounter.style.color = '#dc3545'; // Red color for error
             ratingButtons.forEach(button => button.disabled = true);
         } else {
-            charCounter.style.color = '#6c757d'; // Default muted color
+            charCounter.style.color = '#FFFFFF'; // Pure white color
             ratingButtons.forEach(button => button.disabled = false);
         }
     });
