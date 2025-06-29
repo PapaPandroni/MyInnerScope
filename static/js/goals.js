@@ -10,7 +10,14 @@ document.addEventListener('DOMContentLoaded', function() {
         categorySelect.addEventListener('change', function() {
             const selectedCategory = this.value;
             if (selectedCategory) {
-                fetch(`/api/goals/suggestions/${encodeURIComponent(selectedCategory)}`)
+                // Get CSRF token from meta tag
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                
+                fetch(`/api/goals/suggestions/${encodeURIComponent(selectedCategory)}`, {
+                    headers: {
+                        'X-CSRFToken': csrfToken
+                    }
+                })
                     .then(response => response.json())
                     .then(data => {
                         if (data.suggestions && data.suggestions.length > 0) {

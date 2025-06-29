@@ -26,29 +26,29 @@ tests/
 
 ### Run all tests:
 ```bash
-python -m pytest tests/ -v
+python3 -m pytest tests/ -v
 ```
 
 ### Run specific test categories:
 ```bash
 # Model tests only
-python -m pytest tests/test_models/ -v
+python3 -m pytest tests/test_models/ -v
 
 # Route tests only
-python -m pytest tests/test_routes/ -v
+python3 -m pytest tests/test_routes/ -v
 
 # Utility tests only
-python -m pytest tests/test_utils/ -v
+python3 -m pytest tests/test_utils/ -v
 ```
 
 ### Run with coverage:
 ```bash
-python -m pytest tests/ --cov=web_app --cov-report=html
+python3 -m pytest tests/ --cov=web_app --cov-report=html
 ```
 
 ### Run specific test:
 ```bash
-python -m pytest tests/test_basic.py::test_app_creation -v
+python3 -m pytest tests/test_basic.py::test_app_creation -v
 ```
 
 ## 🧪 **Test Types**

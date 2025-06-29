@@ -21,7 +21,7 @@ def login_page():
             current_app.logger.warning(f"Failed login attempt for email: {email}")
             return render_template("login.html", form=form), 401
 
-        if not check_password_hash(user.password, password):
+        if not user.check_password(password):
             flash("Incorrect password.", "danger")
             current_app.logger.warning(f"Incorrect password for user: {email}")
             return render_template("login.html", form=form), 401
@@ -61,8 +61,8 @@ def register():
             current_app.logger.warning(f"Registration attempt with existing email: {email}")
             return render_template("register.html", form=form), 400
 
-        hashed_password = generate_password_hash(password)
-        new_user = User(email=email, password=hashed_password, user_name=user_name)
+        # Create user with automatic password hashing
+        new_user = User(email=email, password=password, user_name=user_name)
 
         db.session.add(new_user)
         db.session.commit()

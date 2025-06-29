@@ -69,10 +69,14 @@ class ExportManager {
             const wordcloudImage = await this.waitForWordcloud();
             console.log('Wordcloud image captured:', wordcloudImage ? 'Yes' : 'No');
             
+            // Get CSRF token from meta tag
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            
             const response = await fetch('/export-journey', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
                 },
                 body: JSON.stringify({ wordcloud_image: wordcloudImage })
             });

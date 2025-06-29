@@ -4,9 +4,20 @@ Test configuration and fixtures for Aim for the Stars application
 import pytest
 import tempfile
 import os
+import re
 from web_app import create_app
 from models import db
 from models import User, DiaryEntry, DailyStats, Goal
+
+
+def extract_csrf_token(response_data):
+    """Extract CSRF token from response data"""
+    if b'csrf-token' in response_data:
+        # Look specifically for the csrf-token meta tag
+        match = re.search(b'<meta[^>]*name="csrf-token"[^>]*content="([^"]+)"', response_data)
+        if match:
+            return match.group(1).decode('utf-8')
+    return None
 
 
 @pytest.fixture
@@ -56,6 +67,8 @@ def sample_user(app):
         )
         db.session.add(user)
         db.session.commit()
+        # Refresh the user to ensure it's attached to the session
+        db.session.refresh(user)
         return user
 
 
@@ -63,13 +76,16 @@ def sample_user(app):
 def sample_diary_entry(app, sample_user):
     """Create a sample diary entry for testing."""
     with app.app_context():
+        # Get the user ID directly to avoid session issues
+        user_id = sample_user.id
         entry = DiaryEntry(
-            user_id=sample_user.id,
+            user_id=user_id,
             content='This is a test diary entry',
             rating=5
         )
         db.session.add(entry)
         db.session.commit()
+        db.session.refresh(entry)
         return entry
 
 
@@ -79,11 +95,13 @@ def sample_goal(app, sample_user):
     from datetime import datetime, timedelta
     
     with app.app_context():
+        # Get the user ID directly to avoid session issues
+        user_id = sample_user.id
         start_date = datetime.now().date()
         end_date = start_date + timedelta(days=6)
         
         goal = Goal(
-            user_id=sample_user.id,
+            user_id=user_id,
             category='EXERCISE',
             title='Test Goal',
             description='A test goal for testing',
@@ -92,6 +110,7 @@ def sample_goal(app, sample_user):
         )
         db.session.add(goal)
         db.session.commit()
+        db.session.refresh(goal)
         return goal
 
 
@@ -101,8 +120,10 @@ def sample_daily_stats(app, sample_user):
     from datetime import date
     
     with app.app_context():
+        # Get the user ID directly to avoid session issues
+        user_id = sample_user.id
         stats = DailyStats(
-            user_id=sample_user.id,
+            user_id=user_id,
             date=date.today(),
             points=10,
             current_streak=3,
@@ -110,6 +131,7 @@ def sample_daily_stats(app, sample_user):
         )
         db.session.add(stats)
         db.session.commit()
+        db.session.refresh(stats)
         return stats
 
 

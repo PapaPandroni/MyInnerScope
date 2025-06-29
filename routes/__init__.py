@@ -11,3 +11,9 @@ def register_blueprints(app):
     app.register_blueprint(progress_bp)
     app.register_blueprint(reader_bp)
     app.register_blueprint(goals_bp)
+
+    # Apply rate limiting to login and register routes
+    limiter = getattr(app, 'limiter', None)
+    if limiter:
+        limiter.limit("5 per minute")(app.view_functions['auth.login_page'])
+        limiter.limit("3 per hour")(app.view_functions['auth.register'])

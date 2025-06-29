@@ -19,6 +19,9 @@ import os
 import logging
 from flask import Flask, render_template, session, g, flash, current_app
 from flask_migrate import Migrate
+from flask_wtf.csrf import CSRFProtect
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from datetime import datetime, timedelta, timezone
 from config import config
 
@@ -46,6 +49,19 @@ def create_app(config_name=None):
     
     # Initialize Flask-Migrate
     migrate = Migrate(app, db)
+    
+    # Initialize Flask-WTF for CSRF protection
+    csrf = CSRFProtect(app)
+    
+    # Initialize Flask-Limiter for rate limiting
+    limiter = Limiter(
+        app=app,
+        key_func=get_remote_address,
+        default_limits=["200 per day", "50 per hour"]
+    )
+    
+    # Make limiter available globally
+    app.limiter = limiter
 
     # Register blueprints (routes)
     register_blueprints(app)
