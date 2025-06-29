@@ -20,6 +20,13 @@ class Config:
     # Application settings
     WTF_CSRF_ENABLED = True  # If you use Flask-WTF forms
     
+    # Session management
+    PERMANENT_SESSION_LIFETIME = 86400  # 24 hours in seconds
+
+    SESSION_COOKIE_SECURE = True
+    SESSION_COOKIE_HTTPONLY = True
+    SESSION_COOKIE_SAMESITE = 'Lax'
+    
     @staticmethod
     def validate():
         """Validate that required environment variables are set"""

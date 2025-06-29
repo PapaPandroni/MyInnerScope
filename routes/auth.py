@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, session, flash, url_for
+from flask import Blueprint, render_template, request, redirect, session, flash, url_for, current_app
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import date
 from models import User, DailyStats, db
@@ -18,14 +18,17 @@ def login_page():
 
         if not user:
             flash("No user found with that email.", "danger")
+            current_app.logger.warning(f"Failed login attempt for email: {email}")
             return render_template("login.html", form=form), 401
 
         if not check_password_hash(user.password, password):
             flash("Incorrect password.", "danger")
+            current_app.logger.warning(f"Incorrect password for user: {email}")
             return render_template("login.html", form=form), 401
 
         # Success! Session!
         session["user_id"] = user.id
+        current_app.logger.info(f"User {email} logged in successfully.")
 
         # Inside login route, after login is successful
         today = date.today()
@@ -55,6 +58,7 @@ def register():
         # Check if email already exists
         if User.query.filter_by(email=email).first():
             flash("Email already registered.", "danger")
+            current_app.logger.warning(f"Registration attempt with existing email: {email}")
             return render_template("register.html", form=form), 400
 
         hashed_password = generate_password_hash(password)
@@ -62,6 +66,7 @@ def register():
 
         db.session.add(new_user)
         db.session.commit()
+        current_app.logger.info(f"New user registered: {email}")
         flash("Registration successful! Please log in.", "success")
         return redirect("/login")
 
@@ -70,6 +75,11 @@ def register():
 
 @auth_bp.route("/logout")
 def logout():
+    user_id = session.get('user_id')
+    if user_id:
+        user = User.query.get(user_id)
+        if user:
+            current_app.logger.info(f"User {user.email} logged out.")
     session.clear()
     flash("You have been logged out.", "info")
     return redirect("/")

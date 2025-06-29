@@ -16,7 +16,9 @@ limitations under the License.
 """
 
 import os
-from flask import Flask, render_template
+import logging
+from flask import Flask, render_template, session, g, flash, current_app
+from datetime import datetime, timedelta, timezone
 from config import config
 
 # Import database and models
@@ -29,20 +31,52 @@ def create_app(config_name=None):
     """Application factory function"""
     if config_name is None:
         config_name = os.environ.get('FLASK_ENV', 'development')
-    
+
     app = Flask(__name__)
-    
+
     # Load configuration
     app.config.from_object(config[config_name])
-    
+
     # Validate configuration
     config[config_name].validate()
-    
+
     # Initialize database with app
     db.init_app(app)
-    
+
     # Register blueprints (routes)
     register_blueprints(app)
+
+    # --- Logging Setup ---
+    if not app.debug and not app.testing:
+        # In production, log to a file
+        # For this example, we'll just use a basic console logger
+        handler = logging.StreamHandler()
+        handler.setLevel(logging.INFO)
+        app.logger.addHandler(handler)
+        
+        app.logger.setLevel(logging.INFO)
+        app.logger.info('Aim for the Stars startup')
+
+    @app.before_request
+    def before_request():
+        """Middleware to handle session validation and timeout"""
+        session.permanent = True  # Use the lifetime from the config
+
+        # Renew session on activity
+        if session.get('user_id') and session.get('last_activity'):
+            # Convert stored string time back to datetime object
+            last_activity = datetime.fromisoformat(session['last_activity'])
+
+            # Check if the session has expired
+            if datetime.now(timezone.utc) - last_activity > current_app.permanent_session_lifetime:
+                session.clear()  # Session expired
+                flash("Your session has expired. Please log in again.", "info")
+        
+        # Update last activity time for the current request, making it timezone-aware
+        session['last_activity'] = datetime.now(timezone.utc).isoformat()
+
+        # Set user context for templates
+        g.user = session.get('user_id')
     
     @app.route("/")
     def hello():
@@ -58,6 +92,7 @@ def create_app(config_name=None):
 
     @app.errorhandler(500)
     def internal_server_error(e):
+        current_app.logger.error(f"Internal Server Error: {e}", exc_info=True)
         return render_template('errors/500.html'), 500
 
     return app
