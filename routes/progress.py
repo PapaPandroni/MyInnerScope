@@ -67,8 +67,8 @@ def progress():
                 if max_freq == min_freq:
                     normalized_weight = 50  # If all words have same frequency
                 else:
-                    # Scale from 20 to 120
-                    normalized_weight = 20 + (100 * (count - min_freq) / (max_freq - min_freq))
+                    # Scale from 70 to 150
+                    normalized_weight = 70 + (150 * (count - min_freq) / (max_freq - min_freq))
                 
                 wordcloud_data.append([word, int(normalized_weight)])
         else:
