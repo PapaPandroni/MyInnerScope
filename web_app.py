@@ -18,6 +18,7 @@ limitations under the License.
 import os
 import logging
 from flask import Flask, render_template, session, g, flash, current_app
+from flask_migrate import Migrate
 from datetime import datetime, timedelta, timezone
 from config import config
 
@@ -42,6 +43,9 @@ def create_app(config_name=None):
 
     # Initialize database with app
     db.init_app(app)
+    
+    # Initialize Flask-Migrate
+    migrate = Migrate(app, db)
 
     # Register blueprints (routes)
     register_blueprints(app)
@@ -100,10 +104,6 @@ def create_app(config_name=None):
 if __name__ == "__main__":
     # Create the app
     app = create_app()
-    
-    # Create database tables
-    with app.app_context():
-        db.create_all()
     
     # Run the app
     app.run(host="0.0.0.0", debug=app.config['DEBUG'])
