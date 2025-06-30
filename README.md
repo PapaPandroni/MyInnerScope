@@ -119,3 +119,30 @@ This project is provided free of charge. If you find it helpful for your self-im
 
 "Aim for the stars, even if you miss, you'll land among the clouds."
 
+## Dependency Security Checks
+
+This project uses two tools to check for known security vulnerabilities in its Python dependencies:
+
+- **safety**: Checks installed packages for known vulnerabilities.
+- **pip-audit**: Audits dependencies for security issues using the Python Advisory Database.
+
+### How to Run Security Checks Locally
+
+1. Install dependencies (if not already):
+   ```bash
+   pip install -r requirements.txt
+   pip install pip-audit
+   ```
+2. Run safety:
+   ```bash
+   safety check
+   ```
+3. Run pip-audit:
+   ```bash
+   pip-audit
+   ```
+
+### Automated Checks with GitHub Actions
+
+Every time you push code or open a pull request, GitHub Actions will automatically run both `safety` and `pip-audit` to check for vulnerabilities. Results will appear in the "Checks" tab on GitHub. If issues are found, you will see a warning, but you can still merge your code. This helps you stay aware of security issues in your dependencies.
+
