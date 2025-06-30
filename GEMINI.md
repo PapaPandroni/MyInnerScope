@@ -42,7 +42,7 @@ The application gamifies this process by awarding points for entries and trackin
 
 The project follows a standard Flask application structure, separating concerns into distinct modules:
 
--   `web_app.py`: The main application entry point. It uses the factory pattern (`create_app`) to initialize the Flask app, database, routes, logging, and session management.
+-   `app.py`: The main application entry point. It uses the factory pattern (`create_app`) to initialize the Flask app, database, routes, logging, and session management.
 -   `config.py`: Defines configuration environments (Development, Production, Testing) and manages session settings.
 -   `forms.py`: Contains all `Flask-WTF` form classes for input validation (e.g., `LoginForm`, `RegisterForm`, `DiaryEntryForm`).
 -   `models/`: Contains SQLAlchemy database models (`User`, `DiaryEntry`, `DailyStats`, `Goal`).
@@ -60,7 +60,7 @@ The project follows a standard Flask application structure, separating concerns 
 -   **Implementation**:
     -   `routes/auth.py` handles the routes using `Flask-WTF` forms for validation.
     -   Passwords are hashed using Werkzeug.
-    -   `web_app.py` contains a `before_request` handler that validates and renews the user's session on each request.
+    -   `app.py` contains a `before_request` handler that validates and renews the user's session on each request.
     -   Failed login attempts and other auth-related events are logged.
 
 ### 4.2. Diary and Points System
@@ -89,7 +89,7 @@ The project follows a standard Flask application structure, separating concerns 
 1.  **Set up a virtual environment**: `python -m venv env && source env/bin/activate`
 2.  **Install dependencies**: `pip install -r requirements.txt`
 3.  **Create a `.env` file** with a `SECRET_KEY`.
-4.  **Run the application**: `python web_app.py`
+4.  **Run the application**: `python app.py`
 5.  The application will be available at `http://localhost:5000`.
 
 ---
@@ -105,7 +105,7 @@ This project follows a prioritized roadmap to ensure stability and security befo
     -   **2.1. Security Hardening**: Implement rate limiting, CSRF protection for AJAX, and run dependency audits.
     -   **2.2. Legal & Compliance (GDPR)**: Add a privacy policy, cookie consent, and data export/deletion features.
 -   **Phase 3: Final Polish**
-    -   **3.1. Code & File Structure Refinements**: Refactor `web_app.py` to a pure app factory and standardize JS file structure.
+    -   **3.1. Code & File Structure Refinements**: Refactor `app.py` to a pure app factory and standardize JS file structure.
     -   **3.2. Database Performance**: Add indexes to frequently queried columns.
 
 ---

@@ -43,7 +43,7 @@ python3 -m pytest tests/test_utils/ -v
 
 ### Run with coverage:
 ```bash
-python3 -m pytest tests/ --cov=web_app --cov-report=html
+python3 -m pytest tests/ --cov=app --cov-report=html
 ```
 
 ### Run specific test:

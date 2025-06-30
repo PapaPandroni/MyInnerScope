@@ -21,7 +21,7 @@ This plan is structured to front-load foundational tooling and safety nets, ensu
 - **Reasoning**: The current `db.create_all()` will not work for updating the database schema in production once you have real user data. If you need to add a column, `create_all()` will do nothing. A migration tool like Alembic (via Flask-Migrate) is the standard solution and is essential to set up *before* making any more model changes.
 - **Implementation Notes**:
     1.  `pip install Flask-Migrate`.
-    2.  Initialize it in `web_app.py`.
+    2.  Initialize it in `app.py`.
     3.  Run `flask db init` to create the migrations directory.
     4.  Henceforth, use `flask db migrate -m "Description of change"` and `flask db upgrade` to apply schema changes.
 
@@ -71,8 +71,8 @@ This plan is structured to front-load foundational tooling and safety nets, ensu
 ## Phase 3: Final Polish
 
 ### 3.1. Code & File Structure Refinements
-- **Refactor `web_app.py` to a Pure App Factory**:
-    - **Suggestion**: Move the root route (`/`) and error handlers out of `web_app.py` and into their own blueprint.
+- **Refactor `app.py` to a Pure App Factory**:
+    - **Suggestion**: Move the root route (`/`) and error handlers out of `app.py` and into their own blueprint.
     - **Reasoning**: Cleans up the main entry point and follows common Flask best practices.
 - **Standardize JavaScript File Structure**:
     - **Suggestion**: Organize the JavaScript files in the `static/js` directory into a more consistent structure.

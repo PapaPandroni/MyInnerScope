@@ -117,7 +117,7 @@ def test_static_files(client):
     assert response.status_code == 200
     
     # Test JS files
-    response = client.get('/static/js/goals.js')
+    response = client.get('/static/js/goals/goals.js')
     assert response.status_code == 200
 
 

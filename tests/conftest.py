@@ -5,7 +5,7 @@ import pytest
 import tempfile
 import os
 import re
-from web_app import create_app
+from app import create_app
 from models import db
 from models import User, DiaryEntry, DailyStats, Goal
 

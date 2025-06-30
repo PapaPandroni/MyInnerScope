@@ -51,6 +51,8 @@
     </nav>
     {% endif %}
     {% block extra_js %}{% endblock %}
-    {% block scripts %}{% endblock %}
+    {% block scripts %}
+        <script src="{{ url_for('static', filename='js/legal/cookie_consent.js') }}"></script>
+    {% endblock %}
 </body>
 </html> 

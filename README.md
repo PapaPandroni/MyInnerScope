@@ -52,7 +52,7 @@ bash
 pip install -r requirements.txt
 Run the application:
 bash
-python web_app.py
+python app.py
 Open your browser to http://localhost:5000
 The SQLite database (users.db) will be created automatically on first run.
 
