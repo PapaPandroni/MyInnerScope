@@ -77,7 +77,7 @@ def register():
 def logout():
     user_id = session.get('user_id')
     if user_id:
-        user = User.query.get(user_id)
+        user = db.session.get(User, user_id)
         if user:
             current_app.logger.info(f"User {user.email} logged out.")
     session.clear()

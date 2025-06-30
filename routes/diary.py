@@ -13,7 +13,7 @@ def diary_entry():
 
     form = DiaryEntryForm()
     user_id = session["user_id"]
-    user = User.query.get(user_id)
+    user = db.session.get(User, user_id)
 
     if user.user_name:
         display_name = user.user_name

@@ -1,5 +1,5 @@
 from .database import db
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import enum
 
 class GoalCategory(enum.Enum):
@@ -30,7 +30,7 @@ class Goal(db.Model):
     # Time tracking
     week_start = db.Column(db.Date, nullable=False)  # Start date (date of creation)
     week_end = db.Column(db.Date, nullable=False)    # End date (6 days after creation)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     
     # Progress tracking
     status = db.Column(db.Enum(GoalStatus), default=GoalStatus.ACTIVE)
