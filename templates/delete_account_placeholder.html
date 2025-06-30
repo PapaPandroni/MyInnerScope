@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Delete Account{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card bg-dark text-white border-0 shadow">
+                <div class="card-body p-4">
+                    <h1 class="text-center mb-4 text-danger">Delete Account</h1>
+                    <hr class="bg-secondary">
+                    <p class="text-warning">This feature is coming soon. Deleting your account will permanently remove all your data and cannot be undone.</p>
+                    <a href="{{ url_for('user.profile') }}" class="btn btn-secondary">Back to Profile</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -29,6 +29,7 @@
                         {% if request.path != '/goals' %}
                             <li><a class="dropdown-item" href="/goals">Goals</a></li>
                         {% endif %}
+                        <li><a class="dropdown-item" href="{{ url_for('user.profile') }}">Profile</a></li>
                         <li><a class="dropdown-item" href="/logout">Log out</a></li>
                     {% else %}
                         {% if request.path != '/register' %}

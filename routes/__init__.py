@@ -3,6 +3,8 @@ from .diary import diary_bp
 from .progress import progress_bp
 from .reader import reader_bp
 from .goals import goals_bp
+from .legal import legal_bp
+from .user import user_bp
 
 def register_blueprints(app):
     """Register all blueprints with the Flask app"""
@@ -11,6 +13,8 @@ def register_blueprints(app):
     app.register_blueprint(progress_bp)
     app.register_blueprint(reader_bp)
     app.register_blueprint(goals_bp)
+    app.register_blueprint(legal_bp)
+    app.register_blueprint(user_bp)
 
     # Apply rate limiting to login and register routes
     limiter = getattr(app, 'limiter', None)
