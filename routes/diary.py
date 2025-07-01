@@ -24,6 +24,9 @@ def diary_entry():
     if request.method == 'POST' and 'rating' in request.form:
         form.rating.data = int(request.form['rating'])
 
+    print(f"DEBUG: form.rating.data after manual assignment: {form.rating.data}")
+    print(f"DEBUG: form.rating.errors after manual assignment: {form.rating.errors}")
+
     if form.validate_on_submit():
         content = form.content.data
         rating = form.rating.data

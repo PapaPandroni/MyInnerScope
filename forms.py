@@ -52,7 +52,6 @@ class DiaryEntryForm(FlaskForm):
         Length(min=1, max=2000, message='Diary entry must be between 1 and 2000 characters')
     ])
     rating = IntegerField('Rating', validators=[
-        DataRequired(message='Please select a rating'),
         NumberRange(min=-1, max=1, message='Rating must be either -1 (want to change) or 1 (encouraged)')
     ])
 
