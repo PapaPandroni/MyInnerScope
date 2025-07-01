@@ -1,5 +1,7 @@
-from flask import Blueprint, render_template, session, redirect, url_for, send_file, flash, jsonify, make_response
+from flask import Blueprint, render_template, session, redirect, url_for, send_file, flash, jsonify, make_response, request
 from models import User, DiaryEntry, Goal, DailyStats, db
+from forms import DeleteAccountForm
+from werkzeug.security import check_password_hash
 import io, csv, json
 
 user_bp = Blueprint('user', __name__)
@@ -71,7 +73,29 @@ def download_data_csv():
 def delete_account():
     if 'user_id' not in session:
         return redirect(url_for('auth.login_page'))
-    # Placeholder: show confirmation UI, no delete logic yet
-    if 'POST' == 'POST':
-        flash('Account deletion is not yet implemented.', 'warning')
-    return render_template('delete_account_placeholder.html') 
+
+    form = DeleteAccountForm()
+    user = db.session.get(User, session['user_id'])
+
+    if form.validate_on_submit():
+        if user and user.check_password(form.password.data):
+            try:
+                # Delete associated data first
+                DailyStats.query.filter_by(user_id=user.id).delete()
+                Goal.query.filter_by(user_id=user.id).delete()
+                DiaryEntry.query.filter_by(user_id=user.id).delete()
+
+                # Delete the user
+                db.session.delete(user)
+                db.session.commit()
+
+                session.clear()
+                flash('Your account has been successfully deleted.', 'success')
+                return redirect(url_for('auth.login_page'))
+            except Exception as e:
+                db.session.rollback()
+                flash(f'An error occurred during account deletion: {e}', 'danger')
+        else:
+            flash('Incorrect password. Please try again.', 'danger')
+    
+    return render_template('delete_account_confirm.html', form=form) 

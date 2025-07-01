@@ -75,4 +75,11 @@ class GoalProgressForm(FlaskForm):
     """Form for updating goal progress"""
     progress_notes = TextAreaField('Progress Notes', validators=[
         Length(max=1000, message='Progress notes must be less than 1000 characters')
-    ]) 
+    ])
+
+class DeleteAccountForm(FlaskForm):
+    """Form for confirming account deletion"""
+    password = PasswordField('Password', validators=[
+        DataRequired(message='Please enter your password to confirm deletion')
+    ])
+    submit = SubmitField('Delete My Account Permanently') 

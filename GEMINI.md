@@ -42,13 +42,13 @@ The application gamifies this process by awarding points for entries and trackin
 
 The project follows a standard Flask application structure, separating concerns into distinct modules:
 
--   `app.py`: The main application entry point. It uses the factory pattern (`create_app`) to initialize the Flask app, database, routes, logging, and session management.
+-   `app.py`: The main application entry point. It now functions as a pure app factory, initializing the Flask app, database, routes, logging, and session management.
 -   `config.py`: Defines configuration environments (Development, Production, Testing) and manages session settings.
 -   `forms.py`: Contains all `Flask-WTF` form classes for input validation (e.g., `LoginForm`, `RegisterForm`, `DiaryEntryForm`).
--   `models/`: Contains SQLAlchemy database models (`User`, `DiaryEntry`, `DailyStats`, `Goal`).
--   `routes/`: Defines the application's routes using Flask Blueprints (`auth`, `diary`, `progress`, `reader`, `goals`).
--   `templates/`: Contains all Jinja2 HTML templates, including custom error pages (`403.html`, `404.html`, `500.html`).
--   `static/`: Holds all static assets (CSS, JavaScript, images).
+-   `models/`: Contains SQLAlchemy database models (`User`, `DiaryEntry`, `DailyStats`, `Goal`). Database queries have been updated to SQLAlchemy 2.0 style (e.g., `db.session.get()` instead of `User.query.get()`). Datetime handling in models now uses timezone-aware objects (`datetime.now(timezone.utc)`).
+-   `routes/`: Defines the application's routes using Flask Blueprints. This now includes a `main` blueprint (`routes/main.py`) for the root route (`/`) and global error handlers (`403`, `404`, `500`). Other blueprints include (`auth`, `diary`, `progress`, `reader`, `goals`, `legal`, `user`).
+-   `templates/`: Contains all Jinja2 HTML templates, including custom error pages (`403.html`, `404.html`, `500.html`). The `base.html` template now includes `cookie_consent.js`.
+-   `static/`: Holds all static assets (CSS, JavaScript, images). The JavaScript files (`static/js/`) have been reorganized into a feature-based structure (e.g., `static/js/goals/goals.js`, `static/js/legal/cookie_consent.js`).
 -   `utils/`: Contains helper modules for complex logic (`pdf_generator`, `progress_helpers`, etc.).
 
 ---
@@ -58,7 +58,7 @@ The project follows a standard Flask application structure, separating concerns 
 ### 4.1. User Authentication & Session Management
 -   **Functionality**: Secure user registration, login, and logout. Sessions expire after 24 hours of inactivity.
 -   **Implementation**:
-    -   `routes/auth.py` handles the routes using `Flask-WTF` forms for validation.
+    -   `routes/auth.py` handles the routes using `Flask-WTF` forms for validation. Database queries for user retrieval have been updated to `db.session.get()`.
     -   Passwords are hashed using Werkzeug.
     -   `app.py` contains a `before_request` handler that validates and renews the user's session on each request.
     -   Failed login attempts and other auth-related events are logged.
@@ -66,7 +66,7 @@ The project follows a standard Flask application structure, separating concerns 
 ### 4.2. Diary and Points System
 -   **Functionality**: Users submit daily diary entries and categorize them to earn points and build streaks.
 -   **Implementation**:
-    -   `routes/diary.py` manages entry creation using the `DiaryEntryForm` for validation.
+    -   `routes/diary.py` manages entry creation using the `DiaryEntryForm` for validation. Database queries for user retrieval have been updated to `db.session.get()`.
     -   `models/DailyStats.py` tracks daily points and streaks.
 
 ### 4.3. Progress Dashboard & PDF Export
@@ -81,6 +81,7 @@ The project follows a standard Flask application structure, separating concerns 
 -   **Implementation**:
     -   `routes/goals.py` handles all goal-related logic using the `GoalForm` for validation.
     -   `utils/goal_helpers.py` provides functions for goal management.
+    -   The `Goal` model (`models/goal.py`) now uses timezone-aware datetimes (`datetime.now(timezone.utc)`) for `created_at` timestamps.
 
 ---
 
@@ -105,8 +106,17 @@ This project follows a prioritized roadmap to ensure stability and security befo
     -   **2.1. Security Hardening**: Implement rate limiting, CSRF protection for AJAX, and run dependency audits.
     -   **2.2. Legal & Compliance (GDPR)**: Add a privacy policy, cookie consent, and data export/deletion features.
 -   **Phase 3: Final Polish**
-    -   **3.1. Code & File Structure Refinements**: Refactor `app.py` to a pure app factory and standardize JS file structure.
+    -   **3.1. Code & File Structure Refinements**: **Completed.** This included renaming `web_app.py` to `app.py` and refactoring it to a pure app factory, standardizing the JavaScript file structure, and ensuring `cookie_consent.js` is loaded on all pages.
     -   **3.2. Database Performance**: Add indexes to frequently queried columns.
+
+### Recent Technical Improvements and Learnings:
+
+*   **SQLAlchemy 2.0 Adoption**: Updated database query patterns from legacy `Query.get()` to `db.session.get()` for improved compatibility and future-proofing.
+*   **Timezone-Aware Datetimes**: Replaced `datetime.utcnow()` with `datetime.now(timezone.utc)` to ensure consistent and accurate timestamping across different timezones, resolving deprecation warnings.
+*   **Modular Application Structure**: Further modularized the Flask application by moving the main route and error handlers into a dedicated `main` blueprint, enhancing maintainability and adherence to Flask best practices.
+*   **Standardized Frontend Assets**: Organized JavaScript files into a feature-based directory structure within `static/js/` for better project scalability and easier navigation.
+*   **GDPR Compliance (Cookie Consent)**: Ensured the cookie consent script is loaded globally on all pages via `base.html` to meet initial GDPR requirements for user consent.
+*   **Robust Testing**: Maintained a passing test suite throughout the refactoring process, demonstrating the effectiveness of incremental changes and immediate verification. All critical warnings have been addressed, leaving only expected development-related warnings from Flask-Limiter.
 
 ---
 

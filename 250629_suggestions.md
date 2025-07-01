@@ -70,16 +70,33 @@ This plan is structured to front-load foundational tooling and safety nets, ensu
 
 ## Phase 3: Final Polish
 
-### 3.1. Code & File Structure Refinements
+### 3.1. Code & File Structure Refinements - **COMPLETED**
 - **Refactor `app.py` to a Pure App Factory**:
-    - **Suggestion**: Move the root route (`/`) and error handlers out of `app.py` and into their own blueprint.
-    - **Reasoning**: Cleans up the main entry point and follows common Flask best practices.
+    - **Status**: Completed. `web_app.py` was renamed to `app.py`, and the root route (`/`) and error handlers (`403`, `404`, `500`) were moved into a new `routes/main.py` blueprint.
 - **Standardize JavaScript File Structure**:
-    - **Suggestion**: Organize the JavaScript files in the `static/js` directory into a more consistent structure.
-    - **Reasoning**: Improves maintainability as the project grows.
+    - **Status**: Completed. JavaScript files in `static/js` were reorganized into feature-based subdirectories (e.g., `static/js/goals/goals.js`, `static/js/legal/cookie_consent.js`). The `cookie_consent.js` script is now loaded globally via `templates/base.html`.
 
 ### 3.2. Database Performance
 - **Add Database Indexes**:
     - **Suggestion**: Add explicit database indexes to frequently queried foreign keys and date columns.
     - **Reasoning**: Indexes dramatically speed up read queries, which is essential for performance as the amount of data grows. This is best done after the schema is stable.
     - **Implementation**: In your models, add `db.Index(...)` to columns like `DiaryEntry.entry_date`, `Goal.user_id`, etc.
+
+---
+
+## New Suggestions & Refinements (Based on Recent Work)
+
+These suggestions are derived from observations made during the implementation of Phase 3.1 and the subsequent warning resolutions.
+
+### 4.1. Modernize SQLAlchemy Query API (High Priority)
+- **Suggestion**: Update remaining legacy SQLAlchemy `Query` API calls (e.g., `User.query.filter_by()`) to the modern SQLAlchemy 2.0 style using `db.session.execute(select(...))`.
+- **Reasoning**: While `Query.get()` was updated, other `Query` methods are still in use and will eventually be deprecated. Adopting the `select` and `execute` pattern is the recommended future-proof approach for SQLAlchemy 2.0. This will also help eliminate any remaining `LegacyAPIWarning` messages related to query construction.
+- **Affected Files (Likely)**: `routes/auth.py`, `routes/diary.py`, `models/daily_stats.py`, `models/user.py` (and potentially others).
+
+### 4.2. Review Datetime Usage for Consistency
+- **Suggestion**: Review all instances of `datetime.now().date()` and `date.today()` to ensure consistent and appropriate use, especially concerning timezone awareness for date-only comparisons.
+- **Reasoning**: While `datetime.utcnow()` was replaced with timezone-aware `datetime.now(timezone.utc)`, some date-only operations might still implicitly rely on local time or naive datetimes. Ensuring explicit timezone handling or using `date.today()` where appropriate can prevent subtle bugs related to date boundaries across different timezones.
+
+### 4.3. Centralize Flash Message Handling (Maintainability)
+- **Suggestion**: Consider centralizing the logic for `flash` messages into a helper function or a dedicated utility.
+- **Reasoning**: This would promote consistency in message formatting, categories, and potentially allow for easier internationalization or custom styling of flash messages across the application. It's a refactoring for maintainability rather than a bug fix.
