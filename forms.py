@@ -55,6 +55,10 @@ class DiaryEntryForm(FlaskForm):
         NumberRange(min=-1, max=1, message='Rating must be either -1 (want to change) or 1 (encouraged)')
     ])
 
+    def validate_rating(self, field):
+        if field.data not in [-1, 1]:
+            raise ValidationError('Rating must be either -1 (want to change) or 1 (encouraged)')
+
 class GoalForm(FlaskForm):
     """Form for goal creation"""
     category = SelectField('Category', validators=[

@@ -11,7 +11,6 @@ def diary_entry():
     if "user_id" not in session:
         return redirect("/login")
 
-    form = DiaryEntryForm()
     user_id = session["user_id"]
     user = db.session.get(User, user_id)
 
@@ -20,12 +19,7 @@ def diary_entry():
     else:
         display_name = user.email.split('@')[0]
 
-    # Manually set the rating from the button pressed
-    if request.method == 'POST' and 'rating' in request.form:
-        form.rating.data = int(request.form['rating'])
-
-    print(f"DEBUG: form.rating.data after manual assignment: {form.rating.data}")
-    print(f"DEBUG: form.rating.errors after manual assignment: {form.rating.errors}")
+    form = DiaryEntryForm()
 
     if form.validate_on_submit():
         content = form.content.data

@@ -134,8 +134,9 @@ class TestDiaryRoutes:
             'rating': '0', # Invalid rating
             'csrf_token': csrf_token
         }
-        response = client.post('/diary', data=data, follow_redirects=True)
+        response = client.post('/diary', data=data)
         assert response.status_code == 400
+        assert b'alert alert-danger' in response.data
         assert b'Rating must be either -1 (want to change) or 1 (encouraged)' in response.data
 
         with app.app_context():
