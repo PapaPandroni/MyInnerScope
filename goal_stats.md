@@ -35,3 +35,15 @@ Here is a step-by-step plan to implement these new features:
     *   Add a new function to create the "Goal Performance by Category" chart.
     *   This chart will be a **stacked bar chart**, with each bar representing a category. The bar will be segmented to show the number of completed goals and failed goals.
     *   The chart will be styled to match the existing "sci-fi" theme of the application.
+
+### Part 3: Data Export Considerations
+
+It's crucial to ensure that the newly integrated goal statistics are also available for export, maintaining data portability and user access to their complete journey.
+
+1.  **JSON/CSV Data Export:**
+    *   **Action:** Verify and update the existing JSON and CSV export functions (likely in `routes/user.py` or a related utility) to include the goal statistics. This will involve fetching the `goal_statistics` data and serializing it appropriately within the existing export structures.
+
+2.  **PDF Export:**
+    *   **Action:** Integrate the goal statistics into the PDF export functionality (likely in `routes/progress.py` and `utils/pdf_generator.py`). This will involve:
+        *   Passing the `goal_statistics` data from the `progress` route to the `generate_journey_pdf` function.
+        *   Modifying the PDF generation logic to render these statistics, potentially as a new section or integrated into existing summary views within the PDF template (`templates/pdf/journey.html`). This might include rendering the total completed goals, success rate, and potentially a simplified text-based summary of category performance if a visual chart is too complex for static PDF rendering.
