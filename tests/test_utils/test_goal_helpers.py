@@ -5,7 +5,7 @@ import pytest
 from datetime import datetime, date, timedelta
 from models import Goal, db
 from models.goal import GoalCategory, GoalStatus
-from utils.goal_helpers import get_current_goals, get_overdue_goals, create_goal, get_goal_stats
+from utils.goal_helpers import get_current_goals, get_overdue_goals, create_goal, get_goal_statistics
 
 
 class TestGoalHelpers:
@@ -114,21 +114,19 @@ class TestGoalHelpers:
             db.session.commit()
             
             # Get stats
-            stats = get_goal_stats(sample_user.id)
+            stats = get_goal_statistics(sample_user.id)
             
-            assert stats['total_goals'] == 3
-            assert stats['completed_goals'] == 1
-            assert stats['failed_goals'] == 1
-            assert stats['active_goals'] == 1
-            assert stats['completion_rate'] == pytest.approx(33.3, rel=0.1)
+            assert stats['total_completed'] == 1
+            assert stats['success_rate'] == 50.0
+            assert stats['has_stats'] is True
+            assert stats['category_stats'][GoalCategory.LEARNING.value]['completed'] == 1
+            assert stats['category_stats'][GoalCategory.MINDFULNESS.value]['failed'] == 1
     
     def test_get_goal_stats_empty(self, app, sample_user):
         """Test getting goal stats when user has no goals"""
         with app.app_context():
-            stats = get_goal_stats(sample_user.id)
+            stats = get_goal_statistics(sample_user.id)
             
-            assert stats['total_goals'] == 0
-            assert stats['completed_goals'] == 0
-            assert stats['failed_goals'] == 0
-            assert stats['active_goals'] == 0
-            assert stats['completion_rate'] == 0 
+            assert stats['total_completed'] == 0
+            assert stats['success_rate'] == 0
+            assert stats['has_stats'] is False 

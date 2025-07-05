@@ -1,5 +1,41 @@
 # Changelog
 
+## 23432ecc1e29e67a51cf7f9cf74964211f137c5c
+**Author**: Peremil
+**Date**: Fri Jul 4 22:00:46 2025 +0200
+**Message**: updated spmp with work
+**Summary**: Modified `SPMP_250701.md`.
+**Detailed Description**: This commit updates the project management plan to reflect the completion of the rate limiting implementation. It details that rate
+limits have been applied to all sensitive blueprints and that a new test file has been added to verify the implementation.
+
+
+## f6017858631ce36cfbc595a4882fd94d03f1dfcd
+**Author**: Peremil
+**Date**: Fri Jul 4 21:58:52 2025 +0200
+**Message**: added rate limiting to all sensitive end points
+**Summary**: Modified `routes/__init__.py and added tests/test_security.py`.
+Detailed Description: This commit implements rate limiting across all sensitive endpoints of the application. It applies various rate limits to the auth,
+diary, goals, user, progress, and reader blueprints. A new test file, tests/test_security.py, was added to ensure the rate limiting is working as expected.
+
+## 02fcada72dd86cafc59bee7c46bc00d03f20ad96
+**Author**: Peremil
+**Date**: Fri Jul 4 09:03:06 2025 +0200
+**Message**: recommit with deletions
+**Summary**: Deleted several markdown files and `web_app.py`. Added a GitHub Actions workflow for security.
+**Detailed Description**: This commit removes several outdated markdown files that were used for planning and suggestions. It also removes the old `web_app.py`
+file, which has been replaced by the app factory pattern. A new GitHub Actions workflow, security.yml, has been added to automate dependency security audits.
+The .gitignore file was also updated.
+
+
+## 9bc0dead6b56884d6f13cb60340a27be6af73dee
+**Author**: Peremil
+**Date**: Fri Jul 4 08:46:45 2025 +0200
+**Message**: added a changelog files with description of my commits
+**Summary**: Added `changelog.md`.
+**Detailed Description**: This commit adds the `changelog.md` file to the project. The file is pre-populated with a detailed history of all previous commits, their
+descriptions, and summaries.
+
+
 ## ca8a2c20cbd1f136ab2c24e9cf71370fff112234
 **Author:** Peremil
 **Date:** Thu Jul 3 21:25:16 2025 +0200

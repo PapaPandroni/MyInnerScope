@@ -7,12 +7,14 @@ class ProgressCharts {
     constructor() {
         this.pointsChart = null;
         this.weekdayChart = null;
+        this.goalCategoryChart = null;
         this.init();
     }
 
     init() {
         this.initPointsChart();
         this.initWeekdayChart();
+        this.initGoalCategoryChart();
     }
 
     initPointsChart() {
@@ -155,6 +157,86 @@ class ProgressCharts {
             this.weekdayChart.canvas.style.opacity = '0.3';
             this.weekdayChart.canvas.style.pointerEvents = 'none';
         }
+    }
+
+    initGoalCategoryChart() {
+        const goalStatsData = window.progressData.goalStatsData;
+        if (!goalStatsData || !goalStatsData.has_stats) {
+            return;
+        }
+
+        const categoryStats = goalStatsData.category_stats;
+        const labels = Object.keys(categoryStats);
+        const completedData = labels.map(label => categoryStats[label].completed);
+        const failedData = labels.map(label => categoryStats[label].failed);
+
+        const ctx = document.getElementById('goalCategoryChart').getContext('2d');
+        this.goalCategoryChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Completed',
+                        data: completedData,
+                        backgroundColor: 'rgba(0, 255, 127, 0.6)',
+                        borderColor: '#00ff7f',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Failed',
+                        data: failedData,
+                        backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                        borderColor: '#ff6384',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        stacked: true,
+                        title: {
+                            display: true,
+                            text: 'Category',
+                            color: '#ffffff'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#ffffff'
+                        }
+                    },
+                    y: {
+                        stacked: true,
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Number of Goals',
+                            color: '#ffffff'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#ffffff',
+                            stepSize: 1
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            color: '#ffffff'
+                        }
+                    }
+                }
+            }
+        });
     }
 }
 

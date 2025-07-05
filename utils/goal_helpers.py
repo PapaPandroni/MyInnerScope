@@ -73,19 +73,37 @@ def get_goal_history(user_id: int, limit: int = 10) -> List[Goal]:
         .limit(limit)\
         .all()
 
-def get_goal_stats(user_id: int) -> Dict[str, Any]:
-    goals = Goal.query.filter_by(user_id=user_id).all()
-    total_goals = len(goals)
-    completed_goals = len([g for g in goals if g.status == GoalStatus.COMPLETED])
-    failed_goals = len([g for g in goals if g.status == GoalStatus.FAILED])
-    active_goals = len([g for g in goals if g.status == GoalStatus.ACTIVE and g.week_end >= datetime.now().date()])
-    completion_rate = (completed_goals / total_goals * 100) if total_goals > 0 else 0
+def get_goal_statistics(user_id: int) -> Dict[str, Any]:
+    """
+    Gathers statistics about a user's goals.
+    """
+    goals = Goal.query.filter(
+        Goal.user_id == user_id,
+        Goal.status.in_([GoalStatus.COMPLETED, GoalStatus.FAILED])
+    ).all()
+
+    completed_goals = sum(1 for g in goals if g.status == GoalStatus.COMPLETED)
+    failed_goals = sum(1 for g in goals if g.status == GoalStatus.FAILED)
+    total_past_goals = completed_goals + failed_goals
+
+    success_rate = (completed_goals / total_past_goals * 100) if total_past_goals > 0 else 0
+
+    category_stats = {
+        category.value: {"completed": 0, "failed": 0}
+        for category in GoalCategory
+    }
+
+    for goal in goals:
+        if goal.status == GoalStatus.COMPLETED:
+            category_stats[goal.category.value]["completed"] += 1
+        elif goal.status == GoalStatus.FAILED:
+            category_stats[goal.category.value]["failed"] += 1
+
     return {
-        'total_goals': total_goals,
-        'completed_goals': completed_goals,
-        'failed_goals': failed_goals,
-        'active_goals': active_goals,
-        'completion_rate': round(completion_rate, 1)
+        "total_completed": completed_goals,
+        "success_rate": round(success_rate, 1),
+        "category_stats": category_stats,
+        "has_stats": total_past_goals > 0
     }
 
 def get_predefined_goals() -> Dict[GoalCategory, List[str]]:

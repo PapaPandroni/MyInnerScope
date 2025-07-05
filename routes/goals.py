@@ -3,7 +3,7 @@ from models.goal import GoalCategory, GoalStatus
 from models import User, DailyStats, db
 from utils.goal_helpers import (
     get_current_goals, get_overdue_goals, create_goal, update_goal_progress, 
-    complete_goal, fail_goal, get_goal_history, get_goal_stats, get_predefined_goals
+    complete_goal, fail_goal, get_goal_history, get_goal_statistics, get_predefined_goals
 )
 from forms import GoalForm, GoalProgressForm
 from datetime import date
@@ -20,7 +20,7 @@ def goals_page():
     current_goals = get_current_goals(user_id)
     overdue_goals = get_overdue_goals(user_id)
     goal_history = get_goal_history(user_id, limit=10)
-    goal_stats = get_goal_stats(user_id)
+    goal_stats = get_goal_statistics(user_id)
     predefined_goals = get_predefined_goals()
     goal_form = GoalForm()
     progress_form = GoalProgressForm()
@@ -76,7 +76,7 @@ def create_new_goal():
         current_goals = get_current_goals(user_id)
         overdue_goals = get_overdue_goals(user_id)
         goal_history = get_goal_history(user_id, limit=10)
-        goal_stats = get_goal_stats(user_id)
+        goal_stats = get_goal_statistics(user_id)
         predefined_goals = get_predefined_goals()
 
         # Flash validation errors
@@ -121,7 +121,7 @@ def update_goal(goal_id):
         current_goals = get_current_goals(user_id)
         overdue_goals = get_overdue_goals(user_id)
         goal_history = get_goal_history(user_id, limit=10)
-        goal_stats = get_goal_stats(user_id)
+        goal_stats = get_goal_statistics(user_id)
         predefined_goals = get_predefined_goals()
 
         # Flash validation errors
@@ -163,7 +163,7 @@ def mark_goal_complete(goal_id):
             current_goals = get_current_goals(user_id)
             overdue_goals = get_overdue_goals(user_id)
             goal_history = get_goal_history(user_id, limit=10)
-            goal_stats = get_goal_stats(user_id)
+            goal_stats = get_goal_statistics(user_id)
             predefined_goals = get_predefined_goals()
             goal_form = GoalForm()
             progress_form = GoalProgressForm()
@@ -184,7 +184,7 @@ def mark_goal_complete(goal_id):
         current_goals = get_current_goals(user_id)
         overdue_goals = get_overdue_goals(user_id)
         goal_history = get_goal_history(user_id, limit=10)
-        goal_stats = get_goal_stats(user_id)
+        goal_stats = get_goal_statistics(user_id)
         predefined_goals = get_predefined_goals()
         goal_form = GoalForm()
         progress_form = GoalProgressForm()
@@ -205,7 +205,7 @@ def mark_goal_complete(goal_id):
         current_goals = get_current_goals(user_id)
         overdue_goals = get_overdue_goals(user_id)
         goal_history = get_goal_history(user_id, limit=10)
-        goal_stats = get_goal_stats(user_id)
+        goal_stats = get_goal_statistics(user_id)
         predefined_goals = get_predefined_goals()
         goal_form = GoalForm()
         progress_form = GoalProgressForm()
@@ -242,7 +242,7 @@ def mark_goal_failed(goal_id):
             current_goals = get_current_goals(user_id)
             overdue_goals = get_overdue_goals(user_id)
             goal_history = get_goal_history(user_id, limit=10)
-            goal_stats = get_goal_stats(user_id)
+            goal_stats = get_goal_statistics(user_id)
             predefined_goals = get_predefined_goals()
             goal_form = GoalForm()
             progress_form = GoalProgressForm()
@@ -262,7 +262,7 @@ def mark_goal_failed(goal_id):
             current_goals = get_current_goals(user_id)
             overdue_goals = get_overdue_goals(user_id)
             goal_history = get_goal_history(user_id, limit=10)
-            goal_stats = get_goal_stats(user_id)
+            goal_stats = get_goal_statistics(user_id)
             predefined_goals = get_predefined_goals()
             goal_form = GoalForm()
             progress_form = GoalProgressForm()
@@ -282,7 +282,7 @@ def mark_goal_failed(goal_id):
         current_goals = get_current_goals(user_id)
         overdue_goals = get_overdue_goals(user_id)
         goal_history = get_goal_history(user_id, limit=10)
-        goal_stats = get_goal_stats(user_id)
+        goal_stats = get_goal_statistics(user_id)
         predefined_goals = get_predefined_goals()
         goal_form = GoalForm()
         progress_form = GoalProgressForm()

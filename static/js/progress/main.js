@@ -26,7 +26,8 @@ class ProgressPage {
         // Setup global data object for other modules to access
         window.progressData = {
             pointsData: JSON.parse(document.getElementById('points-data').textContent),
-            weekdayConfig: weekdayConfig
+            weekdayConfig: weekdayConfig,
+            goalStatsData: JSON.parse(document.getElementById('goal-stats-data').textContent)
         };
     }
 

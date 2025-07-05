@@ -68,6 +68,23 @@
             </div>
         </div>
         <div class="container mt-5">
+            <h2 class="text-center">Goal Performance by Category</h2>
+            <div class="chart-container">
+                <canvas id="goalCategoryChart" width="400" height="200"></canvas>
+                {% if not goal_stats.has_stats %}
+                <div class="chart-overlay">
+                    <div class="overlay-content">
+                        <div class="overlay-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <h4 class="overlay-title">Goal Insights Locked</h4>
+                        <p class="overlay-message">Complete or fail at least one goal to see your performance by category.</p>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="container mt-5">
             <h2 class="text-center mb-4">Exploration Overview</h2>
         </div>
     <div class="row text-center">
@@ -140,6 +157,30 @@
                     </div>
                     <h5 class="card-title">Weekly Trend</h5>
                     <p class="card-text">{{ trend_message }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="sci-fi-card goals-completed">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <div class="card-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h5 class="card-title">Goals Completed</h5>
+                    <p class="card-value">{{ goal_stats.total_completed }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="sci-fi-card goal-success-rate">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <div class="card-icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <h5 class="card-title">Success Rate</h5>
+                    <p class="card-value">{{ goal_stats.success_rate }}%</p>
                 </div>
             </div>
         </div>
@@ -283,6 +324,9 @@
         "hasSufficientWeekdayData": {{ has_sufficient_weekday_data|tojson|safe }},
         "sampleWeekdayData": {{ sample_weekday_data|tojson|safe }}
     }
+    </script>
+    <script type="application/json" id="goal-stats-data">
+        {{ goal_stats|tojson|safe }}
     </script>
 {% endblock %}
 {% block scripts %}
