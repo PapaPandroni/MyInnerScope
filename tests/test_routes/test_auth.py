@@ -2,7 +2,7 @@
 Tests for authentication routes
 """
 import pytest
-from models import User, db
+from app.models import User, db
 from tests.conftest import extract_csrf_token
 
 

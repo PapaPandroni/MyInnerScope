@@ -2,7 +2,7 @@
 Tests for User model
 """
 import pytest
-from models import User, db
+from app.models import User, db
 from werkzeug.security import check_password_hash
 
 

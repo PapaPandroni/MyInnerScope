@@ -1,6 +1,6 @@
 import pytest
 from flask import url_for, session
-from models import User, DiaryEntry, Goal, DailyStats, db
+from app.models import User, DiaryEntry, Goal, DailyStats, db
 from datetime import datetime
 
 

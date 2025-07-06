@@ -1,7 +1,7 @@
 
 import pytest
 from app import create_app
-from models import User, db, Goal
+from app.models import User, db, Goal
 from datetime import datetime
 
 @pytest.fixture

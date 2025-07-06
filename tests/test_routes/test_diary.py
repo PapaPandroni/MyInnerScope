@@ -2,7 +2,7 @@
 import pytest
 from flask import url_for, session
 from datetime import date, timedelta
-from models import User, DiaryEntry, DailyStats, db
+from app.models import User, DiaryEntry, DailyStats, db
 from tests.conftest import extract_csrf_token
 
 class TestDiaryRoutes:

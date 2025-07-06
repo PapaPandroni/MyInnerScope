@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+
+{% block title %}Read Diary{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/goals.css') }}">
+<style>
+.diary-search-card {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border: 1px solid #2d3748;
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    color: #e2e8f0;
+    margin: 2rem auto 2.5rem auto;
+    max-width: 540px;
+}
+.diary-search-card .card-title {
+    color: #e2e8f0;
+    font-weight: 600;
+}
+.diary-search-card .form-control, .diary-search-card .form-select {
+    background: rgba(45, 55, 72, 0.5);
+    border: 1px solid #2d3748;
+    color: #e2e8f0;
+    border-radius: 8px;
+}
+.diary-search-card .form-control:focus, .diary-search-card .form-select:focus {
+    background: rgba(45, 55, 72, 0.7);
+    border-color: #4fd1c7;
+    color: #e2e8f0;
+    box-shadow: 0 0 0 0.2rem rgba(79, 209, 199, 0.25);
+}
+.diary-search-card .form-control::placeholder {
+    color: #718096;
+}
+.diary-day-title {
+    text-align: center;
+    margin-top: 2.5rem;
+    margin-bottom: 2rem;
+    color: #e2e8f0;
+    font-size: 2.2rem;
+    font-weight: 600;
+}
+.diary-entry-content {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border: 1px solid #2d3748;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    color: #e2e8f0;
+    font-size: 1.15rem;
+    padding: 1.5rem 2rem;
+    margin: 0 auto 2rem auto;
+    max-width: 700px;
+    white-space: pre-line;
+}
+.diary-hr {
+    border: none;
+    border-top: 1px solid #2d3748;
+    margin: 2rem auto;
+    max-width: 700px;
+}
+.diary-nav-btns {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+}
+@media (max-width: 768px) {
+    .diary-search-card, .diary-entry-content {
+        max-width: 98vw;
+        padding: 1rem;
+    }
+    .diary-day-title {
+        font-size: 1.3rem;
+    }
+}
+.search-result-card {
+    padding: 0.7rem 1.1rem !important;
+    font-size: 1rem !important;
+    margin-bottom: 0.8rem !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 48px;
+}
+.search-result-main {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+.search-result-date {
+    font-size: 0.98rem;
+    color: #e2e8f0;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+.search-result-snippet {
+    color: #e2e8f0;
+    font-size: 1rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-left: 0.5rem;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+.search-result-btn {
+    margin-left: 1.2rem;
+    flex-shrink: 0;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+    {% if not no_entries %}
+    <div class="diary-search-card card">
+        <div class="card-body">
+            <h5 class="card-title">Search Your Diary</h5>
+            <form method="GET" action="/read-diary">
+                <div class="row g-3 align-items-center">
+                    <div class="col-md-7">
+                        <input type="text" class="form-control" name="search" placeholder="Search for text..." value="{{ request.args.get('search', '') }}">
+                    </div>
+                    <div class="col-md-5">
+                        <select class="form-select" name="search_date">
+                            <option value="">All days</option>
+                            {% for diary_date in diary_dates %}
+                            <option value="{{ diary_date }}" {% if request.args.get('search_date') == diary_date|string %}selected{% endif %}>
+                                {{ diary_date.strftime('%b %d, %Y') }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="mt-3 text-center">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                    <a href="/read-diary" class="btn btn-outline-secondary">Clear</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+    {% if no_entries %}
+    <div class="container mt-5 text-center">
+        <h1 class="display-4 text-muted">No diary entries yet</h1>
+        <p class="lead">Start writing your first diary entry to begin your self-reflection journey!</p>
+        <a href="/diary" class="btn btn-primary btn-lg">Write your first entry</a>
+    </div>
+    {% elif show_search_results %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-lg-6 mx-auto">
+                <h2 class="mb-4 text-center" style="color:#e2e8f0;">Search Results</h2>
+                {% if search_results %}
+                    <p class="text-muted mb-4 text-center">Found {{ search_results|length }} result(s)</p>
+                    {% for result in search_results %}
+                    <div class="diary-entry-content search-result-card">
+                        <div class="search-result-main">
+                            <span class="search-result-date">
+                                <i class="fas fa-calendar-alt" style="color:#4fd1c7;"></i>
+                                {{ result.formatted_date }}
+                            </span>
+                            <span class="search-result-snippet">{{ result.snippet|safe }}</span>
+                        </div>
+                        <div class="search-result-btn">
+                            <a href="/read-diary?date={{ result.date }}" class="btn btn-outline-primary btn-sm">Read Full Day</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="alert alert-info text-center">
+                        <h5 class="alert-heading">No results found</h5>
+                        <p class="mb-0">
+                            {% if request.args.get('search_date') %}
+                                No entries found for "{{ request.args.get('search') }}" on {{ request.args.get('search_date') }}.<br>Try searching on a different date or leave the date as "All days".
+                            {% else %}
+                                No entries found containing "{{ request.args.get('search') }}".
+                            {% endif %}
+                        </p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% elif show_front_page %}
+    <div class="container mt-5 text-center">
+        <h1 class="display-3 mb-4" style="color:#e2e8f0;">{{ display_name }}'s Diary</h1>
+        <p class="lead mb-5" style="color:#e2e8f0;">A self reflection journey started on {{ first_entry_date.strftime('%B %d, %Y') }}</p>
+        <a href="/read-diary?date={{ first_entry_date }}" class="btn btn-primary btn-lg">Next</a>
+    </div>
+    {% elif show_day_page %}
+    <div class="container">
+        <h1 class="diary-day-title">{{ formatted_date }}</h1>
+        {% for entry in entries %}
+            <div class="diary-entry-content">{{ entry.content }}</div>
+            {% if not loop.last %}<hr class="diary-hr"/>{% endif %}
+        {% endfor %}
+        <div class="diary-nav-btns">
+            {% if prev_date %}
+            <a href="/read-diary?date={{ prev_date }}" class="btn btn-outline-secondary">Previous</a>
+            {% else %}
+            <a href="/read-diary" class="btn btn-outline-secondary">Previous</a>
+            {% endif %}
+            {% if next_date %}
+            <a href="/read-diary?date={{ next_date }}" class="btn btn-outline-secondary">Next</a>
+            {% else %}
+            <span class="btn btn-outline-secondary disabled">Next</span>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}

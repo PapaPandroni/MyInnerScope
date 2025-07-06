@@ -3,9 +3,9 @@ Tests for goal helper utilities
 """
 import pytest
 from datetime import datetime, date, timedelta
-from models import Goal, db
-from models.goal import GoalCategory, GoalStatus
-from utils.goal_helpers import get_current_goals, get_overdue_goals, create_goal, get_goal_statistics
+from app.models import Goal, db
+from app.models.goal import GoalCategory, GoalStatus
+from app.utils.goal_helpers import get_current_goals, get_overdue_goals, create_goal, get_goal_statistics
 
 
 class TestGoalHelpers:

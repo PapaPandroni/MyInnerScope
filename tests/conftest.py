@@ -6,8 +6,8 @@ import tempfile
 import os
 import re
 from app import create_app
-from models import db
-from models import User, DiaryEntry, DailyStats, Goal
+from app.models import db
+from app.models import User, DiaryEntry, DailyStats, Goal
 
 
 def extract_csrf_token(response_data):

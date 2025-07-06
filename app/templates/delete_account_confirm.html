@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Delete Account{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card bg-dark text-white border-0 shadow">
+                <div class="card-body p-4">
+                    <h1 class="text-center mb-4 text-danger">Delete Account</h1>
+                    <hr class="bg-secondary">
+                    <p class="text-warning">Deleting your account will permanently remove all your data and cannot be undone. This action is irreversible.</p>
+                    <p>To confirm, please re-enter your password:</p>
+                    <form method="POST" action="{{ url_for('user.delete_account') }}">
+                        {{ form.hidden_tag() }}
+                        <div class="mb-3">
+                            {{ form.password.label(class="form-label") }}
+                            {{ form.password(class="form-control") }}
+                            {% for error in form.password.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="d-grid gap-2">
+                            {{ form.submit(class="btn btn-danger") }}
+                            <a href="{{ url_for('user.profile') }}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

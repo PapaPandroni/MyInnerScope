@@ -5,7 +5,7 @@ from alembic.config import Config
 from alembic import command
 from sqlalchemy import create_engine, inspect
 from app import create_app
-from models import db
+from app.models import db
 
 @pytest.fixture
 def migration_app():

@@ -1,0 +1,98 @@
+.custom-nav {
+    background-color: rgb(23, 26, 37) !important
+}
+.dropdown-item{
+    color: whitesmoke
+}
+
+.btn-dark {
+    background-color: rgb(23, 26, 37);
+}
+
+body {
+    background-color: rgb(23, 26, 37);
+    color: whitesmoke;
+}
+
+.hero-section {
+    background-color: rgb(23, 26, 37);
+    padding: 100px 0;
+}
+
+.card.bg-dark {
+    background-color: rgb(30, 33, 45) !important; /* Slightly lighter dark for cards */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer {
+    background-color: rgb(18, 20, 28) !important; /* Even darker for footer */
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.text-with-shadow {
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.8), 0 0 5px #fff
+}
+
+#good-boy{
+    background-color: green;
+    height: 300px;
+    width: 300px;
+}
+
+#bad-boy{
+    background-color: red;
+    height: 300px;
+    width: 300px;
+}
+
+#diary-input {
+    width: 400px;
+    height: 50px;
+    border-radius: 4%;
+}
+
+#button-container {
+    margin-top: 200px
+}
+
+#login {
+    margin: 125px auto;
+    width: 400px;
+    height: 400 px;
+}
+
+#register-form {
+    margin: 125px auto;
+    width: 400px;
+    height: 400 px;
+}
+
+/* Export PDF generating overlay */
+.generating-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(23, 26, 37, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.generating-content {
+    text-align: center;
+}
+
+/* Style for the export button */
+#exportButton {
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
+
+#exportButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}

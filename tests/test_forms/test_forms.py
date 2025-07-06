@@ -2,8 +2,8 @@
 import unittest
 from flask import Flask
 from flask_wtf import CSRFProtect
-from forms import LoginForm, RegisterForm, DiaryEntryForm, GoalForm, GoalProgressForm, DeleteAccountForm
-from models.goal import GoalCategory
+from app.forms import LoginForm, RegisterForm, DiaryEntryForm, GoalForm, GoalProgressForm, DeleteAccountForm
+from app.models.goal import GoalCategory
 from wtforms.validators import ValidationError
 
 class TestForms(unittest.TestCase):
