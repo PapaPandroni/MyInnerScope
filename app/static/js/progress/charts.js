@@ -184,7 +184,7 @@ class ProgressCharts {
                         borderWidth: 1
                     },
                     {
-                        label: 'Failed',
+                        label: 'Not Completed',
                         data: failedData,
                         backgroundColor: 'rgba(255, 99, 132, 0.6)',
                         borderColor: '#ff6384',

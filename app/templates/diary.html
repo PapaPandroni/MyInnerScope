@@ -38,14 +38,20 @@
                         </div>
 
                         <div class="d-flex flex-column flex-md-row justify-content-center gap-3 gap-md-4">
-                            <button type="button" class="btn btn-outline-danger btn-lg px-4 py-3 rating-btn" data-rating="-1" style="transition: transform 0.2s ease;">
-                                <i class="fas fa-thumbs-down me-2"></i>
-                                Want to change
-                            </button>
-                            <button type="button" class="btn btn-outline-success btn-lg px-4 py-3 rating-btn" data-rating="1" style="transition: transform 0.2s ease;">
-                                <i class="fas fa-thumbs-up me-2"></i>
-                                Encouraged
-                            </button>
+                            <div class="d-flex flex-column align-items-center">
+                                <button type="button" class="btn btn-outline-success btn-lg px-4 py-3 rating-btn" data-rating="1" style="transition: transform 0.2s ease;">
+                                    <i class="fas fa-thumbs-up me-2"></i>
+                                    Keep Doing This
+                                </button>
+                                <small class="mt-1" style="color: whitesmoke; font-style: italic;">This is a behavior I want to continue and encourage.</small>
+                            </div>
+                            <div class="d-flex flex-column align-items-center">
+                                <button type="button" class="btn btn-outline-danger btn-lg px-4 py-3 rating-btn" data-rating="-1" style="transition: transform 0.2s ease;">
+                                    <i class="fas fa-pen me-2"></i>
+                                    Change This
+                                </button>
+                                <small class="mt-1" style="color: whitesmoke; font-style: italic;">This is a behavior I want to improve or do differently.</small>
+                            </div>
                         </div>
                     </form>
                 </div>
