@@ -139,4 +139,51 @@ body {
 /* Text muted utility class */
 .text-muted {
     color: #666;
+}
+
+/* Goal section specific styles */
+.goal-entry {
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #28a745;
+}
+
+.goal-entry.failed {
+    border-left-color: #dc3545;
+}
+
+.goal-title {
+    font-size: 14pt;
+    font-weight: bold;
+    color: #171A25;
+    margin-bottom: 5px;
+}
+
+.goal-description {
+    font-size: 11pt;
+    color: #666;
+    font-style: italic;
+    margin-bottom: 5px;
+}
+
+.goal-category {
+    font-size: 10pt;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.goal-status {
+    font-size: 12pt;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.goal-status.completed {
+    color: #28a745;
+}
+
+.goal-status.failed {
+    color: #dc3545;
 } 

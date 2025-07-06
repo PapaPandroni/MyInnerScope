@@ -279,6 +279,76 @@ class TestProgressRoutes:
         assert response.status_code == 200
         assert response.mimetype == 'application/pdf'
     
+    def test_export_journey_with_goals(self, client, app, sample_user):
+        """Test PDF export when user has goal data."""
+        with app.app_context():
+            # Create some diary entries
+            entry = DiaryEntry(
+                user_id=sample_user.id,
+                content='Test entry',
+                rating=1,
+                entry_date=date.today()
+            )
+            db.session.add(entry)
+            
+            stats = DailyStats(
+                user_id=sample_user.id,
+                date=date.today(),
+                points=5,
+                current_streak=1,
+                longest_streak=1
+            )
+            db.session.add(stats)
+            
+            # Create some goals
+            from app.models.goal import Goal, GoalCategory, GoalStatus
+            from datetime import timedelta
+            
+            # Completed goal
+            completed_goal = Goal(
+                user_id=sample_user.id,
+                category=GoalCategory.EXERCISE,
+                title='Exercise Goal',
+                description='Work out 3 times this week',
+                week_start=date.today() - timedelta(days=14),
+                week_end=date.today() - timedelta(days=7),
+                status=GoalStatus.COMPLETED,
+                created_at=date.today() - timedelta(days=14)
+            )
+            db.session.add(completed_goal)
+            
+            # Failed goal
+            failed_goal = Goal(
+                user_id=sample_user.id,
+                category=GoalCategory.LEARNING,
+                title='Learning Goal',
+                description='Read for 30 minutes daily',
+                week_start=date.today() - timedelta(days=21),
+                week_end=date.today() - timedelta(days=14),
+                status=GoalStatus.FAILED,
+                created_at=date.today() - timedelta(days=21)
+            )
+            db.session.add(failed_goal)
+            
+            db.session.commit()
+        
+        with client.session_transaction() as sess:
+            sess['user_id'] = sample_user.id
+        
+        # Get CSRF token
+        response = client.get('/progress')
+        csrf_token = extract_csrf_token(response.data)
+        
+        # Test PDF export with goals
+        response = client.post('/export-journey', 
+                             headers={'X-CSRFToken': csrf_token},
+                             json={'wordcloud_image': None})
+        
+        assert response.status_code == 200
+        assert response.mimetype == 'application/pdf'
+        assert 'attachment' in response.headers.get('Content-Disposition', '')
+        assert 'self-reflective-journey' in response.headers.get('Content-Disposition', '')
+    
     def test_progress_page_displays_correct_stats(self, client, app, sample_user):
         """Test that progress page displays all statistics correctly."""
         with app.app_context():

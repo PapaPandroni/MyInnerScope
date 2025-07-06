@@ -7,7 +7,7 @@ from ..utils.progress_helpers import (
     get_longest_streak, get_total_entries, get_points_data, get_top_days_with_entries,
     get_weekday_data, get_sample_weekday_data, get_trend_message
 )
-from ..utils.goal_helpers import get_current_goals, get_goal_statistics
+from ..utils.goal_helpers import get_current_goals, get_goal_statistics, get_goal_history
 
 progress_bp = Blueprint('progress', __name__)
 
@@ -127,6 +127,10 @@ def export_journey():
         'total_entries': len(entries)
     }
 
+    # Get goal data for PDF export
+    goal_stats = get_goal_statistics(user_id)
+    goal_history = get_goal_history(user_id, limit=50)  # Get all goals for PDF
+
     # Handle wordcloud image from frontend
     wordcloud_image = None
     if request.is_json:
@@ -146,7 +150,9 @@ def export_journey():
         weekday_data=weekday_data,
         top_days=[],
         stats=stats,
-        wordcloud_image=wordcloud_image  # Pass to PDF generator (implement handling there)
+        wordcloud_image=wordcloud_image,
+        goal_stats=goal_stats,
+        goal_history=goal_history
     )
     return send_file(
         pdf_buffer,

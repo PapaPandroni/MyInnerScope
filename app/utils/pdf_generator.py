@@ -7,7 +7,7 @@ from flask import render_template, current_app
 import matplotlib.pyplot as plt
 import os
 
-def generate_journey_pdf(user, entries, points_data, weekday_data, top_days, stats, wordcloud_image=None):
+def generate_journey_pdf(user, entries, points_data, weekday_data, top_days, stats, wordcloud_image=None, goal_stats=None, goal_history=None):
     """Generate a PDF containing the user's self-reflective journey.
     
     Args:
@@ -18,6 +18,8 @@ def generate_journey_pdf(user, entries, points_data, weekday_data, top_days, sta
         top_days: List of top performing days with entries
         stats: Dictionary containing user statistics
         wordcloud_image: Optional base64 data URL of the word cloud image
+        goal_stats: Dictionary containing goal statistics
+        goal_history: List of completed/failed goals
     
     Returns:
         BytesIO object containing the generated PDF
@@ -34,6 +36,11 @@ def generate_journey_pdf(user, entries, points_data, weekday_data, top_days, sta
     # Generate static images of the charts
     points_chart = _generate_points_chart(points_data)
     weekday_chart = _generate_weekday_chart(weekday_data)
+    
+    # Generate goal category chart if goal stats are available
+    goal_chart = None
+    if goal_stats and goal_stats.get('has_stats'):
+        goal_chart = _generate_goal_category_chart(goal_stats['category_stats'])
     
     # Prepare wordcloud image (strip data URL prefix if present)
     wordcloud_chart = None
@@ -53,9 +60,12 @@ def generate_journey_pdf(user, entries, points_data, weekday_data, top_days, sta
         entries=sorted_entries,  # Pass the sorted entries
         points_chart=points_chart,
         weekday_chart=weekday_chart,
+        goal_chart=goal_chart,
         wordcloud_chart=wordcloud_chart,
         top_days=top_days,
         stats=stats,
+        goal_stats=goal_stats,
+        goal_history=goal_history,
         generation_date=datetime.now().strftime('%B %d, %Y')
     )
     
@@ -177,6 +187,78 @@ def _generate_weekday_chart(weekday_data):
     # Convert plot to base64 string
     buffer = BytesIO()
     plt.savefig(buffer, format='png', dpi=300, bbox_inches='tight')
+    plt.close()
+    
+    buffer.seek(0)
+    image_png = buffer.getvalue()
+    buffer.close()
+    
+    return base64.b64encode(image_png).decode()
+
+def _generate_goal_category_chart(category_stats):
+    """Generate a static image of the goal category performance chart."""
+    plt.figure(figsize=(12, 8))
+    plt.style.use('dark_background')
+    
+    # Extract data
+    categories = list(category_stats.keys())
+    completed_data = [category_stats[cat]['completed'] for cat in categories]
+    failed_data = [category_stats[cat]['failed'] for cat in categories]
+    
+    # Filter out categories with no goals
+    non_zero_categories = []
+    non_zero_completed = []
+    non_zero_failed = []
+    
+    for i, cat in enumerate(categories):
+        if completed_data[i] > 0 or failed_data[i] > 0:
+            non_zero_categories.append(cat)
+            non_zero_completed.append(completed_data[i])
+            non_zero_failed.append(failed_data[i])
+    
+    if not non_zero_categories:
+        # If no goals, create a simple text plot
+        plt.figure(figsize=(8, 4))
+        plt.text(0.5, 0.5, 'No completed or failed goals yet', 
+                ha='center', va='center', transform=plt.gca().transAxes,
+                fontsize=14, color='white')
+        plt.axis('off')
+    else:
+        # Create the stacked bar chart
+        x = range(len(non_zero_categories))
+        width = 0.6
+        
+        # Create bars
+        completed_bars = plt.bar(x, non_zero_completed, width, 
+                               label='Completed', color='#00ff7f', alpha=0.8)
+        failed_bars = plt.bar(x, non_zero_failed, width, 
+                            bottom=non_zero_completed, label='Failed', 
+                            color='#ff6384', alpha=0.8)
+        
+        # Customize the plot
+        plt.title('Goal Performance by Category', pad=20, fontsize=16)
+        plt.xlabel('Category', fontsize=12)
+        plt.ylabel('Number of Goals', fontsize=12)
+        plt.xticks(x, non_zero_categories, rotation=45, ha='right')
+        plt.legend()
+        plt.grid(True, alpha=0.2, axis='y')
+        
+        # Add value labels on bars
+        for i, (comp, fail) in enumerate(zip(non_zero_completed, non_zero_failed)):
+            if comp > 0:
+                plt.text(i, comp/2, str(comp), ha='center', va='center', 
+                        fontweight='bold', color='black')
+            if fail > 0:
+                plt.text(i, comp + fail/2, str(fail), ha='center', va='center', 
+                        fontweight='bold', color='black')
+    
+    # Adjust layout
+    plt.tight_layout()
+    
+    # Convert plot to base64 string
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png', dpi=300, bbox_inches='tight', 
+                facecolor='#1a1a2e', edgecolor='none')
     plt.close()
     
     buffer.seek(0)
