@@ -1,39 +1,141 @@
 {% extends "base.html" %}
-{% block title %}Aim for the stars{% endblock %}
+
+{% block title %}Aim for the Stars - Reflect. Grow. Achieve.{% endblock %}
+
+{% block extra_css %}
+<style>
+.landing-bg {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    z-index: -2;
+    background: url("{{ url_for('static', filename='assets/starry_sky.jpg') }}") center center/cover no-repeat;
+}
+.landing-gradient {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    z-index: -1;
+    /* Softer, lower gradient for more visible stars */
+    background: linear-gradient(to top, rgba(10,24,51,0.92) 85%, rgba(10,24,51,0.5) 95%, rgba(10,24,51,0.1) 100%);
+}
+.landing-content {
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+    padding-top: 7vh;
+}
+.landing-title {
+    font-size: 3rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 16px #000, 0 0 8px #00d4ff;
+}
+.landing-subtitle {
+    font-size: 1.4rem;
+    color: #cce6ff;
+    margin-bottom: 2.5rem;
+    margin-top: 1rem;
+}
+.landing-cta .btn {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0 1rem 2.5rem 1rem;
+    padding: 0.75rem 2.5rem;
+    border-radius: 2rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+    background: #00d4ff;
+    color: #171A25;
+    border: none;
+    transition: background 0.2s;
+}
+.landing-cta .btn:hover {
+    background: #009ec3;
+    color: #fff;
+}
+.landing-features {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 3rem;
+    margin: 3rem 0 2.5rem 0;
+}
+.landing-feature {
+    background: rgba(23,26,37,0.90);
+    border-radius: 2rem;
+    padding: 2.5rem 2rem 2rem 2rem;
+    min-width: 250px;
+    max-width: 350px;
+    box-shadow: 0 2px 24px rgba(0,0,0,0.28);
+    color: #fff;
+    text-align: center;
+    font-size: 1.15rem;
+}
+.landing-feature i {
+    font-size: 3.2rem;
+    color: #00d4ff;
+    margin-bottom: 1.2rem;
+}
+.landing-feature .fw-bold {
+    font-size: 1.25rem;
+}
+.landing-quote {
+    margin-top: 3.5rem;
+    font-style: italic;
+    color: #cce6ff;
+    font-size: 1.6rem;
+    font-weight: 600;
+    text-shadow: 0 1px 12px #000;
+    letter-spacing: 0.5px;
+}
+@media (max-width: 768px) {
+    .landing-title { font-size: 2.1rem; }
+    .landing-features { flex-direction: column; gap: 2rem; }
+    .landing-feature { min-width: 0; max-width: 100%; font-size: 1.05rem; padding: 2rem 1rem 1.5rem 1rem; }
+    .landing-feature i { font-size: 2.2rem; }
+    .landing-quote { font-size: 1.2rem; }
+}
+</style>
+{% endblock %}
+
 {% block content %}
-    <div class="hero-section text-center text-white py-5">
-        <div class="container">
-            <h1 class="display-4 text-with-shadow">Uncover Your Potential. Chart Your Growth.</h1>
-            <p class="lead">Your daily companion for self-discovery and personal evolution.</p>
-            <a href="/register" class="btn btn-light btn-lg mt-3">Start Your Journey</a>
+<div class="landing-bg"></div>
+<div class="landing-gradient"></div>
+<div class="landing-content">
+    <div class="landing-title">Aim for the Stars</div>
+    <div class="landing-subtitle">
+        Reflect on your journey. Set goals. Visualize your growth.<br>
+        Become the best version of yourself.
+    </div>
+    <div class="landing-cta">
+        {% if not session.get('user_id') %}
+            <a href="/register" class="btn btn-lg">Register</a>
+            <a href="/login" class="btn btn-lg">Log In</a>
+        {% else %}
+            <a href="/progress" class="btn btn-lg">Go to Dashboard</a>
+        {% endif %}
+    </div>
+    <div class="landing-features">
+        <div class="landing-feature">
+            <i class="fas fa-book"></i>
+            <div class="mt-2 mb-1 fw-bold">Track Your Reflections</div>
+            <div>Write daily entries and see your thoughts evolve over time.</div>
+        </div>
+        <div class="landing-feature">
+            <i class="fas fa-bullseye"></i>
+            <div class="mt-2 mb-1 fw-bold">Set & Achieve Goals</div>
+            <div>Define weekly goals and celebrate your progress.</div>
+        </div>
+        <div class="landing-feature">
+            <i class="fas fa-chart-line"></i>
+            <div class="mt-2 mb-1 fw-bold">Visualize Your Growth</div>
+            <div>Interactive charts and stats help you see your journey.</div>
         </div>
     </div>
-    <div class="container text-center py-5">
-        <div class="row">
-            <div class="col-md-4 mb-4">
-                <div class="card h-100 bg-dark text-white border-0">
-                    <div class="card-body">
-                        <h2 class="card-title">Embark on Your Path</h2>
-                        <p class="card-text">Begin your personal growth adventure by creating an account or logging in to access your self-reflection tools.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="card h-100 bg-dark text-white border-0">
-                    <div class="card-body">
-                        <h2 class="card-title">Document Your Discoveries</h2>
-                        <p class="card-text">Capture your daily thoughts and actions, categorizing them to gain clarity on your behaviors and progress.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="card h-100 bg-dark text-white border-0">
-                    <div class="card-body">
-                        <h2 class="card-title">Chart Your Evolution</h2>
-                        <p class="card-text">Visualize your journey with insightful charts and statistics, tracking your points, streaks, and overall development.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="landing-quote">
+        “It's a fun way to discover yourself and become the best version of yourself.”
     </div>
+</div>
 {% endblock %}
