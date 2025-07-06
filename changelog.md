@@ -1,5 +1,33 @@
 # Changelog
 
+## 52ced21ed88c45fa0346448d5a81bebd38be298f
+**Author**: Peremil
+**Date**: Sun Jul 6 17:25:19 2025 +0200
+**Message**: refactored the code
+**Summary**: Modified the complete app structure, moving all files into a new `app/` directory.
+**Detailed Description**: This commit refactors the entire application structure by moving all core files and directories into a new `app/` directory. This includes the `models`, `routes`, `static`, `templates`, and `utils` directories, as well as the main application files. The `run.py` file is now the main entry point for the application. This change improves the project's organization and modularity, making it easier to manage and scale in the future.
+
+## 3fda552f0d6c164a09ca1051e4fb96b07552edef
+**Author**: Peremil
+**Date**: Sat Jul 5 19:58:36 2025 +0200
+**Message**: urecommit
+**Summary**: Modified `goal_stats.md`.
+**Detailed Description**: This commit updates the `goal_stats.md` file to include considerations for data export. It outlines the need to include goal statistics in both JSON/CSV and PDF exports to ensure data portability for the user.
+
+## f6d75e536a2f4808bd772d808c9627d16e247dfd
+**Author**: Peremil
+**Date**: Sat Jul 5 19:26:51 2025 +0200
+**Message**: changed the layout of progress.html and grouped different categorys
+**Summary**: Modified `templates/progress.html`.
+**Detailed Description**: This commit reorganizes the `progress.html` template by grouping related statistics into different categories. The "Exploration Overview" and "Goals Overview" sections now have their own headers, and the "Goal Performance by Category" chart has been moved under the "Goals Overview" section. This improves the layout and readability of the progress page.
+
+## 247181dc8ae53caa6ab3d49773bd8a5fb4c27f7d
+**Author**: Peremil
+**Date**: Sat Jul 5 19:19:39 2025 +0200
+**Message**: added information about golas to the progress route. including completed, success rate and a stacked barplot for completed/failed goals
+**Summary**: Modified `routes/progress.py`, `routes/goals.py`, `static/js/progress/charts.js`, `static/js/progress/main.js`, `templates/progress.html`, `tests/test_utils/test_goal_helpers.py`, and `utils/goal_helpers.py`.
+**Detailed Description**: This commit adds goal-related statistics to the progress page. It introduces a new `get_goal_statistics` function in `utils/goal_helpers.py` to calculate the total number of completed goals, the success rate, and a breakdown of completed and failed goals by category. The `routes/progress.py` and `routes/goals.py` were updated to use this new function and pass the statistics to the `progress.html` template. The template was updated to display these new statistics in new cards and a stacked bar chart. The `static/js/progress/charts.js` and `static/js/progress/main.js` were updated to render the new chart. The tests in `tests/test_utils/test_goal_helpers.py` were also updated to reflect the changes in the `get_goal_statistics` function.
+
 ## 23432ecc1e29e67a51cf7f9cf74964211f137c5c
 **Author**: Peremil
 **Date**: Fri Jul 4 22:00:46 2025 +0200
