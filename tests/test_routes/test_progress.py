@@ -395,4 +395,11 @@ class TestProgressRoutes:
         assert b'Points Over Time' in response.data
         assert b'Average Points by Day of Week' in response.data
         assert b'Exploration Overview' in response.data
-        assert b'Export Journey' in response.data 
+        assert b'Export Journey' in response.data
+
+    def test_donate_page_loads(self, client):
+        """Test that the donate page loads correctly."""
+        response = client.get('/donate')
+        assert response.status_code == 200
+        assert b'Thank You!' in response.data
+        assert b'papapandroni' in response.data  # Buy Me a Coffee widget 

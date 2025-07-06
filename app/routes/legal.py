@@ -8,4 +8,8 @@ def privacy():
 
 @legal_bp.route('/terms')
 def terms():
-    return render_template('terms.html') 
+    return render_template('terms.html')
+
+@legal_bp.route('/donate')
+def donate():
+    return render_template('donate.html') 
