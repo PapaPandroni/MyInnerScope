@@ -161,11 +161,11 @@ This project follows a prioritized roadmap to ensure stability and security befo
 -   **Testing Framework**: Continuously write comprehensive unit, integration, and functional tests for new and existing features.
 
 ### 6.2. Security Hardening & Compliance
--   **CSRF Protection for AJAX Requests**: Implement CSRF protection for all JavaScript-driven POST requests.
+-   **CSRF Protection for AJAX Requests**: **Completed**. Verified that `app/static/js/progress/export.js` correctly includes CSRF token in POST requests. Other JavaScript files do not make unprotected AJAX POST requests. The `meta[name="csrf-token"]` tag is correctly present in `base.html`.
 -   **Rate Limiting**: Apply rate limiting to all sensitive endpoints.
--   **Dependency Security Audit**: Regularly review audit reports and address identified vulnerabilities.
--   **Privacy Policy and Cookie Consent**: Review and complete content for full GDPR compliance.
--   **User Data Deletion (Right to Erasure)**: Thoroughly test and ensure the "Delete Account" feature securely and completely removes all associated user data.
+-   **Dependency Security Audit**: **Completed**. `safety check` and `pip-audit` performed. Identified `pillow` vulnerability (PYSEC-2025-61) and upgraded `pillow` to `11.3.0`. All known vulnerabilities addressed.
+-   **Privacy Policy and Cookie Consent**: **Completed**. Content of `privacy.html` and `terms.html` updated to accurately reflect existing features and GDPR compliance. Cookie consent mechanism in `cookie_consent.js` verified to be sufficient for essential cookies.
+-   **User Data Deletion (Right to Erasure)**: **Completed**. Existing test suite (`tests/test_routes/test_user.py`) thoroughly verifies that the "Delete Account" feature performs a full cascading delete of all associated user data.
 -   **Data Portability**: Verify the completeness and accuracy of exported data.
 
 ### 6.3. Feature Enhancements & New Functionality

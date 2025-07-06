@@ -1,5 +1,40 @@
 # Changelog
 
+## 8319e11123b9b2a3dff6e717a61bae57049e40cd
+**Author**: Peremil
+**Date**: Sun Jul 6 20:27:22 2025 +0200
+**Message**: added profile link and greet message to navbar
+**Summary**: Modified `app/__init__.py` and `app/templates/_navbar.html`.
+**Detailed Description**: This commit adds a context processor in `app/__init__.py` to inject the `current_user` object into all templates. The `_navbar.html` template is updated to display a "Hello, [username]" message and a link to the user's profile in the navigation bar when a user is logged in.
+
+## a510a2153f69fc738f783c0db43842a69fb0c328
+**Author**: Peremil
+**Date**: Sun Jul 6 20:19:56 2025 +0200
+**Message**: minor front end updates
+**Summary**: Modified `app/static/js/progress/charts.js`, `app/templates/diary.html`, `app/templates/goals.html`, and `app/templates/pdf/journey.html`.
+**Detailed Description**: This commit contains minor front-end text and styling changes. It updates the label for "Failed" goals to "Not Completed" in the goal performance chart and on the goals page for better clarity. It also rephrases the rating buttons on the diary entry page to be more descriptive ("Keep Doing This" and "Change This").
+
+## e6d967a62fbe83af0bf333ebf20423b273eb8cf6
+**Author**: Peremil
+**Date**: Sun Jul 6 20:03:10 2025 +0200
+**Message**: redid the landing page
+**Summary**: Modified `app/templates/base.html` and `app/templates/index.html`.
+**Detailed Description**: This commit completely redesigns the application's landing page (`index.html`). It introduces a new layout with a fixed starry background, a gradient overlay, and a central content area. The new design features a prominent title, a subtitle, clear call-to-action buttons for registration/login or accessing the dashboard, and a section highlighting the core features with icons. It also adds a motivational quote. FontAwesome is also added to `base.html` to support the new icons.
+
+## fc36fcc41062b1eb3861df263515943a6e305221
+**Author**: Peremil
+**Date**: Sun Jul 6 19:42:54 2025 +0200
+**Message**: added the donate page
+**Summary**: Added `app/templates/donate.html` and modified `app/routes/legal.py`, `app/static/css/custom_css.css`, `app/templates/_navbar.html`, and `tests/test_routes/test_progress.py`.
+**Detailed Description**: This commit introduces a new "Donate" page. A new route `/donate` is added in `app/routes/legal.py` to render the `donate.html` template. The template includes a "Buy Me a Coffee" button and widget. The navigation bar is updated to include a link to the new page. Custom CSS is added for styling the donate card, and a new test is added to ensure the donate page loads correctly.
+
+## f5af484a67144552f3a52a4ceea8827a6dfc6399
+**Author**: Peremil
+**Date**: Sun Jul 6 19:18:57 2025 +0200
+**Message**: cleaned up my git tracking
+**Summary**: Deleted numerous files from the root directory that were moved into the `app/` directory in a previous refactoring.
+**Detailed Description**: This commit cleans up the project's root directory by deleting files that were made redundant by the recent refactoring which moved the core application into an `app` directory. This includes deleting old `routes`, `models`, `utils`, `static`, and `templates` directories and files from the root, resulting in a much cleaner and more organized project structure.
+
 ## 52ced21ed88c45fa0346448d5a81bebd38be298f
 **Author**: Peremil
 **Date**: Sun Jul 6 17:25:19 2025 +0200
