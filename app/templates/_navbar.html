@@ -10,7 +10,20 @@
                  {% endif %}">
             Aim for the stars
         </a>
-        <ul class="navbar-nav">
+        <ul class="navbar-nav ms-auto align-items-center flex-row gap-3">
+            {% if current_user %}
+                <li class="nav-item d-none d-lg-block">
+                    <a class="nav-link fw-semibold" href="{{ url_for('user.profile') }}" style="color: #fff;">
+                        Hello, {{ current_user.user_name if current_user.user_name else current_user.email.split('@')[0] }}
+                    </a>
+                </li>
+                <!-- Mobile: show greeting above menu -->
+                <li class="nav-item d-lg-none text-center">
+                    <a class="nav-link fw-semibold" href="{{ url_for('user.profile') }}" style="color: #fff;">
+                        Hello, {{ current_user.user_name if current_user.user_name else current_user.email.split('@')[0] }}
+                    </a>
+                </li>
+            {% endif %}
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <b>Menu</b>

@@ -26,7 +26,7 @@ from datetime import datetime, timedelta, timezone
 from .config import config
 
 # Import database and models
-from .models import db
+from .models import db, User
 
 # Import routes
 from .routes import register_blueprints
@@ -98,4 +98,11 @@ def create_app(config_name=None):
         # Set user context for templates
         g.user = session.get('user_id')
     
+    @app.context_processor
+    def inject_user():
+        user = None
+        if 'user_id' in session:
+            user = User.query.get(session['user_id'])
+        return dict(current_user=user)
+
     return app 
