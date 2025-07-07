@@ -80,6 +80,38 @@ class GoalProgressForm(FlaskForm):
         Length(max=1000, message='Progress notes must be less than 1000 characters')
     ])
 
+class ChangeUsernameForm(FlaskForm):
+    """Form for changing username"""
+    new_username = StringField('New Username', validators=[
+        DataRequired(message='Username is required'),
+        Length(min=1, max=200, message='Username must be between 1 and 200 characters')
+    ])
+    submit = SubmitField('Change Username')
+
+class ChangePasswordForm(FlaskForm):
+    """Form for changing password"""
+    current_password = PasswordField('Current Password', validators=[
+        DataRequired(message='Current password is required')
+    ])
+    new_password = PasswordField('New Password', validators=[
+        DataRequired(message='New password is required'),
+        Length(min=8, message='Password must be at least 8 characters long')
+    ])
+    confirm_password = PasswordField('Confirm New Password', validators=[
+        DataRequired(message='Please confirm your new password'),
+        EqualTo('new_password', message='Passwords must match')
+    ])
+    submit = SubmitField('Change Password')
+
+    def validate_new_password(self, new_password):
+        """Custom validation for password strength"""
+        if new_password.data:
+            # Check for mixed case
+            if not re.search(r'[A-Z]', new_password.data):
+                raise ValidationError('Password must contain at least one uppercase letter')
+            if not re.search(r'[a-z]', new_password.data):
+                raise ValidationError('Password must contain at least one lowercase letter')
+
 class DeleteAccountForm(FlaskForm):
     """Form for confirming account deletion"""
     password = PasswordField('Password', validators=[

@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 {% block title %}Captain's Cabin{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% endblock %}
 {% block content %}
 <div class="container mt-5">
     <div class="row justify-content-center">
@@ -8,23 +11,115 @@
                 <div class="card-body p-4">
                     <h1 class="text-center mb-4">Captain's Cabin</h1>
                     <hr class="bg-secondary">
+                    
+                    <!-- Profile Settings Section -->
                     <div class="mb-4">
-                        <h4>Data Portability</h4>
+                        <h4><i class="fas fa-user-cog me-2"></i>Profile Settings</h4>
+                        <div class="card bg-dark border-secondary">
+                            <div class="card-body">
+                                <!-- Current Username Display -->
+                                <div class="mb-3">
+                                    <label class="form-label text-white">Current Username:</label>
+                                    <div class="form-control-plaintext text-white">
+                                        {{ user.user_name if user.user_name else 'Not set' }}
+                                    </div>
+                                </div>
+                                
+                                <!-- Username Change Form -->
+                                <form method="POST" action="{{ url_for('user.change_username') }}" class="mb-3">
+                                    {{ username_form.hidden_tag() }}
+                                    <div class="row g-2">
+                                        <div class="col-md-8">
+                                            {{ username_form.new_username(class="form-control", placeholder="New username") }}
+                                            {% if username_form.new_username.errors %}
+                                                {% for error in username_form.new_username.errors %}
+                                                    <div class="text-danger small">{{ error }}</div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ username_form.submit(class="btn btn-primary w-100") }}
+                                        </div>
+                                    </div>
+                                </form>
+                                
+                                <!-- Password Change Button -->
+                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
+                                    <i class="fas fa-key me-2"></i>Change Password
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Data Portability Section -->
+                    <div class="mb-4">
+                        <h4><i class="fas fa-download me-2"></i>Data Portability</h4>
                         <a href="{{ url_for('user.download_data_json') }}" class="btn btn-primary me-2">Download My Data (JSON)</a>
                         <a href="{{ url_for('user.download_data_csv') }}" class="btn btn-secondary">Download My Data (CSV)</a>
                     </div>
+                    
+                    <!-- Account Management Section -->
                     <div class="mb-4">
-                        <h4>Account Management</h4>
+                        <h4><i class="fas fa-exclamation-triangle me-2"></i>Account Management</h4>
                         <a href="{{ url_for('user.delete_account') }}" class="btn btn-danger">Delete My Account</a>
-                        
                     </div>
+                    
+                    <!-- Legal Section -->
                     <div class="mb-4">
-                        <h4>Legal</h4>
+                        <h4><i class="fas fa-gavel me-2"></i>Legal</h4>
                         <a href="{{ url_for('legal.privacy') }}" class="link-light me-3">Privacy Policy</a>
                         <a href="{{ url_for('legal.terms') }}" class="link-light">Terms of Service</a>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Password Change Modal -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-white">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" action="{{ url_for('user.change_password') }}">
+                {{ password_form.hidden_tag() }}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        {{ password_form.current_password.label(class="form-label") }}
+                        {{ password_form.current_password(class="form-control") }}
+                        {% if password_form.current_password.errors %}
+                            {% for error in password_form.current_password.errors %}
+                                <div class="text-danger small">{{ error }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        {{ password_form.new_password.label(class="form-label") }}
+                        {{ password_form.new_password(class="form-control") }}
+                        {% if password_form.new_password.errors %}
+                            {% for error in password_form.new_password.errors %}
+                                <div class="text-danger small">{{ error }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        {{ password_form.confirm_password.label(class="form-label") }}
+                        {{ password_form.confirm_password(class="form-control") }}
+                        {% if password_form.confirm_password.errors %}
+                            {% for error in password_form.confirm_password.errors %}
+                                <div class="text-danger small">{{ error }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="modal-footer border-secondary">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    {{ password_form.submit(class="btn btn-warning") }}
+                </div>
+            </form>
         </div>
     </div>
 </div>

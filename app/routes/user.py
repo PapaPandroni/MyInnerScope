@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, session, redirect, url_for, send_file, flash, jsonify, make_response, request
 from ..models import User, DiaryEntry, Goal, DailyStats, db
-from ..forms import DeleteAccountForm
+from ..forms import DeleteAccountForm, ChangeUsernameForm, ChangePasswordForm
 from werkzeug.security import check_password_hash
 import io, csv, json
 
@@ -10,7 +10,78 @@ user_bp = Blueprint('user', __name__)
 def profile():
     if 'user_id' not in session:
         return redirect(url_for('auth.login_page'))
-    return render_template('settings.html')
+    
+    user = db.session.get(User, session['user_id'])
+    username_form = ChangeUsernameForm()
+    password_form = ChangePasswordForm()
+    
+    return render_template('settings.html', 
+                         user=user, 
+                         username_form=username_form, 
+                         password_form=password_form)
+
+@user_bp.route('/change-username', methods=['GET', 'POST'])
+def change_username():
+    if 'user_id' not in session:
+        return redirect(url_for('auth.login_page'))
+    
+    user = db.session.get(User, session['user_id'])
+    form = ChangeUsernameForm()
+    
+    if form.validate_on_submit():
+        try:
+            # Update username
+            user.user_name = form.new_username.data.strip()
+            db.session.commit()
+            
+            flash('Username updated successfully!', 'success')
+            return redirect(url_for('user.profile'))
+            
+        except Exception as e:
+            db.session.rollback()
+            flash(f'An error occurred while updating username: {e}', 'danger')
+            return redirect(url_for('user.profile'))
+    
+    # If validation fails, redirect back to profile with errors
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash(error, 'danger')
+    
+    return redirect(url_for('user.profile'))
+
+@user_bp.route('/change-password', methods=['GET', 'POST'])
+def change_password():
+    if 'user_id' not in session:
+        return redirect(url_for('auth.login_page'))
+    
+    user = db.session.get(User, session['user_id'])
+    form = ChangePasswordForm()
+    
+    if form.validate_on_submit():
+        # Verify current password
+        if not user.check_password(form.current_password.data):
+            flash('Current password is incorrect.', 'danger')
+            return redirect(url_for('user.profile'))
+        
+        try:
+            # Update password (the setter will handle hashing)
+            user.password = form.new_password.data
+            db.session.commit()
+            
+            flash('Password updated successfully!', 'success')
+            return redirect(url_for('user.profile'))
+            
+        except Exception as e:
+            db.session.rollback()
+            flash(f'An error occurred while updating password: {e}', 'danger')
+            return redirect(url_for('user.profile'))
+    
+    # If validation fails, redirect back to profile with errors
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash(error, 'danger')
+    
+    return redirect(url_for('user.profile'))
 
 @user_bp.route('/download-data/json')
 def download_data_json():
