@@ -72,7 +72,10 @@
         </div>
     <div class="row text-center">
         <div class="col-md-3 mb-4">
-        <div class="sci-fi-card points-today">
+        <div class="sci-fi-card points-today" 
+             data-bs-toggle="tooltip" 
+             data-bs-placement="top" 
+             title="Great job! You earned {{ points_today }} points today. Every reflection brings you closer to understanding yourself better!">
             <div class="card-glow"></div>
             <div class="card-content">
                 <div class="card-icon">
@@ -84,7 +87,10 @@
         </div>
         </div>
         <div class="col-md-3 mb-4">
-        <div class="sci-fi-card total-points">
+        <div class="sci-fi-card total-points" 
+             data-bs-toggle="tooltip" 
+             data-bs-placement="top" 
+             title="Amazing! You've accumulated {{ total_points }} points on your journey. Each point represents a moment of self-reflection and growth!">
             <div class="card-glow"></div>
             <div class="card-content">
                 <div class="card-icon">
@@ -96,7 +102,10 @@
         </div>
         </div>
         <div class="col-md-3 mb-4">
-        <div class="sci-fi-card current-streak">
+        <div class="sci-fi-card current-streak" 
+             data-bs-toggle="tooltip" 
+             data-bs-placement="top" 
+             title="{% if current_streak >= 2 %}You're on fire! {{ current_streak }} days in a row of self-reflection. Consistency is the key to transformation!{% else %}Consistency is the key to transformation! Start building your streak today!{% endif %}">
             <div class="card-glow"></div>
             <div class="card-content">
                 <div class="card-icon">
@@ -108,7 +117,10 @@
         </div>
         </div>
         <div class="col-md-3 mb-4">
-        <div class="sci-fi-card longest-streak">
+        <div class="sci-fi-card longest-streak" 
+             data-bs-toggle="tooltip" 
+             data-bs-placement="top" 
+             title="Your record streak of {{ longest_streak }} days shows incredible dedication! You've proven you can maintain this habit!">
             <div class="card-glow"></div>
             <div class="card-content">
                 <div class="card-icon">
@@ -120,7 +132,10 @@
         </div>
         </div>
         <div class="col-md-3 mb-4">
-            <div class="sci-fi-card total-entries">
+            <div class="sci-fi-card total-entries" 
+                 data-bs-toggle="tooltip" 
+                 data-bs-placement="top" 
+                 title="You've written {{ total_entries }} diary entries! Each one is a snapshot of your journey and a step toward self-discovery!">
                 <div class="card-glow"></div>
                 <div class="card-content">
                     <div class="card-icon">
@@ -132,14 +147,57 @@
             </div>
         </div>
         <div class="col-md-3 mb-4">
-            <div class="sci-fi-card weekly-trend">
+            <div class="sci-fi-card weekly-trend" 
+                 data-bs-toggle="tooltip" 
+                 data-bs-placement="top" 
+                 title="Your weekly pattern: {{ trend_message }}. Understanding your rhythms helps you optimize your growth journey!">
                 <div class="card-glow"></div>
                 <div class="card-content">
                     <div class="card-icon">
                         <i class="fas fa-chart-line"></i>
                     </div>
                     <h5 class="card-title">Weekly Trend</h5>
-                    <p class="card-text">{{ trend_message }}</p>
+                    <p class="card-value">
+                        {% if 'increasing' in trend_message.lower() or 'up' in trend_message.lower() %}
+                            <i class="fas fa-arrow-up text-success"></i>
+                        {% elif 'decreasing' in trend_message.lower() or 'down' in trend_message.lower() %}
+                            <i class="fas fa-arrow-down text-danger"></i>
+                        {% else %}
+                            <i class="fas fa-minus text-secondary"></i>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!-- New Card: Opportunities for Growth -->
+        <div class="col-md-3 mb-4">
+            <div class="sci-fi-card improvements-card" 
+                 data-bs-toggle="tooltip" 
+                 data-bs-placement="top" 
+                 title="You have identified {{ num_change }} areas where you want to grow. Recognizing these is a sign of self-awareness and courage—each one is a step toward your best self!">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <div class="card-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h5 class="card-title">Opportunities for Growth</h5>
+                    <p class="card-value">{{ num_change }}</p>
+                </div>
+            </div>
+        </div>
+        <!-- New Card: Positive Behaviors -->
+        <div class="col-md-3 mb-4">
+            <div class="sci-fi-card positive-card" 
+                 data-bs-toggle="tooltip" 
+                 data-bs-placement="top" 
+                 title="You celebrated {{ num_positive }} positive actions! Every time you acknowledge your strengths, you add another star to your sky. Keep shining bright!">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <div class="card-icon">
+                        <i class="fas fa-thumbs-up"></i>
+                    </div>
+                    <h5 class="card-title">Positive Behaviors</h5>
+                    <p class="card-value">{{ num_positive }}</p>
                 </div>
             </div>
         </div>

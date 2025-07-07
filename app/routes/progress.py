@@ -77,6 +77,10 @@ def progress():
         else:
             wordcloud_data = []
 
+    # Count positive and improvement entries
+    num_change = sum(1 for e in entries if e.rating == -1)
+    num_positive = sum(1 for e in entries if e.rating == 1)
+
     return render_template(
         "progress.html",
         points_today=points_today,
@@ -96,6 +100,8 @@ def progress():
         has_sufficient_wordcloud_data=has_sufficient_wordcloud_data,
         wordcloud_data=wordcloud_data,
         wordcloud_entry_count=entry_count,
+        num_change=num_change,
+        num_positive=num_positive,
     )
 
 @progress_bp.route("/export-journey", methods=["POST"])
