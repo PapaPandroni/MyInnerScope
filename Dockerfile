@@ -10,7 +10,11 @@ RUN apt-get update && apt-get install -y \
     shared-mime-info \
     build-essential \
     python3-dev \
+    python3-pip \
     && rm -rf /var/lib/apt/lists/*
+
+# Ensure pip is up-to-date
+RUN python3 -m pip install --upgrade pip setuptools
 
 # Set environment variables for library paths (if needed, though apt-get should handle this)
 ENV LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:/usr/lib:/lib/x86_64-linux-gnu:/lib
