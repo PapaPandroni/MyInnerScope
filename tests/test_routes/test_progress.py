@@ -402,4 +402,56 @@ class TestProgressRoutes:
         response = client.get('/donate')
         assert response.status_code == 200
         assert b'Thank You!' in response.data
-        assert b'papapandroni' in response.data  # Buy Me a Coffee widget 
+        assert b'papapandroni' in response.data  # Buy Me a Coffee widget
+
+    def test_progress_page_diary_entry_counts(self, client, app):
+        """Test that the progress page correctly calculates positive and improvement entry counts"""
+        with app.app_context():
+            # Create a test user
+            user = User(email='test@example.com', password='password', user_name='TestUser')
+            db.session.add(user)
+            db.session.commit()
+
+            # Create diary entries with different ratings
+            entries = [
+                DiaryEntry(user_id=user.id, content='Positive entry 1', rating=1),
+                DiaryEntry(user_id=user.id, content='Positive entry 2', rating=1),
+                DiaryEntry(user_id=user.id, content='Improvement entry 1', rating=-1),
+                DiaryEntry(user_id=user.id, content='Improvement entry 2', rating=-1),
+                DiaryEntry(user_id=user.id, content='Improvement entry 3', rating=-1),
+            ]
+            db.session.add_all(entries)
+            db.session.commit()
+
+            # Log in the user
+            with client.session_transaction() as sess:
+                sess['user_id'] = user.id
+
+            response = client.get(url_for('progress.progress'))
+            assert response.status_code == 200
+            
+            # Check that the response contains the expected counts in the HTML
+            response_data = response.data.decode('utf-8')
+            # Only check for the tooltip text
+            assert 'You have identified 3 areas where you want to grow' in response_data
+            assert 'You celebrated 2 positive actions' in response_data
+
+    def test_progress_page_no_entries(self, client, app):
+        """Test progress page with no diary entries"""
+        with app.app_context():
+            # Create a test user with no entries
+            user = User(email='noentries@example.com', password='password', user_name='NoEntriesUser')
+            db.session.add(user)
+            db.session.commit()
+
+            # Log in the user
+            with client.session_transaction() as sess:
+                sess['user_id'] = user.id
+
+            response = client.get(url_for('progress.progress'))
+            assert response.status_code == 200
+            
+            # Check that counts are zero in the HTML
+            response_data = response.data.decode('utf-8')
+            assert 'You have identified 0 areas where you want to grow' in response_data
+            assert 'You celebrated 0 positive actions' in response_data 
