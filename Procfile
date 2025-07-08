@@ -1,1 +1,1 @@
-web: gunicorn --bind 0.0.0.0:$PORT 'app:create_app()' --workers 3
+web: flask db upgrade && gunicorn --bind 0.0.0.0:$PORT 'app:create_app()' --workers 3
