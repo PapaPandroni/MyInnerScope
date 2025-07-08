@@ -362,21 +362,7 @@
         </div>
     </div>
     </div>
-    <!-- Export Section -->
-    <div class="container mt-5 mb-5 text-center">
-        <button id="exportButton" class="btn btn-primary btn-lg" data-bs-toggle="tooltip" data-bs-placement="top" title="Export all your diary entries and progress as a PDF file">
-            Export Journey
-        </button>
-    </div>
-    <!-- Generating Overlay -->
-    <div id="generatingOverlay" class="generating-overlay d-none">
-        <div class="generating-content">
-            <div class="spinner-border text-light" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <h3 class="text-light mt-3">Generating your journey...</h3>
-        </div>
-    </div>
+    
     <!-- Data Scripts -->
     <script type="application/json" id="points-data">
         {{ points_data|tojson|safe }}
@@ -400,7 +386,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
     <script src="{{ url_for('static', filename='js/progress/main.js') }}"></script>
     <script src="{{ url_for('static', filename='js/progress/charts.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/progress/export.js') }}"></script>
+    
     <script src="{{ url_for('static', filename='js/progress/entries.js') }}"></script>
     <script src="{{ url_for('static', filename='js/progress/entry-toggles.js') }}"></script>
 {% endblock %}

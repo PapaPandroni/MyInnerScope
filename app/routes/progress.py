@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, session, send_file, request
 from datetime import date
 from ..models import User, DiaryEntry, DailyStats, db
-from ..utils.pdf_generator import generate_journey_pdf
+
 from ..utils.progress_helpers import (
     get_display_name, get_today_stats, get_total_points, get_current_streak,
     get_longest_streak, get_total_entries, get_points_data, get_top_days_with_entries,
@@ -104,65 +104,3 @@ def progress():
         num_positive=num_positive,
     )
 
-@progress_bp.route("/export-journey", methods=["POST"])
-def export_journey():
-    if "user_id" not in session:
-        return "Unauthorized", 401
-    user_id = session["user_id"]
-    user = User.query.get(user_id)
-    entries = DiaryEntry.query\
-        .filter_by(user_id=user_id)\
-        .order_by(DiaryEntry.entry_date.asc())\
-        .options(db.joinedload(DiaryEntry.user))\
-        .all()
-    for entry in entries:
-        _ = entry.content
-        _ = entry.entry_date
-        _ = entry.rating
-    print(f"Total entries found: {len(entries)}")
-    if entries:
-        print("Entry dates:")
-        for entry in entries:
-            print(f"- {entry.entry_date}: {entry.content[:50]}...")
-    points_data = get_points_data(user_id)
-    weekday_data, _ = get_weekday_data(user_id)
-    stats = {
-        'total_points': get_total_points(user_id),
-        'current_streak': get_current_streak(user_id),
-        'longest_streak': get_longest_streak(user_id),
-        'total_entries': len(entries)
-    }
-
-    # Get goal data for PDF export
-    goal_stats = get_goal_statistics(user_id)
-    goal_history = get_goal_history(user_id, limit=50)  # Get all goals for PDF
-
-    # Handle wordcloud image from frontend
-    wordcloud_image = None
-    if request.is_json:
-        data = request.get_json()
-        wordcloud_image = data.get('wordcloud_image')
-        print(f"Received wordcloud_image: {'Yes' if wordcloud_image else 'No'}")
-        if wordcloud_image:
-            print(f"Wordcloud image length: {len(wordcloud_image)}")
-            print(f"Wordcloud image starts with: {wordcloud_image[:50]}...")
-        else:
-            print("No wordcloud image received from frontend")
-
-    pdf_buffer = generate_journey_pdf(
-        user=user,
-        entries=entries,
-        points_data=points_data,
-        weekday_data=weekday_data,
-        top_days=[],
-        stats=stats,
-        wordcloud_image=wordcloud_image,
-        goal_stats=goal_stats,
-        goal_history=goal_history
-    )
-    return send_file(
-        pdf_buffer,
-        mimetype='application/pdf',
-        as_attachment=True,
-        download_name=f'self-reflective-journey-{date.today()}.pdf'
-    )
