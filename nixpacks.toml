@@ -1,12 +1,11 @@
 # nixpacks.toml
 
 [phases.setup]
-# Add required system packages for WeasyPrint
 aptPkgs = [
     "build-essential",
     "python3-dev",
     "libcairo2",
-    "libcairo2-dev",
+    "libcairo2-dev", 
     "libpango-1.0-0",
     "libpango1.0-dev",
     "libpangocairo-1.0-0",
@@ -16,21 +15,13 @@ aptPkgs = [
     "shared-mime-info",
     "libgobject-2.0-0",
     "libgobject-2.0-dev",
-    "libglib2.0-0",
+    "libglib2.0-0", 
     "libglib2.0-dev",
     "libgirepository-1.0-1",
     "python3-cffi",
     "pkg-config"
 ]
 
-[phases.build]
-# Set environment variables for build
-cmds = [
-    "export PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/share/pkgconfig",
-    "export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:/usr/lib:/usr/local/lib:$LD_LIBRARY_PATH"
-]
-
 [variables]
-# Runtime environment variables
+LD_LIBRARY_PATH = "/usr/lib/x86_64-linux-gnu:/usr/lib:/lib/x86_64-linux-gnu:/lib"
 PKG_CONFIG_PATH = "/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/share/pkgconfig"
-LD_LIBRARY_PATH = "/usr/lib/x86_64-linux-gnu:/usr/lib:/usr/local/lib"
