@@ -16,14 +16,9 @@ def login_page():
         # Try to find a user with that email
         user = User.query.filter_by(email=email).first()
 
-        if not user:
-            flash("No user found with that email.", "danger")
-            current_app.logger.warning(f"Failed login attempt for email: {email}")
-            return render_template("login.html", form=form), 401
-
-        if not user.check_password(password):
-            flash("Incorrect password.", "danger")
-            current_app.logger.warning(f"Incorrect password for user: {email}")
+        if not user or not user.check_password(password):
+            flash("Invalid email or password.", "danger")
+            current_app.logger.warning(f"Failed login attempt.")
             return render_template("login.html", form=form), 401
 
         # Success! Session!

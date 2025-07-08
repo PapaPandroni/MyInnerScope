@@ -1,6 +1,7 @@
 import re
 from datetime import datetime
 from flask import render_template, redirect
+from markupsafe import escape
 from ..models import DiaryEntry
 
 def handle_search(user_id, display_name, diary_dates, search_text, search_date):
@@ -73,6 +74,6 @@ def create_search_snippet(content, search_text, context_chars=20):
         snippet = snippet + "..."
     
     # Highlight the search term (case insensitive replacement)
-    snippet = re.sub(re.escape(search_text), f'<mark>{search_text}</mark>', snippet, flags=re.IGNORECASE)
+    snippet = re.sub(re.escape(search_text), f'<mark>{escape(search_text)}</mark>', snippet, flags=re.IGNORECASE)
     
     return snippet
