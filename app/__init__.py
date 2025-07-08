@@ -58,7 +58,7 @@ def create_app(config_name=None):
         app=app,
         key_func=get_remote_address,
         default_limits=["200 per day", "50 per hour"],
-        storage_uri=app.config['SQLALCHEMY_DATABASE_URI']
+        storage_uri=os.environ.get("REDIS_URL", "memory://") # Fallback to in-memory for local dev
     )
     
     # Make limiter available globally
