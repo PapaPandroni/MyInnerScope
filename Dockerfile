@@ -11,7 +11,8 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     python3-dev \
     python3-pip \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && date # Force cache invalidation
 
 # Ensure pip is up-to-date
 RUN python3 -m pip install --upgrade pip setuptools
