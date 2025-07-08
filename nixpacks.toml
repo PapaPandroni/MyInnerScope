@@ -1,0 +1,5 @@
+# nixpacks.toml
+
+[phases.setup]
+# Add required system packages for WeasyPrint
+aptPkgs = ["libpango-1.0-0", "libcairo2", "libgobject-2.0-0"]
