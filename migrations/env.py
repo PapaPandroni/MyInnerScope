@@ -2,6 +2,7 @@ from logging.config import fileConfig
 
 from alembic import context
 from sqlalchemy import engine_from_config, pool
+from flask import current_app
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -33,21 +34,24 @@ def run_migrations_offline() -> None:
 
 def run_migrations_online() -> None:
     """Run migrations in 'online' mode."""
-    connectable = engine_from_config(
-        config.get_section(config.config_ini_section, {}),
-        prefix="sqlalchemy.",
-        poolclass=pool.NullPool,
-    )
-
-    with connectable.connect() as connection:
-        context.configure(
-            connection=connection, 
-            target_metadata=target_metadata,
-            render_as_batch=True
+    # This callback is passed to Flask-Migrate to get the app's config
+    # It ensures that the app context is available for migrations
+    with current_app.app_context():
+        connectable = engine_from_config(
+            {'sqlalchemy.url': current_app.config.get('SQLALCHEMY_DATABASE_URI')},
+            prefix="sqlalchemy.",
+            poolclass=pool.NullPool,
         )
 
-        with context.begin_transaction():
-            context.run_migrations()
+        with connectable.connect() as connection:
+            context.configure(
+                connection=connection, 
+                target_metadata=target_metadata,
+                render_as_batch=True
+            )
+
+            with context.begin_transaction():
+                context.run_migrations()
 
 if context.is_offline_mode():
     run_migrations_offline()
