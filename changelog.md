@@ -454,7 +454,7 @@ descriptions, and summaries.
 **Date:** Sun Jun 15 19:54:34 2025 +0200
 **Message:** updated the readme and added requirements.txt
 **Summary:** Modified `README.md` and `requirements.txt`. Overall, 119 insertions and 2 deletions.
-**Detailed Description:** This commit significantly updates the `README.md` file to provide a comprehensive overview of the "Aim for the Stars" project. It now includes sections on the application's purpose, features (current and planned), technical stack, installation instructions, and database schema. This makes the README a much more informative resource for new contributors or users. Additionally, a `requirements.txt` file was added, listing all Python dependencies required to run the application, ensuring easier setup and dependency management.
+**Detailed Description:** This commit significantly updates the `README.md` file to provide a comprehensive overview of the "My Inner Scope" project. It now includes sections on the application's purpose, features (current and planned), technical stack, installation instructions, and database schema. This makes the README a much more informative resource for new contributors or users. Additionally, a `requirements.txt` file was added, listing all Python dependencies required to run the application, ensuring easier setup and dependency management.
 
 ## 758ce092e6621221f678d51d2b322964b6fd3941
 **Author:** Peremil

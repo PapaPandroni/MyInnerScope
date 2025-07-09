@@ -13,7 +13,7 @@ class TestAuthRoutes:
         """Test the main index route"""
         response = client.get('/')
         assert response.status_code == 200
-        assert b'Aim for the Stars' in response.data
+        assert b'My Inner Scope' in response.data
     
     def test_register_page(self, client):
         """Test the registration page loads"""

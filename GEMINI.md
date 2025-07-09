@@ -1,203 +1,147 @@
-# Project Overview: Aim for the Stars
+# GEMINI.md - Project "Aim for the Stars"
 
-This document provides a comprehensive overview of the "Aim for the Stars" web application. It is the central source of truth for the project, designed to serve as a detailed reference for an AI assistant. It includes the project's purpose, technology stack, structure, key features, and the development roadmap.
+This document provides a comprehensive overview of the "Aim for the Stars" web application, intended to give a new lead developer a thorough understanding of the project's architecture, features, and codebase.
 
----
+## 1. Project Overview
 
-## 1. Project Purpose and Core Functionality
+"My Inner Scope" is a Flask-based web application designed for self-reflection and personal growth. Users can write daily diary entries, categorize their behaviors, and track their progress through a gamified system of points, streaks, and visualizations.
 
-"Aim for the Stars" is a Flask-based web application designed to help users improve themselves through daily reflection and goal setting. The core functionality revolves around users writing daily diary entries about their behaviors and categorizing them as either "encouraged" or "something to change."
+### 1.1. Core Features
 
-The application gamifies this process by awarding points for entries and tracking daily streaks, motivating users to remain consistent with their self-reflection. A detailed progress dashboard provides visualizations and statistics about the user's journey over time. Additionally, users can set and track weekly goals, further enhancing their personal development journey.
+*   **User Authentication:** Secure user registration and login system with password hashing.
+*   **Daily Diary Entries:** Users can create, view, and rate their daily diary entries.
+*   **Gamification:** A points-based system rewards users for diary entries and completing goals. Streaks are tracked to encourage consistent engagement.
+*   **Progress Dashboard:** A comprehensive dashboard visualizes user progress with interactive charts, statistics, and a word cloud of their most used words.
+*   **Goal Setting:** Users can set and track weekly goals across various categories.
+*   **Data Export:** Users can download their data in JSON and CSV formats.
+*   **User Profile Management:** Users can change their username and password, and delete their account.
 
----
+### 1.2. Technology Stack
 
-## 2. Technology Stack
+*   **Backend:** Flask, SQLAlchemy, Flask-Migrate, Flask-WTF, Flask-Limiter
+*   **Database:** SQLite (for development and production), with PostgreSQL as a potential production option.
+*   **Frontend:** Bootstrap 5, Chart.js, wordcloud2.js
+*   **Deployment:** Gunicorn, Nixpacks
+*   **Testing:** Pytest, pytest-flask, pytest-mock, coverage.py
 
--   **Backend**: Python with the Flask framework.
--   **Database**: SQLAlchemy ORM, defaulting to a SQLite database (`users.db`). Database migrations are managed with `Flask-Migrate` (Alembic).
--   **Frontend**:
-    -   Jinja2 for HTML templating.
-    -   Bootstrap 5 for responsive styling and layout.
-    -   Custom CSS for specific styling and theming (sci-fi inspired).
--   **Client-Side Scripting**:
-    -   JavaScript (ES6+) for interactive components.
-    -   **Chart.js** for data visualization (points over time, weekday performance).
-    -   **Luxon** for robust date/time handling in charts.
-    -   **chartjs-plugin-zoom** for interactive chart zooming and panning.
-    -   **wordcloud2.js** for generating interactive word clouds.
--   **Forms & Validation**:
-    -   **Flask-WTF** for secure form handling, validation, and CSRF protection.
-    -   `wtforms` validators for email, length, equality, and custom password strength (mixed case, min length).
--   **PDF Generation**:
-    -   **WeasyPrint** to convert HTML/CSS to PDF for journey export.
-    -   **Matplotlib** to generate static chart images (points, weekday performance) for PDF embedding.
--   **Authentication & Session Management**:
-    -   **Werkzeug** for secure password hashing (`generate_password_hash`, `check_password_hash`).
-    -   Secure, server-side sessions with a 24-hour timeout, managed by a `before_request` handler in `app.py`.
-    -   **Flask-Limiter** for rate limiting on sensitive endpoints (e.g., login, registration).
--   **Environment Management**: `python-dotenv` for loading environment variables (e.g., `SECRET_KEY`).
--   **Logging**: Standard Python `logging` module for application monitoring and debugging.
--   **Testing**: `pytest` for automated testing (unit, integration, functional tests).
--   **Dependency Auditing**: `safety` and `pip-audit` for checking known security vulnerabilities in dependencies.
+## 2. Project Structure
 
----
+The project follows a modular structure, with the core application logic contained within the `app` directory.
 
-## 3. Project Structure
+```
+/
+├── app/
+│   ├── __init__.py             # Application factory
+│   ├── config.py               # Configuration settings
+│   ├── forms.py                # Flask-WTF forms
+│   ├── models/                 # SQLAlchemy models
+│   ├── routes/                 # Flask blueprints for different features
+│   ├── static/                 # CSS, JavaScript, and image assets
+│   ├── templates/              # Jinja2 templates
+│   └── utils/                  # Helper functions
+├── tests/                      # Pytest tests
+├── migrations/                 # Flask-Migrate migration scripts
+├── requirements.txt            # Python dependencies
+├── nixpacks.toml               # Nixpacks configuration for deployment
+├── Procfile                    # Procfile for Heroku/other platforms
+├── pytest.ini                  # Pytest configuration
+├── run.py                      # Application entry point
+└── ...
+```
 
-The project follows a standard Flask application structure, separating concerns into distinct modules:
+## 3. Detailed Component Breakdown
 
--   `app.py`: The main application entry point. It functions as a pure app factory, initializing the Flask app, database, migrations, CSRF protection, rate limiting, logging, and session management.
--   `config.py`: Defines configuration environments (Development, Production, Testing) and manages session settings and database URIs.
--   `forms.py`: Contains all `Flask-WTF` form classes for input validation (e.g., `LoginForm`, `RegisterForm`, `DiaryEntryForm`, `GoalForm`, `GoalProgressForm`, `DeleteAccountForm`).
--   `models/`: Contains SQLAlchemy database models (`User`, `DiaryEntry`, `DailyStats`, `Goal`). Database queries use SQLAlchemy 2.0 style (`db.session.get()`). Datetime handling in models uses timezone-aware objects (`datetime.now(timezone.utc)`).
-    -   `database.py`: Initializes the SQLAlchemy `db` object.
--   `routes/`: Defines the application's routes using Flask Blueprints.
-    -   `__init__.py`: Registers all blueprints with the Flask application and applies rate limits.
-    -   `main.py`: Handles the root route (`/`) and global error handlers (`403`, `404`, `500`).
-    -   `auth.py`: Manages user registration, login, and logout.
-    -   `diary.py`: Handles daily diary entry creation and display.
-    -   `progress.py`: Renders the user's progress dashboard and handles PDF export.
-    -   `reader.py`: Provides functionality to read past diary entries, including search.
-    -   `goals.py`: Manages weekly goal setting, tracking, and completion.
-    -   `legal.py`: Contains routes for privacy policy and terms of service pages.
-    -   `user.py`: Handles user profile management, data export (JSON/CSV), and account deletion.
--   `templates/`: Contains all Jinja2 HTML templates.
-    -   `base.html`: The base template including navigation, flash messages, and global scripts (e.g., `cookie_consent.js`).
-    -   `_navbar.html`: Navigation bar partial.
-    -   Feature-specific templates (e.g., `diary.html`, `goals.html`, `progress.html`, `login.html`, `register.html`, `settings.html`, `privacy.html`, `terms.html`, `read_diary.html`, `delete_account_confirm.html`).
-    -   `errors/`: Custom error pages (`403.html`, `404.html`, `500.html`).
-    -   `pdf/`: Template for PDF export (`journey.html`).
--   `static/`: Holds all static assets.
-    -   `assets/`: Images (e.g., `starry_sky.jpg`).
-    -   `css/`: Custom CSS files (`custom_css.css`, `goals.css`, `pdf_journey.css`, `progress.css`).
-    -   `js/`: JavaScript files, organized into feature-based subdirectories.
-        -   `goals/`: `goals.js` (goal-related interactivity).
-        -   `legal/`: `cookie_consent.js` (cookie consent banner logic).
-        -   `progress/`: `charts.js`, `entries.js`, `entry-toggles.js`, `export.js`, `main.js` (dashboard interactivity, chart rendering, PDF export).
--   `utils/`: Contains helper modules for complex logic.
-    -   `goal_helpers.py`: Functions for goal management (create, update, stats).
-    -   `pdf_generator.py`: Logic for generating PDF reports using WeasyPrint and Matplotlib.
-    -   `progress_helpers.py`: Functions for aggregating data for the progress dashboard (streaks, points, trends).
-    -   `search_helpers.py`: Functions for searching diary entries.
--   `migrations/`: Directory managed by `Flask-Migrate` (Alembic) for database schema version control.
--   `tests/`: Contains `pytest` test suite for various components of the application.
+### 3.1. Application Factory (`app/__init__.py`)
 
----
+The application is initialized using the factory pattern in `create_app()`. This function:
 
-## 4. Key Features and Implementation
+*   Loads the appropriate configuration based on the `FLASK_ENV` environment variable.
+*   Initializes Flask extensions: `db` (SQLAlchemy), `migrate` (Flask-Migrate), `csrf` (Flask-WTF CSRFProtect), and `limiter` (Flask-Limiter).
+*   Registers all blueprints from the `app/routes` directory.
+*   Sets up logging for production environments.
+*   Includes a `before_request` hook to manage session timeouts and set the `g.user` context variable.
+*   Uses a context processor to inject the `current_user` object into all templates.
 
-### 4.1. User Authentication & Session Management
--   **Functionality**: Secure user registration, login, and logout. Sessions expire after 24 hours of inactivity and are renewed on activity.
--   **Implementation**:
-    -   `routes/auth.py` handles authentication routes using `LoginForm` and `RegisterForm` from `forms.py` for validation.
-    -   Passwords are hashed using `Werkzeug.security.generate_password_hash` and verified with `check_password_hash`.
-    -   `app.py` contains a `before_request` handler that validates and renews the user's session on each request, ensuring timezone-aware `datetime` objects are used.
-    -   `Flask-Limiter` is applied to login and registration endpoints to prevent brute-force attacks.
-    -   Failed login attempts and other authentication-related events are logged.
+### 3.2. Configuration (`app/config.py`)
 
-### 4.2. Diary and Points System
--   **Functionality**: Users submit daily diary entries, categorizing them as "encouraged" (+5 points) or "something to change" (+2 points) to earn points and build streaks.
--   **Implementation**:
-    -   `routes/diary.py` manages entry creation using `DiaryEntryForm` for validation.
-    -   `models/DailyStats.py` tracks daily points, current streaks, and longest streaks.
-    -   Streak logic is handled within `routes/diary.py` to update `DailyStats` based on consecutive entries.
+The application uses a class-based configuration structure to separate settings for different environments (development, production, testing). Key configuration options include:
 
-### 4.3. Progress Dashboard & PDF Export
--   **Functionality**: Provides a comprehensive dashboard with statistics, interactive charts (points over time, weekday performance), and a word cloud. Users can export their entire journey as a PDF.
--   **Implementation**:
-    -   `routes/progress.py` renders the dashboard, fetching data via `utils/progress_helpers.py`.
-    -   Interactive charts are rendered client-side using Chart.js, Luxon, and chartjs-plugin-zoom.
-    -   Word clouds are generated client-side using wordcloud2.js, with data aggregated from diary entries.
-    -   `utils/pdf_generator.py` uses WeasyPrint and Matplotlib to create the PDF export, embedding static chart images and the word cloud.
-    -   The PDF export process includes a loading overlay and captures the client-side rendered word cloud image.
+*   `SECRET_KEY`: Loaded from an environment variable.
+*   `SQLALCHEMY_DATABASE_URI`: Configured for SQLite by default, but can be overridden for other databases.
+*   `PERMANENT_SESSION_LIFETIME`: Sets the session timeout.
+*   `WTF_CSRF_ENABLED`: Enables or disables CSRF protection.
 
-### 4.4. Goal Setting and Tracking
--   **Functionality**: Users can set, track, and manage weekly goals, categorized by areas like Exercise, Learning, Mindfulness, etc.
--   **Implementation**:
-    -   `routes/goals.py` handles all goal-related logic using `GoalForm` and `GoalProgressForm` for validation.
-    -   `utils/goal_helpers.py` provides functions for goal creation, progress updates, completion/failure, history retrieval, and statistics.
-    -   The `Goal` model (`models/goal.py`) uses timezone-aware datetimes (`datetime.now(timezone.utc)`) for `created_at` timestamps and calculates progress based on week start/end dates.
-    -   Points are awarded for completing goals (+10 points) or marking them as failed (+1 point).
+### 3.3. Database Models (`app/models/`)
 
-### 4.5. User Profile & Data Management
--   **Functionality**: Users can manage their profile, download their data (JSON/CSV), and securely delete their account.
--   **Implementation**:
-    -   `routes/user.py` handles profile display, data export, and account deletion.
-    -   `DeleteAccountForm` from `forms.py` is used for secure account deletion requiring password re-entry.
-    -   Data export serializes user-specific information from `User`, `DiaryEntry`, `Goal`, and `DailyStats` models.
-    -   Account deletion performs a cascading delete across all associated user data in the database.
+The database schema is defined using SQLAlchemy models:
 
-### 4.6. Legal & Compliance
--   **Functionality**: Provides Privacy Policy and Terms of Service pages, and implements a cookie consent banner.
--   **Implementation**:
-    -   `routes/legal.py` serves the static `privacy.html` and `terms.html` pages.
-    -   `static/js/legal/cookie_consent.js` manages the display and acceptance of the cookie consent banner, loaded globally via `base.html`.
+*   **`User`:** Stores user information, including email, hashed password, and an optional username.
+*   **`DiaryEntry`:** Represents a single diary entry, linked to a user, with content and a rating.
+*   **`DailyStats`:** Tracks daily user statistics, including points, current streak, and longest streak.
+*   **`Goal`:** Defines user goals, with categories, status, and progress tracking.
 
----
+### 3.4. Routes (`app/routes/`)
 
-## 5. How to Run the Application
+The application's routes are organized into blueprints based on functionality:
 
-1.  **Set up a virtual environment**: `python -m venv env && source env/bin/activate`
-2.  **Install dependencies**: `pip install -r requirements.txt`
-3.  **Create a `.env` file** in the project root with a `SECRET_KEY` (e.g., `SECRET_KEY='your_super_secret_key_here'`).
-4.  **Initialize database migrations**:
-    ```bash
-    flask db init
-    flask db migrate -m "Initial migration"
-    flask db upgrade
-    ```
-5.  **Run the application**: `python app.py`
-6.  The application will be available at `http://localhost:5000`.
+*   **`auth_bp`:** Handles user login, registration, and logout.
+*   **`diary_bp`:** Manages the creation of diary entries.
+*   **`goals_bp`:** Implements all goal-related functionality, including creating, updating, and viewing goals.
+*   **`legal_bp`:** Serves the privacy policy and terms of service pages.
+*   **`main_bp`:** Contains the main landing page and error handlers.
+*   **`progress_bp`:** Powers the progress dashboard, aggregating and displaying user data.
+*   **`reader_bp`:** Allows users to read and search their past diary entries.
+*   **`user_bp`:** Manages user profile settings, data downloads, and account deletion.
 
----
+### 3.5. Utility Functions (`app/utils/`)
 
-## 6. Development Roadmap (SPMP_250701.md)
+Helper functions are organized into modules to support the application's business logic:
 
-This project follows a prioritized roadmap to ensure stability and security before launch. The full plan is detailed in `SPMP_250701.md`.
+*   **`goal_helpers.py`:** Contains functions for creating, updating, and retrieving goal-related data.
+*   **`progress_helpers.py`:** Provides functions for calculating and formatting data for the progress dashboard.
+*   **`search_helpers.py`:** Implements the search functionality for diary entries.
 
-### 6.1. Foundational Tooling & Infrastructure
--   **Database Migrations**: Ensure all future database schema modifications are managed via `flask db migrate` and `flask db upgrade`.
--   **Testing Framework**: Continuously write comprehensive unit, integration, and functional tests for new and existing features.
+### 3.6. Frontend (`app/static/` and `app/templates/`)
 
-### 6.2. Security Hardening & Compliance
--   **CSRF Protection for AJAX Requests**: **Completed**. Verified that `app/static/js/progress/export.js` correctly includes CSRF token in POST requests. Other JavaScript files do not make unprotected AJAX POST requests. The `meta[name="csrf-token"]` tag is correctly present in `base.html`.
--   **Rate Limiting**: Apply rate limiting to all sensitive endpoints.
--   **Dependency Security Audit**: **Completed**. `safety check` and `pip-audit` performed. Identified `pillow` vulnerability (PYSEC-2025-61) and upgraded `pillow` to `11.3.0`. All known vulnerabilities addressed.
--   **Privacy Policy and Cookie Consent**: **Completed**. Content of `privacy.html` and `terms.html` updated to accurately reflect existing features and GDPR compliance. Cookie consent mechanism in `cookie_consent.js` verified to be sufficient for essential cookies.
--   **User Data Deletion (Right to Erasure)**: **Completed**. Existing test suite (`tests/test_routes/test_user.py`) thoroughly verifies that the "Delete Account" feature performs a full cascading delete of all associated user data.
--   **Data Portability**: Verify the completeness and accuracy of exported data.
+The frontend is built with Bootstrap 5 and uses Jinja2 for templating. Key frontend components include:
 
-### 6.3. Feature Enhancements & New Functionality
--   **Dashboard Enhancements**: Implement weekly/monthly comparison views, missed days analysis, and enhanced chart styling.
--   **User Experience Improvements**: Implement email verification, password reset, profile customization, dark/light mode toggle, and onboarding tour.
--   **New Functionality**: Enhance diary search capabilities, develop a system for weekly reflection prompts, and implement advanced analytics and insights.
+*   **`base.html`:** A base template that all other pages extend, providing a consistent layout and navigation.
+*   **`_navbar.html`:** A partial template for the navigation bar.
+*   **Interactive Charts:** Chart.js is used to create interactive charts on the progress dashboard.
+*   **Word Cloud:** `wordcloud2.js` generates a word cloud from the user's diary entries.
+*   **AJAX:** JavaScript is used for features like fetching goal suggestions and updating goal progress without a full page reload.
 
-### 6.4. Code Quality & Refactoring
--   **Project Structure and File Naming**:
-    -   Create an `app` directory and move core application files into it. Rename `app.py` to `run.py` in the root.
-    -   Complete renaming of all files and directories to `snake_case`.
-    -   Update `GEMINI.md` to reflect the final project structure and file names.
--   **Python Code Style**: Apply `black` formatter, refactor `camelCase` to `snake_case`, add type hints, and convert docstrings to Google-style.
--   **Route and Helper Organization**: Create feature-based route packages with `routes.py` and `helpers.py` files, and update all imports.
--   **Static and Template File Organization**: Organize CSS/JS and HTML templates more granularly by feature.
--   **HTML and JavaScript Style**: Update HTML `id` and custom `data-*` attributes to `snake_case`, and refactor JavaScript variable/function names to `snake_case`.
--   **Database Refactoring**: Update SQLAlchemy model definitions for `snake_case` table and column names, and create a migration script for renaming.
--   **Final Review and Cleanup**: Run tests, review codebase for consistency, remove unused files, and update `README.md`.
+## 4. Key Implementation Details
 
-### 6.5. Technical Debt & Performance
--   **Database Performance**: Add explicit database indexes to frequently queried columns.
--   **Centralize Flash Message Handling**: Centralize `flash` message logic for consistency.
--   **Review Datetime Usage for Consistency**: Ensure consistent and appropriate timezone-aware datetime usage.
+### 4.1. Gamification Logic
 
----
+*   **Points:** Users earn points for various actions:
+    *   +5 points for an "encouraged behavior" diary entry.
+    *   +2 points for a "something to change" diary entry.
+    *   +10 points for completing a goal.
+    *   +1 point for a failed goal.
+    *   +1 point for logging in.
+*   **Streaks:** The `DailyStats` model tracks the current and longest streaks of consecutive days with at least one diary entry.
 
-## 7. Coding Style Guide
+### 4.2. Security
 
-The project adheres to a strict set of coding standards to ensure consistency and maintainability. The full guide can be found in `flask_style_guide.md`.
+*   **Password Hashing:** Passwords are hashed using `werkzeug.security`.
+*   **CSRF Protection:** Flask-WTF is used to protect against Cross-Site Request Forgery attacks.
+*   **Rate Limiting:** Flask-Limiter is used to prevent brute-force attacks on authentication routes.
+*   **Session Management:** Secure session cookies are used with a 24-hour timeout.
 
--   **Python**: Follows PEP 8, uses `snake_case` for variables/functions/modules, and Google-style docstrings with type hints.
--   **HTML**: Uses semantic HTML5 elements and `snake_case` for custom IDs and attributes.
--   **JavaScript**: Uses modern ES6+ features and `snake_case` for variables and functions.
--   **CSS**: Follows BEM methodology for custom components and uses CSS custom properties for theming.
--   **Naming Conventions**: `snake_case` for files/directories, `snake_case` and plural for database tables.
+### 4.3. Testing
+
+The project has a comprehensive test suite using Pytest. Tests are organized into `unit` and `integration` directories, and cover models, routes, and utility functions.
+
+## 5. Getting Started
+
+To run the application locally, follow these steps:
+
+1.  **Clone the repository.**
+2.  **Create and activate a virtual environment.**
+3.  **Install the dependencies:** `pip install -r requirements.txt`
+4.  **Create a `.env` file** with a `SECRET_KEY`.
+5.  **Run the application:** `python run.py`
+
+The application will be available at `http://localhost:5000`.

@@ -10,7 +10,7 @@ def test_index_route(client):
     """Test that the index route returns 200 and contains expected content"""
     response = client.get('/')
     assert response.status_code == 200
-    assert b'Aim for the Stars' in response.data
+    assert b'My Inner Scope' in response.data
 
 
 def test_register_route(client):

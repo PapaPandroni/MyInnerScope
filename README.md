@@ -117,7 +117,7 @@ The unique combination of daily reflection, behavioral rating, and gamified self
 This project is provided free of charge. If you find it helpful for your self-improvement journey, consider supporting its development through donations at [Coming soon].
 
 
-"Aim for the stars, even if you miss, you'll land among the clouds."
+"Aim for the Stars"
 
 ## Dependency Security Checks
 

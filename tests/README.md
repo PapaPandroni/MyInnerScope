@@ -1,6 +1,6 @@
-# Testing Framework for Aim for the Stars
+# Testing Framework for My Inner Scope
 
-This directory contains comprehensive tests for the Aim for the Stars application.
+This directory contains comprehensive tests for the My Inner Scope application.
 
 ## 🏗️ **Test Structure**
 

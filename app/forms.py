@@ -1,5 +1,5 @@
 """
-Flask-WTF form classes for Aim for the Stars application
+Flask-WTF form classes for My Inner Scope application
 """
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, TextAreaField, SelectField, SubmitField, IntegerField

@@ -1,5 +1,5 @@
 """
-Aim for the Stars - Self-Reflection Web Application
+My Inner Scope - Self-Reflection Web Application
 Copyright 2025 Peremil Starklint Söderström
 
 Licensed under the Apache License, Version 2.0 (the "License");

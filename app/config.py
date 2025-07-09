@@ -1,5 +1,5 @@
 """
-Configuration settings for Aim for the Stars application
+Configuration settings for My Inner Scope application
 """
 import os
 from dotenv import load_dotenv

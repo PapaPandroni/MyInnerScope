@@ -1,1 +1,1 @@
-# Tests package for Aim for the Stars application 
+# Tests package for My Inner Scope application 

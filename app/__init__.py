@@ -76,7 +76,7 @@ def create_app(config_name=None):
         app.logger.addHandler(handler)
         
         app.logger.setLevel(logging.INFO)
-        app.logger.info('Aim for the Stars startup')
+        app.logger.info('My Inner Scope startup')
 
     @app.before_request
     def before_request():

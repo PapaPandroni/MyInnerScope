@@ -1,5 +1,5 @@
 """
-Test configuration and fixtures for Aim for the Stars application
+Test configuration and fixtures for My Inner Scope application
 """
 import pytest
 import tempfile
