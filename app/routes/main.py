@@ -13,6 +13,11 @@ def hello() -> str:
     return render_template("index.html")
 
 
+@main_bp.route("/about")
+def about() -> str:
+    return render_template("about.html")
+
+
 @main_bp.app_errorhandler(404)
 def page_not_found(e) -> Tuple[str, int]:
     return render_template("errors/404.html"), 404
