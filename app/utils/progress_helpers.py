@@ -64,12 +64,12 @@ def get_top_days_with_entries(user_id: int) -> List[Dict[str, Any]]:
 def get_weekday_data(user_id: int) -> Tuple[List[Dict[str, Any]], bool]:
     """Return weekday data and whether there is sufficient data for the user."""
     day_analysis = db.session.query(
-        db.func.strftime('%w', DailyStats.date).label('weekday'),
+        db.func.extract('dow', DailyStats.date).label('weekday'),
         db.func.avg(DailyStats.points).label('avg_points'),
         db.func.count(DailyStats.id).label('entry_count')
     ).filter_by(user_id=user_id)\
     .filter(DailyStats.points > 0)\
-    .group_by(db.func.strftime('%w', DailyStats.date))\
+    .group_by(db.func.extract('dow', DailyStats.date))\
     .all()
     weekday_names = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
     weekday_data = []
