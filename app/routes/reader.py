@@ -43,11 +43,22 @@ def read_diary() -> Union[str, WerkzeugResponse]:
     # Check for search parameters
     search_text = request.args.get("search", "").strip()
     search_date = request.args.get("search_date", "").strip()
+    rating_param = request.args.get("rating", "").strip()
+    
+    # Convert rating parameter to integer if provided
+    rating = None
+    if rating_param:
+        try:
+            rating = int(rating_param)
+            if rating not in [-1, 1]:
+                rating = None
+        except ValueError:
+            rating = None
 
     # Handle search functionality
-    if search_text or search_date:
+    if search_text or search_date or rating is not None:
         return handle_search(
-            user_id, display_name, diary_dates, search_text, search_date
+            user_id, display_name, diary_dates, search_text, search_date, rating
         )
 
     # Get the date parameter from URL (existing functionality)
@@ -116,4 +127,70 @@ def read_diary() -> Union[str, WerkzeugResponse]:
         next_date=next_date,
         diary_dates=diary_dates,
         show_day_page=True,
+    )
+
+
+@reader_bp.route("/diary-entries/keep-doing")
+def keep_doing_entries() -> Union[str, WerkzeugResponse]:
+    """Show all 'Keep Doing This' diary entries (rating = 1)."""
+    if "user_id" not in session:
+        return redirect("/login")
+
+    user_id = session["user_id"]
+    user = User.query.get(user_id)
+
+    # Get display name
+    if user.user_name:
+        display_name = user.user_name
+    else:
+        display_name = user.email.split("@")[0]
+
+    # Get all dates that have diary entries (sorted chronologically)
+    diary_dates = (
+        db.session.query(DiaryEntry.entry_date)
+        .filter_by(user_id=user_id)
+        .distinct()
+        .order_by(DiaryEntry.entry_date)
+        .all()
+    )
+
+    # Convert to list of date objects
+    diary_dates = [row.entry_date for row in diary_dates]
+
+    # Use the search function with rating=1 to get "Keep Doing This" entries
+    return handle_search(
+        user_id, display_name, diary_dates, "", "", 1
+    )
+
+
+@reader_bp.route("/diary-entries/change-this")
+def change_this_entries() -> Union[str, WerkzeugResponse]:
+    """Show all 'Change This' diary entries (rating = -1)."""
+    if "user_id" not in session:
+        return redirect("/login")
+
+    user_id = session["user_id"]
+    user = User.query.get(user_id)
+
+    # Get display name
+    if user.user_name:
+        display_name = user.user_name
+    else:
+        display_name = user.email.split("@")[0]
+
+    # Get all dates that have diary entries (sorted chronologically)
+    diary_dates = (
+        db.session.query(DiaryEntry.entry_date)
+        .filter_by(user_id=user_id)
+        .distinct()
+        .order_by(DiaryEntry.entry_date)
+        .all()
+    )
+
+    # Convert to list of date objects
+    diary_dates = [row.entry_date for row in diary_dates]
+
+    # Use the search function with rating=-1 to get "Change This" entries
+    return handle_search(
+        user_id, display_name, diary_dates, "", "", -1
     )

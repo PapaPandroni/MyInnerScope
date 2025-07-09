@@ -12,7 +12,8 @@ def handle_search(
     display_name: str, 
     diary_dates: List[date], 
     search_text: str, 
-    search_date: str
+    search_date: str,
+    rating: int = None
 ) -> Union[str, WerkzeugResponse]:
     """Handle search functionality for diary entries.
     
@@ -22,6 +23,7 @@ def handle_search(
         diary_dates: List of dates with diary entries.
         search_text: The text to search for.
         search_date: The date to filter by.
+        rating: Optional rating filter (-1 or 1).
         
     Returns:
         Rendered template or redirect response.
@@ -45,6 +47,10 @@ def handle_search(
     # Add text search if specified
     if search_text:
         query = query.filter(DiaryEntry.content.ilike(f"%{search_text}%"))
+
+    # Add rating filter if specified
+    if rating is not None:
+        query = query.filter(DiaryEntry.rating == rating)
 
     # Execute the search
     search_results = query.order_by(DiaryEntry.entry_date.desc()).all()
