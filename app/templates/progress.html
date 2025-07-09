@@ -2,6 +2,7 @@
 {% block title %}Progress{% endblock %}
 {% block head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/progress.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/tour.css') }}">
 {% endblock %}
 {% block content %}
     <div class="container mt-5">
@@ -391,4 +392,5 @@
     
     <script src="{{ url_for('static', filename='js/progress/entries.js') }}"></script>
     <script src="{{ url_for('static', filename='js/progress/entry-toggles.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/tour/tour-controller.js') }}"></script>
 {% endblock %}
