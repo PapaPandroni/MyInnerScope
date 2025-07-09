@@ -53,10 +53,10 @@ def test_migrations(migration_app):
     inspector = inspect(engine)
     tables = inspector.get_table_names()
     assert 'alembic_version' in tables
-    assert 'user' in tables
+    assert 'users' in tables  # Updated to reflect new table name
     assert 'diary_entry' in tables
     assert 'daily_stats' in tables
-    assert 'goal' in tables
+    assert 'goals' in tables  # Updated to reflect new table name
 
     # Downgrade to base
     run_alembic_command(app, db_path, 'downgrade', 'base')

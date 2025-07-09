@@ -19,8 +19,9 @@ class GoalStatus(enum.Enum):
     FAILED = "failed"
 
 class Goal(db.Model):
+    __tablename__ = 'goals'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     
     # Goal details
     category = db.Column(db.Enum(GoalCategory), nullable=False)
