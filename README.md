@@ -57,50 +57,46 @@ Open your browser to http://localhost:5000
 The SQLite database (users.db) will be created automatically on first run.
 
 Database Schema
-User Table
-id: Primary key
-email: Unique user email
-password: Hashed password
-user_name: Optional display name
-DiaryEntry Table
-id: Primary key
-user_id: Foreign key to User
-entry_date: Date of entry (defaults to today)
-content: Text content of the diary entry
-rating: Integer (-1 for "want to change", 1 for "encouraged")
-DailyStats Table
-id: Primary key
-user_id: Foreign key to User
-date: Date of the stats record
-points: Points earned that day
-current_streak: Current consecutive day streak
-longest_streak: All-time longest streak
+
+The application uses the following SQLAlchemy models for its database schema:
+
+### User Table (`users`)
+- `id`: Primary key (Integer)
+- `email`: Unique user email (String)
+- `_password`: Hashed password (String, internal representation)
+- `user_name`: Optional display name (String)
+
+### DiaryEntry Table (`diary_entry`)
+- `id`: Primary key (Integer)
+- `user_id`: Foreign key to User (Integer)
+- `entry_date`: Date of entry (Date, defaults to today)
+- `content`: Text content of the diary entry (Text)
+- `rating`: Integer (`-1` for "want to change", `1` for "encouraged")
+
+### DailyStats Table (`daily_stats`)
+- `id`: Primary key (Integer)
+- `user_id`: Foreign key to User (Integer)
+- `date`: Date of the stats record (Date)
+- `points`: Points earned that day (Integer, default 0)
+- `current_streak`: Current consecutive day streak (Integer, default 0)
+- `longest_streak`: All-time longest streak (Integer, default 0)
+- `user_date_uc`: Unique constraint on `user_id` and `date`
+
+### Goal Table (`goals`)
+- `id`: Primary key (Integer)
+- `user_id`: Foreign key to User (Integer)
+- `category`: Enum (`GoalCategory`: Exercise, Learning, Mindfulness, Social, Productivity, Personal Development, Home, Creative, Custom)
+- `title`: Goal title (String)
+- `description`: Optional goal description (Text)
+- `week_start`: Start date of the goal week (Date)
+- `week_end`: End date of the goal week (Date)
+- `created_at`: Timestamp of goal creation (DateTime)
+- `status`: Enum (`GoalStatus`: active, completed, failed, default active)
+- `progress_notes`: Optional notes on goal progress (Text)
 Project Status
 🚧 Work in Progress - This is an active development project with ongoing improvements.
 
-Planned Features
-Dashboard Enhancements
-Weekly/monthly comparison views
-Missed days analysis (90-day lookback)
-Enhanced chart styling and interactions
-User Experience Improvements
-Email verification and password reset
-Profile customization options
-Dark/light mode toggle
-Password strength validation
-User-friendly error handling
-Onboarding tour for new users
-New Functionality
-Search functionality for specific diary entries
-Data export capabilities
-Goal setting features
-Weekly reflection prompts
-Advanced analytics and insights
-Technical Improvements
-Input validation and sanitization
-Comprehensive error handling
-Rate limiting
-Performance optimizations
+
 Contributing
 This project is primarily for personal development and documentation purposes. The codebase serves as a learning project for Flask web development and user behavior gamification.
 
@@ -114,7 +110,7 @@ The unique combination of daily reflection, behavioral rating, and gamified self
 
 ## Supporting This Project
 
-This project is provided free of charge. If you find it helpful for your self-improvement journey, consider supporting its development through donations at [Coming soon].
+This project is provided free of charge. If you find it helpful for your self-improvement journey, consider supporting its development through donations at [https://buymeacoffee.com/papapandroni](https://buymeacoffee.com/papapandroni).
 
 
 "Aim for the Stars"
