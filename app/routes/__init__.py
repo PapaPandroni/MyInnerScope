@@ -7,6 +7,7 @@ from .legal import legal_bp
 from .user import user_bp
 from .main import main_bp
 
+
 def register_blueprints(app):
     """Register all blueprints with the Flask app"""
     app.register_blueprint(main_bp)
@@ -19,7 +20,7 @@ def register_blueprints(app):
     app.register_blueprint(user_bp)
 
     # Apply rate limiting to blueprints
-    limiter = getattr(app, 'limiter', None)
+    limiter = getattr(app, "limiter", None)
     if limiter:
         limiter.limit("20 per minute;60 per hour")(auth_bp)
         limiter.limit("30 per minute;120 per hour")(diary_bp)

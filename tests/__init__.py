@@ -1,1 +1,1 @@
-# Tests package for My Inner Scope application 
+# Tests package for My Inner Scope application
