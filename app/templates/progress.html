@@ -171,10 +171,11 @@
         </div>
         <!-- New Card: Opportunities for Growth -->
         <div class="col-md-3 mb-4">
-            <div class="sci-fi-card improvements-card" 
+            <div class="sci-fi-card improvements-card clickable-card" 
                  data-bs-toggle="tooltip" 
                  data-bs-placement="top" 
-                 title="You have identified {{ num_change }} areas where you want to grow. Recognizing these is a sign of self-awareness and courage—each one is a step toward your best self!">
+                 title="You have identified {{ num_change }} areas where you want to grow. Recognizing these is a sign of self-awareness and courage—each one is a step toward your best self! Click to view all entries."
+                 onclick="window.location.href='/read-diary?rating=-1'">
                 <div class="card-glow"></div>
                 <div class="card-content">
                     <div class="card-icon">
@@ -187,10 +188,11 @@
         </div>
         <!-- New Card: Positive Behaviors -->
         <div class="col-md-3 mb-4">
-            <div class="sci-fi-card positive-card" 
+            <div class="sci-fi-card positive-card clickable-card" 
                  data-bs-toggle="tooltip" 
                  data-bs-placement="top" 
-                 title="You celebrated {{ num_positive }} positive actions! Every time you acknowledge your strengths, you add another star to your sky. Keep shining bright!">
+                 title="You celebrated {{ num_positive }} positive actions! Every time you acknowledge your strengths, you add another star to your sky. Keep shining bright! Click to view all entries."
+                 onclick="window.location.href='/read-diary?rating=1'">
                 <div class="card-glow"></div>
                 <div class="card-content">
                     <div class="card-icon">
