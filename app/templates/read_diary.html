@@ -124,10 +124,10 @@
             <h5 class="card-title">Search Your Diary</h5>
             <form method="GET" action="/read-diary">
                 <div class="row g-3 align-items-center">
-                    <div class="col-md-7">
+                    <div class="col-md-6">
                         <input type="text" class="form-control" name="search" placeholder="Search for text..." value="{{ request.args.get('search', '') }}">
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-3">
                         <select class="form-select" name="search_date">
                             <option value="">All days</option>
                             {% for diary_date in diary_dates %}
@@ -135,6 +135,13 @@
                                 {{ diary_date.strftime('%b %d, %Y') }}
                             </option>
                             {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select" name="rating">
+                            <option value="">All Ratings</option>
+                            <option value="1" {% if request.args.get('rating') == '1' %}selected{% endif %}>Positive behaviours</option>
+                            <option value="-1" {% if request.args.get('rating') == '-1' %}selected{% endif %}>Growth opportunities</option>
                         </select>
                     </div>
                 </div>
