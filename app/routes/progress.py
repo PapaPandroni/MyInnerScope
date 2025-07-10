@@ -16,6 +16,7 @@ from ..utils.progress_helpers import (
     get_weekday_data,
     get_sample_weekday_data,
     get_trend_message,
+    get_recent_entries,
 )
 from ..utils.goal_helpers import (
     get_current_goals,
@@ -340,6 +341,10 @@ def progress() -> Union[str, WerkzeugResponse]:
     num_change = sum(1 for e in entries if e.rating == -1)
     num_positive = sum(1 for e in entries if e.rating == 1)
 
+    # Check if user should see onboarding tour (new user with no entries)
+    recent_entries = get_recent_entries(user_id)
+    is_new_user = len(recent_entries) == 0
+
     return render_template(
         "progress.html",
         points_today=points_today,
@@ -361,4 +366,5 @@ def progress() -> Union[str, WerkzeugResponse]:
         wordcloud_entry_count=entry_count,
         num_change=num_change,
         num_positive=num_positive,
+        is_new_user=is_new_user,
     )

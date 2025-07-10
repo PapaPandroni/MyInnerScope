@@ -241,4 +241,33 @@
 
 .goal-card .badge {
     color: #fff;
+}
+
+/* Card Icons for Goals */
+.goal-card .card-icon {
+    font-size: 2rem;
+    color: #4fd1c7;
+    background: linear-gradient(45deg, #4fd1c7, #38b2ac);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: iconPulse 2s ease-in-out infinite;
+}
+
+.goal-card .card-icon i {
+    display: block;
+}
+
+/* Card icon in the centered empty state */
+.goal-card .card-body .card-icon {
+    font-size: 3rem;
+    margin: 0 auto;
+    display: block;
+    text-align: center;
+    width: fit-content;
+}
+
+@keyframes iconPulse {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.05); opacity: 1; }
 } 

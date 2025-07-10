@@ -24,6 +24,7 @@ from ..utils.goal_helpers import (
     get_goal_statistics,
     get_predefined_goals,
 )
+from ..utils.progress_helpers import get_recent_entries
 from ..forms import GoalForm, GoalProgressForm
 from datetime import date
 
@@ -49,6 +50,10 @@ def goals_page() -> Union[str, WerkzeugResponse]:
     goal_form = GoalForm()
     progress_form = GoalProgressForm()
 
+    # Check if user should see onboarding tour (new user with no entries)
+    recent_entries = get_recent_entries(user_id)
+    is_new_user = len(recent_entries) == 0
+
     return render_template(
         "goals.html",
         current_goals=current_goals,
@@ -59,6 +64,7 @@ def goals_page() -> Union[str, WerkzeugResponse]:
         categories=GoalCategory,
         goal_form=goal_form,
         progress_form=progress_form,
+        is_new_user=is_new_user,
     )
 
 
@@ -109,6 +115,10 @@ def create_new_goal() -> Union[WerkzeugResponse, Tuple[str, int]]:
         goal_stats = get_goal_statistics(user_id)
         predefined_goals = get_predefined_goals()
 
+        # Check if user should see onboarding tour (new user with no entries)
+        recent_entries = get_recent_entries(user_id)
+        is_new_user = len(recent_entries) == 0
+
         # Flash validation errors
         for field, errors in form.errors.items():
             for error in errors:
@@ -123,6 +133,7 @@ def create_new_goal() -> Union[WerkzeugResponse, Tuple[str, int]]:
                 predefined_goals=predefined_goals,
                 categories=GoalCategory,
                 goal_form=form,
+                is_new_user=is_new_user,
             ),
             400,
         )

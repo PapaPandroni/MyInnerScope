@@ -4,6 +4,7 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/goals.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/tour.css') }}">
 <style>
 .diary-search-card {
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
@@ -214,4 +215,16 @@
         </div>
     </div>
     {% endif %}
+{% endblock %}
+
+<script>
+// Configure onboarding tour
+window.tourConfig = {
+    isNewUser: {{ is_new_user|tojson }},
+    userEntryCount: 0  // Read diary page doesn't directly track diary entries
+};
+</script>
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/tour/tour-controller.js') }}"></script>
 {% endblock %}
