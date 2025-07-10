@@ -4,6 +4,7 @@ from werkzeug.wrappers import Response as WerkzeugResponse
 from datetime import datetime
 from ..models import User, DiaryEntry, db
 from ..utils import handle_search
+from ..utils.progress_helpers import get_recent_entries
 
 reader_bp = Blueprint("reader", __name__)
 
@@ -36,8 +37,12 @@ def read_diary() -> Union[str, WerkzeugResponse]:
 
     if not diary_dates:
         # No entries yet - show empty state
+        # Check if user should see onboarding tour (new user with no entries)
+        recent_entries = get_recent_entries(user_id)
+        is_new_user = len(recent_entries) == 0
+        
         return render_template(
-            "read_diary.html", display_name=display_name, no_entries=True
+            "read_diary.html", display_name=display_name, no_entries=True, is_new_user=is_new_user
         )
 
     # Check for search parameters
@@ -67,12 +72,17 @@ def read_diary() -> Union[str, WerkzeugResponse]:
     if not date_param:
         # Show front page
         first_entry_date = diary_dates[0]
+        # Check if user should see onboarding tour (new user with no entries)
+        recent_entries = get_recent_entries(user_id)
+        is_new_user = len(recent_entries) == 0
+        
         return render_template(
             "read_diary.html",
             display_name=display_name,
             first_entry_date=first_entry_date,
             show_front_page=True,
             diary_dates=diary_dates,
+            is_new_user=is_new_user,
         )
 
     # Parse the date parameter
@@ -117,6 +127,10 @@ def read_diary() -> Union[str, WerkzeugResponse]:
 
     formatted_date = f"{day_name}, {month_name} {day_num}{suffix} {year}"
 
+    # Check if user should see onboarding tour (new user with no entries)
+    recent_entries = get_recent_entries(user_id)
+    is_new_user = len(recent_entries) == 0
+    
     return render_template(
         "read_diary.html",
         display_name=display_name,
@@ -127,4 +141,5 @@ def read_diary() -> Union[str, WerkzeugResponse]:
         next_date=next_date,
         diary_dates=diary_dates,
         show_day_page=True,
+        is_new_user=is_new_user,
     )

@@ -83,20 +83,29 @@ def diary_entry() -> Union[str, tuple[str, int], WerkzeugResponse]:
         for field, errors in form.errors.items():
             for error in errors:
                 flash(error, "danger")
+        recent_entries = get_recent_entries(user_id)
+        is_new_user = len(recent_entries) == 0
+        
         return (
             render_template(
                 "diary.html",
                 display_name=display_name,
-                recent_entries=get_recent_entries(user_id),
+                recent_entries=recent_entries,
                 form=form,
+                is_new_user=is_new_user,
             ),
             400,
         )
 
     recent_entries = get_recent_entries(user_id)
+    
+    # Check if user should see onboarding tour (new user with no entries)
+    is_new_user = len(recent_entries) == 0
+    
     return render_template(
         "diary.html",
         display_name=display_name,
         recent_entries=recent_entries,
         form=form,
+        is_new_user=is_new_user,
     )

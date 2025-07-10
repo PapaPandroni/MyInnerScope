@@ -15,6 +15,7 @@ from flask import (
 from werkzeug.wrappers import Response as WerkzeugResponse
 from ..models import User, DiaryEntry, Goal, DailyStats, db
 from ..forms import DeleteAccountForm, ChangeUsernameForm, ChangePasswordForm
+from ..utils.progress_helpers import get_recent_entries
 from werkzeug.security import check_password_hash
 import io, csv, json
 
@@ -30,11 +31,16 @@ def profile() -> Union[str, WerkzeugResponse]:
     username_form = ChangeUsernameForm()
     password_form = ChangePasswordForm()
 
+    # Check if user should see onboarding tour (new user with no entries)
+    recent_entries = get_recent_entries(session["user_id"])
+    is_new_user = len(recent_entries) == 0
+
     return render_template(
         "settings.html",
         user=user,
         username_form=username_form,
         password_form=password_form,
+        is_new_user=is_new_user,
     )
 
 
@@ -205,4 +211,8 @@ def delete_account() -> Union[str, WerkzeugResponse]:
         else:
             flash("Incorrect password. Please try again.", "danger")
 
-    return render_template("delete_account_confirm.html", form=form)
+    # Check if user should see onboarding tour (new user with no entries)
+    recent_entries = get_recent_entries(session["user_id"])
+    is_new_user = len(recent_entries) == 0
+
+    return render_template("delete_account_confirm.html", form=form, is_new_user=is_new_user)

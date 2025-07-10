@@ -2,6 +2,9 @@
 {% block title %}Diary{% endblock %}
 {% block head %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% if is_new_user %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/tour.css') }}">
+{% endif %}
 {% endblock %}
 {% block content %}
 <div class="container mt-3 mt-md-5">
@@ -191,6 +194,19 @@ function toggleEntry(index) {
         full.classList.remove('d-none');
     }
 }
+
+{% if is_new_user %}
+// Configure onboarding tour
+window.tourConfig = {
+    isNewUser: {{ is_new_user|tojson }},
+    userEntryCount: {{ recent_entries|length }}
+};
+{% endif %}
 </script>
+
+{% if is_new_user %}
+<script src="{{ url_for('static', filename='js/tour/tour-controller.js') }}"></script>
+{% endif %}
+
 {% endblock %}
 
