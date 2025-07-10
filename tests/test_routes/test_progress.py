@@ -265,9 +265,11 @@ class TestProgressRoutes:
 
             # Check that the response contains the expected counts in the HTML
             response_data = response.data.decode("utf-8")
-            # Only check for the tooltip text
-            assert "You have identified 3 areas where you want to grow" in response_data
-            assert "You celebrated 2 positive actions" in response_data
+            # Check for the new card titles and values
+            assert '<h5 class="card-title">Opportunities for Growth</h5>' in response_data
+            assert '<p class="card-value">3</p>' in response_data
+            assert '<h5 class="card-title">Positive Behaviors</h5>' in response_data
+            assert '<p class="card-value">2</p>' in response_data
 
     def test_progress_page_no_entries(self, client, app):
         """Test progress page with no diary entries"""
@@ -290,5 +292,7 @@ class TestProgressRoutes:
 
             # Check that counts are zero in the HTML
             response_data = response.data.decode("utf-8")
-            assert "You have identified 0 areas where you want to grow" in response_data
-            assert "You celebrated 0 positive actions" in response_data
+            assert '<h5 class="card-title">Opportunities for Growth</h5>' in response_data
+            assert '<p class="card-value">0</p>' in response_data
+            assert '<h5 class="card-title">Positive Behaviors</h5>' in response_data
+            assert '<p class="card-value">0</p>' in response_data
