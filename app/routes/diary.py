@@ -76,7 +76,20 @@ def diary_entry() -> Union[str, tuple[str, int], WerkzeugResponse]:
         db.session.add(new_entry)
         db.session.commit()
 
-        return redirect("/diary")
+        # Clear the form for the next entry
+        form = DiaryEntryForm(formdata=None)
+
+        recent_entries = get_recent_entries(user_id)
+        is_new_user = len(recent_entries) == 0
+
+        return render_template(
+            "diary.html",
+            display_name=display_name,
+            recent_entries=recent_entries,
+            form=form,
+            is_new_user=is_new_user,
+            entry_saved=True,
+        )
 
     # Flash errors if validation fails
     if form.errors:
