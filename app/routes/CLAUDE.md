@@ -1,0 +1,115 @@
+# app/routes/ Directory
+
+This directory contains Flask Blueprint-based route handlers for the "Aim for the Stars" application.
+
+## Blueprint Architecture
+
+All routes are organized as Flask Blueprints for modularity and maintainability. Each blueprint handles a specific domain of functionality.
+
+### Route Files
+
+#### `auth.py` - Authentication Blueprint (`auth_bp`)
+- **Purpose**: User registration, login, logout
+- **Rate Limits**: 20 per minute, 60 per hour
+- **Key Routes**:
+  - `/register` - User registration form and processing
+  - `/login` - User authentication
+  - `/logout` - Session termination
+- **Security**: Password hashing, session management, CSRF protection
+
+#### `diary.py` - Diary Management Blueprint (`diary_bp`)
+- **Purpose**: Diary entry creation, editing, and management
+- **Rate Limits**: 30 per minute, 120 per hour
+- **Key Routes**:
+  - `/diary` - Main diary interface
+  - `/entry/new` - Create new diary entry
+  - `/entry/<id>/edit` - Edit existing entry
+  - `/entry/<id>/delete` - Delete entry
+- **Features**: Behavior rating system, points calculation
+
+#### `progress.py` - Progress Tracking Blueprint (`progress_bp`)
+- **Purpose**: User progress visualization and statistics
+- **Rate Limits**: 20 per minute, 60 per hour
+- **Key Routes**:
+  - `/progress` - Main progress dashboard
+  - `/stats/daily` - Daily statistics view
+  - `/analytics` - Advanced analytics
+- **Visualizations**: Chart.js integration for progress charts
+
+#### `goals.py` - Goal Management Blueprint (`goals_bp`)
+- **Purpose**: Goal setting, tracking, and management
+- **Rate Limits**: 30 per minute, 120 per hour
+- **Key Routes**:
+  - `/goals` - Goal dashboard
+  - `/goals/new` - Create new goal
+  - `/goals/<id>/edit` - Edit goal
+  - `/goals/<id>/complete` - Mark goal as completed
+
+#### `reader.py` - Content Reading Blueprint (`reader_bp`)
+- **Purpose**: Diary entry reading and search functionality
+- **Rate Limits**: 60 per minute, 300 per hour (higher for read operations)
+- **Key Routes**:
+  - `/read` - Read diary entries
+  - `/search` - Search functionality
+- **Features**: Pagination, filtering, search snippets
+
+#### `user.py` - User Management Blueprint (`user_bp`)
+- **Purpose**: User settings, profile management, account actions
+- **Rate Limits**: 20 per minute, 60 per hour
+- **Key Routes**:
+  - `/settings` - User settings page
+  - `/profile` - User profile management
+  - `/delete-account` - Account deletion
+
+#### `legal.py` - Legal Pages Blueprint (`legal_bp`)
+- **Purpose**: Privacy policy, terms of service, legal compliance
+- **Key Routes**:
+  - `/privacy` - Privacy policy
+  - `/terms` - Terms of service
+  - `/cookies` - Cookie policy
+- **Features**: Cookie consent management
+
+#### `main.py` - Main Application Blueprint (`main_bp`)
+- **Purpose**: Home page, about page, general application routes
+- **Key Routes**:
+  - `/` - Home page
+  - `/about` - About page
+  - `/donate` - Donation page
+
+## Blueprint Registration
+
+### `__init__.py`
+- Contains `register_blueprints(app)` function
+- Registers all blueprints with the Flask application
+- Applies rate limiting to each blueprint with appropriate limits
+- **Rate Limiting Strategy**:
+  - Auth operations: Conservative limits (security-sensitive)
+  - Read operations: Higher limits (less resource-intensive)
+  - Write operations: Moderate limits (balance usability/security)
+
+## Common Patterns
+
+### Security Implementation
+- **CSRF Protection**: All forms include CSRF tokens
+- **Authentication Required**: Protected routes check `session['user_id']`
+- **Rate Limiting**: Applied per blueprint based on operation type
+- **Input Validation**: Flask-WTF forms validate all user input
+
+### Error Handling
+- Consistent error message patterns
+- Proper HTTP status codes
+- User-friendly error pages (handled in templates/errors/)
+- Logging for debugging and monitoring
+
+### Database Operations
+- Session management with proper commit/rollback
+- Optimized queries with appropriate joins
+- Pagination for large result sets
+- Transaction handling for data integrity
+
+## Development Notes
+
+- **Import Pattern**: Routes import models and forms as needed
+- **Response Types**: Mix of rendered templates and JSON responses
+- **URL Structure**: RESTful design where appropriate
+- **Template Context**: Consistent data passed to templates
