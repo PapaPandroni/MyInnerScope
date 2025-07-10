@@ -172,7 +172,7 @@ def get_weekday_data(user_id: int) -> Tuple[List[Dict[str, Any]], bool]:
     sufficient_data_count = 0
     for i in range(7):
         day_data = next((d for d in day_analysis if int(d.weekday) == i), None)
-        if day_data and day_data.entry_count >= 2:
+        if day_data and day_data.entry_count >= 1:
             weekday_data.append(
                 {"name": weekday_names[i], "avg_points": round(day_data.avg_points, 1)}
             )
@@ -245,6 +245,24 @@ def get_trend_message(user_id: int, today: date) -> str:
         return "Let's beat last week! Keep reflecting to keep improving!"
     else:
         return "Steady progress! Consistency is key to self-improvement!"
+
+
+def get_unique_weekdays_with_entries(user_id: int) -> int:
+    """Get the count of unique weekdays that have diary entries.
+    
+    Args:
+        user_id: The ID of the user.
+        
+    Returns:
+        Count of unique weekdays (0-7) that have at least one diary entry.
+    """
+    unique_weekdays = (
+        db.session.query(db.func.extract("dow", DiaryEntry.entry_date))
+        .filter_by(user_id=user_id)
+        .distinct()
+        .count()
+    )
+    return unique_weekdays
 
 
 def get_recent_entries(user_id: int, limit: int = 3) -> List[DiaryEntry]:

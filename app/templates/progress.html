@@ -264,9 +264,9 @@
                         <p class="overlay-message">Write diary entries on at least 2 different days of the week to unlock your weekly patterns.</p>
                         <div class="overlay-progress">
                             <div class="progress-bar">
-                                <div class="progress-fill" style="width: 0%"></div>
+                                <div class="progress-fill" style="width: {{ (unique_weekdays_count/2*100) if unique_weekdays_count < 2 else 100 }}%"></div>
                             </div>
-                            <span class="progress-text">0/2 days completed</span>
+                            <span class="progress-text">{{ unique_weekdays_count }}/2 days completed</span>
                         </div>
                     </div>
                 </div>

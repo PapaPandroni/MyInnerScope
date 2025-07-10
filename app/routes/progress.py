@@ -17,6 +17,7 @@ from ..utils.progress_helpers import (
     get_sample_weekday_data,
     get_trend_message,
     get_recent_entries,
+    get_unique_weekdays_with_entries,
 )
 from ..utils.goal_helpers import (
     get_current_goals,
@@ -344,6 +345,9 @@ def progress() -> Union[str, WerkzeugResponse]:
     # Check if user should see onboarding tour (new user with no entries)
     recent_entries = get_recent_entries(user_id)
     is_new_user = len(recent_entries) == 0
+    
+    # Get unique weekdays count for progress display
+    unique_weekdays_count = get_unique_weekdays_with_entries(user_id)
 
     return render_template(
         "progress.html",
@@ -367,4 +371,5 @@ def progress() -> Union[str, WerkzeugResponse]:
         num_change=num_change,
         num_positive=num_positive,
         is_new_user=is_new_user,
+        unique_weekdays_count=unique_weekdays_count,
     )

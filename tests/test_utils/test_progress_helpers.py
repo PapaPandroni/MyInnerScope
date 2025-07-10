@@ -18,6 +18,7 @@ from app.utils.progress_helpers import (
     get_sample_weekday_data,
     get_trend_message,
     get_recent_entries,
+    get_unique_weekdays_with_entries,
 )
 
 
@@ -486,3 +487,109 @@ class TestProgressHelpers:
 
             recent_entries = get_recent_entries(sample_user.id)  # No limit specified
             assert len(recent_entries) == 3  # Default limit
+
+    def test_get_unique_weekdays_with_entries_with_data(self, app, sample_user):
+        """Test get_unique_weekdays_with_entries when user has entries on multiple weekdays."""
+        with app.app_context():
+            # Create entries on different weekdays
+            base_date = date.today()
+            
+            # Monday (weekday 0)
+            monday_date = base_date - timedelta(days=base_date.weekday())
+            entry1 = DiaryEntry(
+                user_id=sample_user.id,
+                content="Monday entry",
+                rating=1,
+                entry_date=monday_date,
+            )
+            db.session.add(entry1)
+            
+            # Tuesday (weekday 1)
+            tuesday_date = monday_date + timedelta(days=1)
+            entry2 = DiaryEntry(
+                user_id=sample_user.id,
+                content="Tuesday entry",
+                rating=1,
+                entry_date=tuesday_date,
+            )
+            db.session.add(entry2)
+            
+            # Friday (weekday 4)
+            friday_date = monday_date + timedelta(days=4)
+            entry3 = DiaryEntry(
+                user_id=sample_user.id,
+                content="Friday entry",
+                rating=1,
+                entry_date=friday_date,
+            )
+            db.session.add(entry3)
+            
+            # Another Monday entry (same weekday as first)
+            another_monday = monday_date + timedelta(days=7)
+            entry4 = DiaryEntry(
+                user_id=sample_user.id,
+                content="Another Monday entry",
+                rating=1,
+                entry_date=another_monday,
+            )
+            db.session.add(entry4)
+            
+            db.session.commit()
+
+            unique_weekdays = get_unique_weekdays_with_entries(sample_user.id)
+            assert unique_weekdays == 3  # Monday, Tuesday, Friday (Monday counted only once)
+
+    def test_get_unique_weekdays_with_entries_without_data(self, app, sample_user):
+        """Test get_unique_weekdays_with_entries when user has no entries."""
+        with app.app_context():
+            unique_weekdays = get_unique_weekdays_with_entries(sample_user.id)
+            assert unique_weekdays == 0
+
+    def test_get_unique_weekdays_with_entries_single_day(self, app, sample_user):
+        """Test get_unique_weekdays_with_entries when user has entries on only one weekday."""
+        with app.app_context():
+            # Create multiple entries on the same weekday
+            today = date.today()
+            
+            entry1 = DiaryEntry(
+                user_id=sample_user.id,
+                content="First entry today",
+                rating=1,
+                entry_date=today,
+            )
+            db.session.add(entry1)
+            
+            entry2 = DiaryEntry(
+                user_id=sample_user.id,
+                content="Second entry today",
+                rating=1,
+                entry_date=today,
+            )
+            db.session.add(entry2)
+            
+            db.session.commit()
+
+            unique_weekdays = get_unique_weekdays_with_entries(sample_user.id)
+            assert unique_weekdays == 1  # Only one unique weekday
+
+    def test_get_unique_weekdays_with_entries_all_weekdays(self, app, sample_user):
+        """Test get_unique_weekdays_with_entries when user has entries on all weekdays."""
+        with app.app_context():
+            # Create entries for all 7 weekdays
+            base_date = date.today()
+            monday_date = base_date - timedelta(days=base_date.weekday())
+            
+            for i in range(7):
+                entry_date = monday_date + timedelta(days=i)
+                entry = DiaryEntry(
+                    user_id=sample_user.id,
+                    content=f"Entry for day {i}",
+                    rating=1,
+                    entry_date=entry_date,
+                )
+                db.session.add(entry)
+            
+            db.session.commit()
+
+            unique_weekdays = get_unique_weekdays_with_entries(sample_user.id)
+            assert unique_weekdays == 7  # All 7 weekdays
