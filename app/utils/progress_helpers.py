@@ -169,17 +169,17 @@ def get_weekday_data(user_id: int) -> Tuple[List[Dict[str, Any]], bool]:
         "Saturday",
     ]
     weekday_data = []
-    sufficient_data_count = 0
     for i in range(7):
         day_data = next((d for d in day_analysis if int(d.weekday) == i), None)
-        if day_data and day_data.entry_count >= 1:
+        if day_data:
             weekday_data.append(
                 {"name": weekday_names[i], "avg_points": round(day_data.avg_points, 1)}
             )
-            sufficient_data_count += 1
         else:
             weekday_data.append({"name": weekday_names[i], "avg_points": 0})
-    has_sufficient_weekday_data = sufficient_data_count >= 2
+    
+    # Chart unlocks based on diary entries on different weekdays, not daily stats
+    has_sufficient_weekday_data = get_unique_weekdays_with_entries(user_id) >= 2
     return weekday_data, has_sufficient_weekday_data
 
 

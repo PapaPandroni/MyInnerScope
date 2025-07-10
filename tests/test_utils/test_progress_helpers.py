@@ -234,39 +234,34 @@ class TestProgressHelpers:
     def test_get_weekday_data_with_sufficient_data(self, app, sample_user):
         """Test get_weekday_data when user has sufficient data."""
         with app.app_context():
-            # Create 2 stats for Monday and Tuesday, 1 for the rest, all with unique dates
+            # Create diary entries on 2+ different weekdays (to unlock chart)
             base_date = date.today()
-            # Monday (weekday=0)
-            for i in range(2):
+            monday_date = base_date - timedelta(days=base_date.weekday())
+            tuesday_date = monday_date + timedelta(days=1)
+            
+            # Diary entries on Monday and Tuesday (unlocks chart)
+            entry1 = DiaryEntry(
+                user_id=sample_user.id,
+                content="Monday entry",
+                rating=1,
+                entry_date=monday_date,
+            )
+            db.session.add(entry1)
+            
+            entry2 = DiaryEntry(
+                user_id=sample_user.id,
+                content="Tuesday entry",
+                rating=1,
+                entry_date=tuesday_date,
+            )
+            db.session.add(entry2)
+            
+            # Create daily stats for all weekdays (chart data)
+            for i in range(7):
+                stats_date = monday_date + timedelta(days=i)
                 stats = DailyStats(
                     user_id=sample_user.id,
-                    date=base_date
-                    - timedelta(
-                        days=(base_date.weekday() - 0) + i * 7
-                    ),  # Monday this week and last week
-                    points=10,
-                    current_streak=1,
-                    longest_streak=1,
-                )
-                db.session.add(stats)
-            # Tuesday (weekday=1)
-            for i in range(2):
-                stats = DailyStats(
-                    user_id=sample_user.id,
-                    date=base_date
-                    - timedelta(
-                        days=(base_date.weekday() - 1) + i * 7
-                    ),  # Tuesday this week and last week
-                    points=10,
-                    current_streak=1,
-                    longest_streak=1,
-                )
-                db.session.add(stats)
-            # One for each other weekday (unique dates)
-            for i in range(2, 7):
-                stats = DailyStats(
-                    user_id=sample_user.id,
-                    date=base_date - timedelta(days=i + 14),  # Ensure unique dates
+                    date=stats_date,
                     points=10,
                     current_streak=1,
                     longest_streak=1,
@@ -276,7 +271,7 @@ class TestProgressHelpers:
 
             weekday_data, has_sufficient = get_weekday_data(sample_user.id)
             assert len(weekday_data) == 7
-            assert has_sufficient is True
+            assert has_sufficient is True  # Should unlock due to diary entries on 2+ weekdays
             # Check that all weekdays are present
             weekday_names = [day["name"] for day in weekday_data]
             expected_names = [
@@ -293,20 +288,30 @@ class TestProgressHelpers:
     def test_get_weekday_data_with_insufficient_data(self, app, sample_user):
         """Test get_weekday_data when user has insufficient data."""
         with app.app_context():
-            # Create stats for only one day
-            stats = DailyStats(
+            # Create diary entry on only one weekday (insufficient for unlock)
+            entry = DiaryEntry(
                 user_id=sample_user.id,
-                date=date.today(),
-                points=10,
-                current_streak=1,
-                longest_streak=1,
+                content="Single entry",
+                rating=1,
+                entry_date=date.today(),
             )
-            db.session.add(stats)
+            db.session.add(entry)
+            
+            # Create stats for multiple days (but chart won't unlock due to diary entries)
+            for i in range(3):
+                stats = DailyStats(
+                    user_id=sample_user.id,
+                    date=date.today() - timedelta(days=i),
+                    points=10,
+                    current_streak=1,
+                    longest_streak=1,
+                )
+                db.session.add(stats)
             db.session.commit()
 
             weekday_data, has_sufficient = get_weekday_data(sample_user.id)
             assert len(weekday_data) == 7
-            assert has_sufficient is False
+            assert has_sufficient is False  # Only 1 unique weekday with diary entries
 
     def test_get_weekday_data_without_data(self, app, sample_user):
         """Test get_weekday_data when user has no data."""
@@ -593,3 +598,45 @@ class TestProgressHelpers:
 
             unique_weekdays = get_unique_weekdays_with_entries(sample_user.id)
             assert unique_weekdays == 7  # All 7 weekdays
+
+    def test_get_weekday_data_points_vs_diary_logic(self, app, sample_user):
+        """Test that chart unlocks based on diary entries, not daily stats."""
+        with app.app_context():
+            # User has only one diary entry
+            entry = DiaryEntry(
+                user_id=sample_user.id,
+                content="Only diary entry",
+                rating=1,
+                entry_date=date.today(),
+            )
+            db.session.add(entry)
+            
+            # But user has daily stats on multiple weekdays (e.g., from login bonuses)
+            base_date = date.today()
+            monday_date = base_date - timedelta(days=base_date.weekday())
+            
+            for i in range(3):  # Monday, Tuesday, Wednesday
+                stats = DailyStats(
+                    user_id=sample_user.id,
+                    date=monday_date + timedelta(days=i),
+                    points=5,  # Points from login bonus or other activities
+                    current_streak=1,
+                    longest_streak=1,
+                )
+                db.session.add(stats)
+            
+            db.session.commit()
+
+            weekday_data, has_sufficient = get_weekday_data(sample_user.id)
+            assert len(weekday_data) == 7
+            # Chart should NOT unlock despite having points on multiple weekdays
+            # because user only has diary entries on 1 weekday
+            assert has_sufficient is False
+            
+            # But the chart data should still show points for those days
+            monday_data = next(d for d in weekday_data if d["name"] == "Monday")
+            tuesday_data = next(d for d in weekday_data if d["name"] == "Tuesday") 
+            wednesday_data = next(d for d in weekday_data if d["name"] == "Wednesday")
+            assert monday_data["avg_points"] == 5.0
+            assert tuesday_data["avg_points"] == 5.0  
+            assert wednesday_data["avg_points"] == 5.0
