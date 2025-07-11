@@ -1,5 +1,145 @@
 # Changelog
 
+## 76f698752134b464f8194b7045ffd5f9babe0422
+**Author**: Peremil
+**Date**: Fri Jul 11 15:59:37 2025 +0200
+**Message**: added tests specifically the JavaScript-HTML integration, DOM element validation, and user interface components like forms, charts, and interactive elements.
+**Summary**: Major template reorganization moving files into categorized subdirectories, reorganized static assets, and added comprehensive frontend testing suite including `tests/test_frontend_regression.py`, `tests/test_html_structure.py`, `tests/test_template_integration.py`, and `tests/test_routes/test_goals.py`.
+**Detailed Description**: This commit represents a significant architectural improvement with two main components. First, it reorganizes the entire template and static file structure by moving templates into categorized subdirectories (auth/, diary/, goals/, main/, etc.) and reorganizing static assets similarly. This improves code organization and maintainability. Second, it introduces a comprehensive frontend testing strategy with over 1,500 lines of new test code covering JavaScript-HTML integration, DOM element validation, template rendering, and user interface components. The testing suite includes regression tests, HTML structure validation, template integration tests, and comprehensive goal functionality testing. This change significantly enhances code quality and ensures UI consistency across the application.
+
+## 2e2a9a51e2696b2329d0e4e10396654de9418975
+**Author**: Peremil
+**Date**: Thu Jul 10 12:40:59 2025 +0200
+**Message**: fix: Correct weekday chart unlock logic to require diary entries
+**Summary**: Modified `app/utils/progress_helpers.py` and `tests/test_utils/test_progress_helpers.py`.
+**Detailed Description**: This commit fixes a logic issue in the weekday insights chart where the unlock condition was based on daily stats rather than actual diary entries. The chart now properly unlocks when users have diary entries on 2 or more different weekdays, which aligns better with the application's core functionality of diary writing. This change ensures that users who write diary entries but may not have accumulated daily stats (due to system changes or data migration) can still access the weekday insights feature. The fix maintains comprehensive point data display once unlocked and includes thorough testing for edge cases.
+
+## 1f96ba2e66705ddb5628f441645322b2a35ef748
+**Author**: Peremil
+**Date**: Thu Jul 10 12:23:29 2025 +0200
+**Message**: fix: Fix weekday insights progress tracking
+**Summary**: Modified `app/routes/progress.py`, `app/templates/progress.html`, `app/utils/progress_helpers.py`, and `tests/test_utils/test_progress_helpers.py`.
+**Detailed Description**: This commit addresses an issue where the weekday insights feature showed a hardcoded "0/2 days completed" message regardless of actual user progress. The fix introduces a new helper function `get_unique_weekdays_with_entries()` that accurately counts how many different weekdays have diary entries, and updates the progress template to display dynamic progress like "1/2 days completed". The change also relaxes the requirement from 2+ entries per day to 1+ entry per day, making the feature more accessible to users. Comprehensive tests ensure the function works correctly across all scenarios, improving the user experience by providing accurate progress feedback.
+
+## 54bf8f2fef5b8d8e953a8fe8318e8af434a5dcf1
+**Author**: Peremil
+**Date**: Thu Jul 10 11:57:06 2025 +0200
+**Message**: reordered the progress page
+**Summary**: Modified `app/templates/progress.html`.
+**Detailed Description**: This commit reorganizes the layout of the progress page to improve user experience and information hierarchy. The sections were reordered to create a more logical flow, likely moving the most important or frequently accessed information to more prominent positions on the page. This type of UX improvement helps users find key information more efficiently and creates a better overall experience when reviewing their progress and statistics.
+
+## a13278b4e2ded17aeda7bdc9f26bf5730c9f86b9
+**Author**: Peremil
+**Date**: Thu Jul 10 11:50:26 2025 +0200
+**Message**: feat: Add post-submission UI to diary
+**Summary**: Modified `app/routes/diary.py` and `app/templates/diary.html`.
+**Detailed Description**: This commit enhances the user experience by adding a post-submission success interface to the diary entry page. After users submit a diary entry, they now see a confirmation message or updated UI state that acknowledges their submission. This improvement provides immediate feedback to users, confirming that their diary entry was successfully saved to the database. The feature helps users understand that their action was completed successfully and improves the overall user experience by providing clear interaction feedback.
+
+## 3a16ccd2686adfdaf590cbfd41229834f93d76c3
+**Author**: Peremil
+**Date**: Thu Jul 10 11:43:12 2025 +0200
+**Message**: feat: Add rating filter to diary search
+**Summary**: Modified `app/templates/read_diary.html`.
+**Detailed Description**: This commit adds filtering capability to the diary reading interface, allowing users to filter their diary entries by rating (positive behaviors vs. behaviors to change). This feature enhances the diary search functionality by enabling users to focus on specific types of entries based on their behavioral ratings. Users can now easily review all their positive behaviors or areas for improvement separately, making the diary more useful for self-reflection and progress tracking. This aligns with the application's core mission of behavioral self-improvement and goal tracking.
+
+## 269ff06835f8a670262909001d4e15a5e3a772e0
+**Author**: Peremil
+**Date**: Thu Jul 10 11:29:54 2025 +0200
+**Message**: Merge branch 'feature/onboarding-tour' into main
+**Summary**: Merged the onboarding tour feature branch with extensive changes including tour controller, CSS, and template modifications.
+**Detailed Description**: This commit merges the completed onboarding tour feature into the main branch. The merge brings together all the components of an interactive user onboarding system, including the tour controller JavaScript, custom CSS styling, and template modifications across multiple pages. This represents the completion of a significant feature that helps new users understand and navigate the application effectively. The onboarding tour likely guides users through key features like writing diary entries, setting goals, and viewing progress, improving user adoption and engagement.
+
+## c0635013f8b9fa28a995c4dfd793eb00948d6a31
+**Author**: Peremil
+**Date**: Thu Jul 10 10:36:46 2025 +0200
+**Message**: changed two tests to assert correct card text
+**Summary**: Modified `tests/test_routes/test_progress.py`.
+**Detailed Description**: This commit fixes test assertions to match the actual text content displayed in the progress page cards. This type of change typically occurs when the UI text has been updated but the corresponding tests weren't updated to match. By correcting these test assertions, the commit ensures that the test suite accurately validates the current user interface text, maintaining test reliability and preventing false failures. This demonstrates good testing hygiene and ensures the test suite remains accurate and useful for catching real issues.
+
+## d749fa035943b2b1abe3d1ea0c432bdb5fec7235
+**Author**: Peremil
+**Date**: Thu Jul 10 10:12:43 2025 +0200
+**Message**: added onboarding tour
+**Summary**: Modified multiple files including `app/static/css/tour.css`, `app/static/js/tour/tour-controller.js`, templates across multiple pages, and updated SPMP documentation.
+**Detailed Description**: This commit implements the core onboarding tour functionality, creating an interactive guide system for new users. The tour system includes custom CSS for visual styling, a comprehensive JavaScript tour controller that manages the tour flow across different pages, and template modifications to support tour integration. The tour helps new users understand the application's key features and how to use them effectively. This is a significant user experience enhancement that reduces the learning curve for new users and increases user engagement by providing guided discovery of the application's features. The tour likely covers diary writing, goal setting, and progress tracking workflows.
+
+## 15899971b43da2479cee81e6557917bd30c67d0d
+**Author**: Peremil
+**Date**: Thu Jul 10 07:54:00 2025 +0200
+**Message**: added claude files in all subdirectories
+**Summary**: Added 20 CLAUDE.md documentation files across all major subdirectories of the application.
+**Detailed Description**: This commit creates comprehensive documentation for AI-assisted development by adding CLAUDE.md files throughout the codebase. Each subdirectory now contains detailed documentation explaining its purpose, structure, and key components. This includes documentation for models (database schema), routes (API endpoints), static assets (frontend resources), templates (UI components), utilities (helper functions), tests (testing strategy), and migrations (database changes). These documentation files serve as a knowledge base for AI assistants working on the codebase, providing context about each component's role and implementation patterns. This documentation strategy significantly improves code maintainability and helps maintain consistency in AI-assisted development.
+
+## 4c557d92a65827448e1f07f8dbe5d1d00df4331d
+**Author**: Peremil
+**Date**: Wed Jul 9 20:36:55 2025 +0200
+**Message**: amll about page change
+**Summary**: Modified `app/templates/about.html`.
+**Detailed Description**: This commit makes a small textual adjustment to the about page content. While the specific change is minor, it demonstrates ongoing refinement of the user-facing content to improve clarity, accuracy, or presentation. These types of incremental content improvements help ensure the application provides clear and accurate information to users about its purpose and functionality.
+
+## 3990a36a1ef4f1e9e0420d73c8958e392905a2ac
+**Author**: Peremil
+**Date**: Wed Jul 9 20:31:37 2025 +0200
+**Message**: small change in about
+**Summary**: Modified `app/templates/about.html`.
+**Detailed Description**: Another minor content update to the about page, continuing the refinement of user-facing information. This type of iterative improvement shows attention to detail in ensuring the application presents clear and polished information to users about its features and purpose.
+
+## 86af893f5e85a128b18173ef6f4f3973b0cf06a1
+**Author**: Peremil
+**Date**: Wed Jul 9 20:29:21 2025 +0200
+**Message**: added about page
+**Summary**: Modified `app/routes/main.py`, `app/templates/_navbar.html`, `app/templates/about.html`, and `app/templates/index.html`.
+**Detailed Description**: This commit introduces a new about page to the application, providing users with information about the application's purpose, features, and functionality. The implementation includes creating the new about page template, adding the corresponding route in the main blueprint, and updating the navigation bar to include a link to the about page. This enhancement improves user experience by providing clear information about what the application does and how users can benefit from it. The about page likely explains the self-reflection and goal-tracking features, helping users understand the application's value proposition.
+
+## c8a95c546cf1095ffb405fd7489dd7eff4ab6984
+**Author**: Peremil
+**Date**: Wed Jul 9 20:17:21 2025 +0200
+**Message**: updated readme
+**Summary**: Modified `README.md`.
+**Detailed Description**: This commit updates the project's README file to improve documentation quality and project presentation. README updates typically include clearer setup instructions, updated feature descriptions, improved formatting, or corrections to outdated information. A well-maintained README is crucial for project understanding, onboarding new developers, and providing clear guidance for installation and usage. This update likely improves the overall documentation quality and makes the project more accessible to new contributors or users.
+
+## 0c1da2cbec0d09569d6cabd15e515aa85107dccf
+**Author**: Peremil
+**Date**: Wed Jul 9 18:38:37 2025 +0200
+**Message**: Implement interactive onboarding tour for new users
+**Summary**: Added comprehensive onboarding tour system with `app/static/css/tour.css`, `app/static/js/tour/tour-controller.js`, template modifications, and supporting documentation.
+**Detailed Description**: This commit introduces a sophisticated 3-phase cosmic-themed onboarding tour designed to welcome and guide new users through the application. The tour system includes a welcome modal, interactive first entry guidance, and progress discovery features. It uses localStorage for tour completion tracking and sessionStorage for cross-page state management, ensuring the tour only appears for new users with zero diary entries. The implementation includes responsive design with accessibility features, reduced motion support for users with accessibility needs, and a "Take Tour Again" option in the navigation bar. The tour celebrates completion with animations and provides a comprehensive introduction to diary writing, goal setting, and progress tracking. All 120 tests pass, confirming the tour doesn't interfere with existing functionality.
+
+## 3d9bdefa5c71ddb2ad26395cd4453ff789e7dc86
+**Author**: Peremil
+**Date**: Wed Jul 9 18:08:26 2025 +0200
+**Message**: Fix: Implement clickable behavior cards on progress page
+**Summary**: Modified `app/routes/reader.py`, `app/static/css/progress.css`, `app/templates/diary.html`, and `app/templates/progress.html`.
+**Detailed Description**: This commit enhances user interaction by making the "Opportunities for Growth" and "Positive Behaviors" cards clickable on the progress page. When clicked, these cards redirect users to the diary reader with appropriate rating filters (rating=-1 for behaviors to change, rating=1 for positive behaviors). The implementation adds onclick handlers and enhanced CSS hover effects to indicate the cards are interactive. The solution uses URL parameters rather than dedicated routes, providing a clean and efficient approach. Updated tooltips inform users about the clickable functionality, and all tests pass confirming the feature works correctly. This improvement makes it easier for users to quickly access specific types of diary entries from the progress dashboard.
+
+## e29801f7bdb3c1aaee6863ab0ae6ef2181a6911e
+**Author**: Peremil
+**Date**: Wed Jul 9 17:59:21 2025 +0200
+**Message**: Add clickable behavior categories feature
+**Summary**: Modified `app/routes/reader.py`, `app/templates/diary.html`, `app/utils/search_helpers.py`, and added new documentation.
+**Detailed Description**: This commit implements a new feature that allows users to click on behavior category links directly from the diary entry page. The implementation modifies the search helpers to accept an optional rating parameter for filtering diary entries by behavior type. New routes `/diary-entries/keep-doing` and `/diary-entries/change-this` provide behavior-specific filtering capabilities. The diary template is enhanced with clickable links under the behavior rating buttons, making it easy for users to quickly review all entries of a specific type. The existing search functionality is enhanced to support rating-based filtering via URL parameters, maintaining backward compatibility while adding new functionality. This feature improves user experience by providing quick access to categorized diary entries, supporting better self-reflection and progress tracking.
+
+## 40e8c7fc2804bb2addc6b2b168fc58ec2743d69f
+**Author**: Peremil
+**Date**: Wed Jul 9 13:53:56 2025 +0200
+**Message**: updated code style
+**Summary**: Comprehensive code style refactoring across 42 files throughout the entire application including models, routes, templates, tests, and configuration.
+**Detailed Description**: This commit represents a major code quality improvement initiative, applying consistent coding standards across the entire codebase. The refactoring touches every major component of the application including the Flask app initialization, configuration management, form definitions, database models, route handlers, utility functions, and the complete test suite. The changes include improved type hints, better variable naming, consistent formatting, enhanced docstrings, and adherence to Python best practices. A new `pyproject.toml` file is added to define project configuration and dependencies. This extensive refactoring significantly improves code maintainability, readability, and consistency, making the codebase more professional and easier to work with. The changes maintain all existing functionality while establishing a solid foundation for future development.
+
+## 3112d1209619210be9d3a794b5307174b7460d62
+**Author**: Peremil
+**Date**: Wed Jul 9 13:03:06 2025 +0200
+**Message**: refactored database
+**Summary**: Modified database models and created a new migration `033faf89f4e5_rename_tables_to_snake_case_plural.py` along with updating related files.
+**Detailed Description**: This commit implements a significant database schema refactoring by renaming all tables to follow snake_case plural naming conventions. The database tables are renamed from their previous format to `users`, `diary_entries`, `daily_stats`, and `goals`, providing better consistency with Python and Flask naming conventions. A comprehensive migration script handles the table renaming process, ensuring data integrity during the transition. The refactoring also includes updates to all model files to reflect the new table names and maintains all existing relationships and constraints. This change improves database schema consistency and follows industry best practices for naming conventions. The database backup created during this process ensures data safety during the migration.
+
+## c32d84979a327507f08f417a457cc188db32edbf
+**Author**: Peremil
+**Date**: Wed Jul 9 11:00:35 2025 +0200
+**Message**: added features to SPMP and updated the tab name
+**Summary**: Modified `SPMP_250701.md` and `app/templates/base.html`.
+**Detailed Description**: This commit updates the Software Project Management Plan (SPMP) documentation to reflect newly completed features and ongoing development progress. The SPMP is updated to track the current state of development milestones and feature implementation. Additionally, the browser tab title is updated in the base template to better reflect the application's current branding or functionality. These changes help maintain accurate project documentation and improve the user experience with a more descriptive browser tab title that helps users identify the application when multiple tabs are open.
+
 ## 8319e11123b9b2a3dff6e717a61bae57049e40cd
 **Author**: Peremil
 **Date**: Sun Jul 6 20:27:22 2025 +0200

@@ -70,7 +70,7 @@ def handle_search(
         )
 
     return render_template(
-        "read_diary.html",
+        "reader/read_diary.html",
         display_name=display_name,
         diary_dates=diary_dates,
         search_results=result_data,
