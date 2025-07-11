@@ -183,7 +183,12 @@
             {% endif %}
             {% if primary_goal %}
             <div class="col-md-6 mb-4">
-                <div class="sci-fi-card current-goal">
+                <div class="sci-fi-card current-goal"
+                     {% if primary_goal.description %}
+                     data-bs-toggle="tooltip" 
+                     data-bs-placement="top" 
+                     title="{{ primary_goal.description }}"
+                     {% endif %}>
                     <div class="card-glow"></div>
                     <div class="card-content">
                         <div class="card-icon">

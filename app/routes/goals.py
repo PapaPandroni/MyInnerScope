@@ -25,6 +25,7 @@ from ..utils.goal_helpers import (
     get_predefined_goals,
 )
 from ..utils.progress_helpers import get_recent_entries
+from ..utils.points_service import award_goal_completion_points, award_goal_failure_points
 from ..forms import GoalForm, GoalProgressForm
 from datetime import date
 
@@ -218,16 +219,11 @@ def mark_goal_complete(goal_id: int) -> Tuple[str, int]:
         goal = complete_goal(goal_id)
 
         if goal:
-            # Award 10 points for completed goal
-            today = date.today()
-            stats = DailyStats.query.filter_by(user_id=user_id, date=today).first()
-            if not stats:
-                stats = DailyStats(user_id=user_id, date=today, points=0)
-                db.session.add(stats)
-            stats.points += 10
-            db.session.commit()
+            # Award 10 points for completed goal through points service
+            award_goal_completion_points(user_id, goal.id, goal.title)
+            description_text = f" - {goal.description}" if goal.description else ""
             flash(
-                f'Congratulations! You completed your goal: "{goal.title}"', "success"
+                f'Congratulations! You completed your goal: "{goal.title}"{description_text}', "success"
             )
             # Re-render the page with a 200 OK status for success
             user_id = session["user_id"]
@@ -315,15 +311,10 @@ def mark_goal_failed(goal_id: int) -> Tuple[str, int]:
         user_id = session["user_id"]
         goal = fail_goal(goal_id)
         if goal:
-            # Award 1 point for failed goal
-            today = date.today()
-            stats = DailyStats.query.filter_by(user_id=user_id, date=today).first()
-            if not stats:
-                stats = DailyStats(user_id=user_id, date=today, points=0)
-                db.session.add(stats)
-            stats.points += 1
-            db.session.commit()
-            flash(f'Goal marked as failed: "{goal.title}"', "warning")
+            # Award 1 point for failed goal through points service
+            award_goal_failure_points(user_id, goal.id, goal.title)
+            description_text = f" - {goal.description}" if goal.description else ""
+            flash(f'Goal marked as failed: "{goal.title}"{description_text}', "warning")
             # Re-render the page with a 200 OK status for success
             user_id = session["user_id"]
             current_goals = get_current_goals(user_id)

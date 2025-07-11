@@ -535,4 +535,175 @@
 .sci-fi-card.no-goal .card-text {
     color: #a0aec0;
     margin-bottom: 1rem;
+}
+
+/* Points Breakdown Modal Styling */
+.modal-content.points-breakdown {
+    background: linear-gradient(145deg, #1a1a2e 0%, #16213e 50%, #0f1027 100%);
+    border: 2px solid #4a9eff;
+    border-radius: 15px;
+    box-shadow: 
+        0 0 30px rgba(74, 158, 255, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.modal-content.points-breakdown::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 20% 20%, rgba(74, 158, 255, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.modal-header.points-breakdown {
+    background: linear-gradient(135deg, #4a9eff 0%, #667eea 100%);
+    border-bottom: 1px solid rgba(74, 158, 255, 0.3);
+    border-radius: 13px 13px 0 0;
+    color: white;
+    padding: 1.5rem;
+    position: relative;
+}
+
+.modal-header.points-breakdown .modal-title {
+    font-weight: 600;
+    font-size: 1.3rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.modal-header.points-breakdown .modal-title::before {
+    content: '⭐';
+    font-size: 1.5rem;
+    animation: sparkle 2s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.1) rotate(180deg); }
+}
+
+.modal-header.points-breakdown .btn-close {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+    filter: brightness(0) invert(1);
+}
+
+.modal-header.points-breakdown .btn-close:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.modal-body.points-breakdown {
+    background: transparent;
+    color: #e0e6ed;
+    padding: 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.modal-body.points-breakdown .list-group {
+    background: transparent;
+    border: none;
+}
+
+.modal-body.points-breakdown .list-group-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.75rem;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+    border: 1px solid rgba(74, 158, 255, 0.2);
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    color: #e0e6ed;
+}
+
+.modal-body.points-breakdown .list-group-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(74, 158, 255, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.modal-body.points-breakdown .list-group-item:hover {
+    transform: translateY(-2px);
+    border-color: rgba(74, 158, 255, 0.4);
+    box-shadow: 0 4px 15px rgba(74, 158, 255, 0.2);
+}
+
+.modal-body.points-breakdown .list-group-item:hover::before {
+    left: 100%;
+}
+
+.modal-body.points-breakdown .badge {
+    background: linear-gradient(135deg, #4a9eff 0%, #667eea 100%) !important;
+    color: white;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 8px rgba(74, 158, 255, 0.3);
+    min-width: 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.modal-body.points-breakdown .badge::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.3s ease;
+}
+
+.modal-body.points-breakdown .badge:hover::before {
+    left: 100%;
+}
+
+.modal-footer.points-breakdown {
+    background: transparent;
+    border-top: 1px solid rgba(74, 158, 255, 0.2);
+    padding: 1rem 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.modal-footer.points-breakdown .btn {
+    background: linear-gradient(135deg, #4a9eff 0%, #667eea 100%);
+    border: none;
+    color: white;
+    padding: 0.6rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(74, 158, 255, 0.3);
+}
+
+.modal-footer.points-breakdown .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(74, 158, 255, 0.4);
 } 

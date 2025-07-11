@@ -4,6 +4,7 @@ from werkzeug.wrappers import Response as WerkzeugResponse
 from datetime import date, timedelta
 from ..models import User, DiaryEntry, DailyStats, db
 from ..utils.progress_helpers import get_recent_entries
+from ..utils.points_service import award_diary_points
 from ..forms import DiaryEntryForm
 
 diary_bp = Blueprint("diary", __name__)
@@ -27,53 +28,16 @@ def diary_entry() -> Union[str, tuple[str, int], WerkzeugResponse]:
     if form.validate_on_submit():
         content = form.content.data
         rating = form.rating.data
-        today = date.today()
 
-        stats = DailyStats.query.filter_by(user_id=user_id, date=today).first()
-
-        if stats is None:
-            yesterday = today - timedelta(days=1)
-            yesterdays_stats = DailyStats.query.filter_by(
-                user_id=user_id, date=yesterday
-            ).first()
-
-            new_streak = 1
-            if yesterdays_stats and yesterdays_stats.current_streak > 0:
-                new_streak = yesterdays_stats.current_streak + 1
-
-            stats = DailyStats(
-                user_id=user_id, date=today, current_streak=new_streak, points=0
-            )
-
-            longest = (
-                DailyStats.query.filter_by(user_id=user_id)
-                .order_by(DailyStats.longest_streak.desc())
-                .first()
-            )
-            stats.longest_streak = longest.longest_streak if longest else new_streak
-            if new_streak > stats.longest_streak:
-                stats.longest_streak = new_streak
-
-            db.session.add(stats)
-
-        elif stats.current_streak == 0:
-            yesterday = today - timedelta(days=1)
-            yesterdays_stats = DailyStats.query.filter_by(
-                user_id=user_id, date=yesterday
-            ).first()
-
-            if yesterdays_stats and yesterdays_stats.current_streak > 0:
-                stats.current_streak = yesterdays_stats.current_streak + 1
-            else:
-                stats.current_streak = 1
-
-            if stats.current_streak > stats.longest_streak:
-                stats.longest_streak = stats.current_streak
-
-        stats.points += 5 if rating == 1 else 2
-
+        # Create diary entry first
         new_entry = DiaryEntry(user_id=user_id, content=content, rating=rating)
         db.session.add(new_entry)
+        db.session.flush()  # Flush to get the ID for points service
+
+        # Award points through the points service (this will also update DailyStats)
+        award_diary_points(user_id, new_entry.id, rating)
+
+        # Commit all changes
         db.session.commit()
 
         # Clear the form for the next entry

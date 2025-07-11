@@ -75,8 +75,29 @@ document.addEventListener('DOMContentLoaded', function() {
                         modal_body.innerHTML = content;
                     }
 
-                    const modal = new bootstrap.Modal(document.getElementById('genericModal'));
+                    // Apply cosmic styling to modal
+                    const modal_element = document.getElementById('genericModal');
+                    const modal_content = modal_element.querySelector('.modal-content');
+                    const modal_header = modal_element.querySelector('.modal-header');
+                    const modal_body_elem = modal_element.querySelector('.modal-body');
+                    const modal_footer = modal_element.querySelector('.modal-footer');
+                    
+                    // Add cosmic styling classes
+                    modal_content.classList.add('points-breakdown');
+                    modal_header.classList.add('points-breakdown');
+                    modal_body_elem.classList.add('points-breakdown');
+                    modal_footer.classList.add('points-breakdown');
+
+                    const modal = new bootstrap.Modal(modal_element);
                     modal.show();
+                    
+                    // Remove classes when modal is hidden
+                    modal_element.addEventListener('hidden.bs.modal', function() {
+                        modal_content.classList.remove('points-breakdown');
+                        modal_header.classList.remove('points-breakdown');
+                        modal_body_elem.classList.remove('points-breakdown');
+                        modal_footer.classList.remove('points-breakdown');
+                    }, { once: true });
                 })
                 .catch(error => {
                     console.error('Error fetching points breakdown:', error);
