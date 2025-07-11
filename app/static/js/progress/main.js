@@ -52,6 +52,41 @@ class ProgressPage {
 // Initialize the page when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     window.progress_page = new ProgressPage();
+
+    const points_today_card = document.getElementById('points_today_card');
+    if (points_today_card) {
+        points_today_card.addEventListener('click', function() {
+            fetch('/api/points-breakdown')
+                .then(response => response.json())
+                .then(data => {
+                    const modal_title = document.getElementById('genericModalLabel');
+                    const modal_body = document.getElementById('genericModalBody');
+                    
+                    modal_title.textContent = "Today's Points Breakdown";
+                    
+                    if (data.length === 0) {
+                        modal_body.innerHTML = '<p>No points earned yet today. Go complete a goal or write a diary entry!</p>';
+                    } else {
+                        let content = '<ul class="list-group">';
+                        data.forEach(item => {
+                            content += `<li class="list-group-item d-flex justify-content-between align-items-center">${item.source}<span class="badge bg-primary rounded-pill">${item.points}</span></li>`;
+                        });
+                        content += '</ul>';
+                        modal_body.innerHTML = content;
+                    }
+
+                    const modal = new bootstrap.Modal(document.getElementById('genericModal'));
+                    modal.show();
+                })
+                .catch(error => {
+                    console.error('Error fetching points breakdown:', error);
+                    const modal_body = document.getElementById('genericModalBody');
+                    modal_body.innerHTML = '<p>Could not load points breakdown. Please try again later.</p>';
+                    const modal = new bootstrap.Modal(document.getElementById('genericModal'));
+                    modal.show();
+                });
+        });
+    }
 });
 
 // Word Cloud rendering

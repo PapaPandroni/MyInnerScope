@@ -6,6 +6,7 @@ from .goals import goals_bp
 from .legal import legal_bp
 from .user import user_bp
 from .main import main_bp
+from .api import api_bp
 
 
 def register_blueprints(app):
@@ -18,6 +19,7 @@ def register_blueprints(app):
     app.register_blueprint(goals_bp)
     app.register_blueprint(legal_bp)
     app.register_blueprint(user_bp)
+    app.register_blueprint(api_bp)
 
     # Apply rate limiting to blueprints
     limiter = getattr(app, "limiter", None)
