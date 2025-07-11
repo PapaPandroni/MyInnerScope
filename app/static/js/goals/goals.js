@@ -1,55 +1,55 @@
 // Goals Page JavaScript
 document.addEventListener('DOMContentLoaded', function() {
-    const categorySelect = document.getElementById('category');
-    const titleInput = document.getElementById('title');
-    const suggestionsContainer = document.getElementById('suggestions');
-    const suggestionsList = document.getElementById('suggestions-list');
+    const category_select = document.getElementById('category');
+    const title_input = document.getElementById('title');
+    const suggestions_container = document.getElementById('suggestions');
+    const suggestions_list = document.getElementById('suggestions_list');
     
     // Goal suggestions functionality
-    if (categorySelect && titleInput) {
-        categorySelect.addEventListener('change', function() {
-            const selectedCategory = this.value;
-            if (selectedCategory) {
+    if (category_select && title_input) {
+        category_select.addEventListener('change', function() {
+            const selected_category = this.value;
+            if (selected_category) {
                 // Get CSRF token from meta tag
-                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                const csrf_token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
                 
-                fetch(`/api/goals/suggestions/${encodeURIComponent(selectedCategory)}`, {
+                fetch(`/api/goals/suggestions/${encodeURIComponent(selected_category)}`, {
                     headers: {
-                        'X-CSRFToken': csrfToken
+                        'X-CSRFToken': csrf_token
                     }
                 })
                     .then(response => response.json())
                     .then(data => {
                         if (data.suggestions && data.suggestions.length > 0) {
-                            suggestionsList.innerHTML = '';
+                            suggestions_list.innerHTML = '';
                             data.suggestions.forEach(suggestion => {
                                 const item = document.createElement('div');
-                                item.className = 'suggestion-item';
+                                item.className = 'suggestion_item';
                                 item.textContent = suggestion;
                                 item.addEventListener('click', function() {
-                                    titleInput.value = suggestion;
-                                    suggestionsContainer.style.display = 'none';
+                                    title_input.value = suggestion;
+                                    suggestions_container.style.display = 'none';
                                 });
-                                suggestionsList.appendChild(item);
+                                suggestions_list.appendChild(item);
                             });
-                            suggestionsContainer.style.display = 'block';
+                            suggestions_container.style.display = 'block';
                         } else {
-                            suggestionsContainer.style.display = 'none';
+                            suggestions_container.style.display = 'none';
                         }
                     })
                     .catch(error => {
                         console.error('Error fetching suggestions:', error);
-                        suggestionsContainer.style.display = 'none';
+                        suggestions_container.style.display = 'none';
                     });
             } else {
-                suggestionsContainer.style.display = 'none';
+                suggestions_container.style.display = 'none';
             }
         });
         
         // Hide suggestions when clicking outside
         document.addEventListener('click', function(e) {
-            if (!suggestionsContainer.contains(e.target) && e.target !== categorySelect) {
-                suggestionsContainer.style.display = 'none';
+            if (!suggestions_container.contains(e.target) && e.target !== category_select) {
+                suggestions_container.style.display = 'none';
             }
         });
     }
@@ -172,9 +172,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Toggle extra goals in Recent Goals section
-    window.toggleExtraGoals = function() {
+    window.toggle_extra_goals = function() {
         const extraGoals = document.querySelectorAll('.extra-goal');
-        const btn = document.getElementById('show-more-goals-btn');
+        const btn = document.getElementById('show_more_goals_btn');
         let expanded = false;
         extraGoals.forEach(goal => {
             if (goal.classList.contains('d-none')) {

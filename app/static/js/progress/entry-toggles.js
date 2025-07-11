@@ -3,9 +3,9 @@
  * Handles expanding/collapsing diary entries in the top days section
  */
 
-function toggleEntry(entryId) {
-    const preview = document.getElementById('preview-' + entryId);
-    const full = document.getElementById('full-' + entryId);
+function toggle_entry(entry_id) {
+    const preview = document.getElementById('preview_' + entry_id);
+    const full = document.getElementById('full_' + entry_id);
     
     if (preview.classList.contains('d-none')) {
         preview.classList.remove('d-none');
@@ -17,4 +17,4 @@ function toggleEntry(entryId) {
 }
 
 // Make function globally available
-window.toggleEntry = toggleEntry; 
+window.toggle_entry = toggle_entry; 

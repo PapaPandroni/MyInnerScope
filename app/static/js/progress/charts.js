@@ -5,21 +5,21 @@
 
 class ProgressCharts {
     constructor() {
-        this.pointsChart = null;
-        this.weekdayChart = null;
-        this.goalCategoryChart = null;
+        this.points_chart = null;
+        this.weekday_chart = null;
+        this.goal_category_chart = null;
         this.init();
     }
 
     init() {
-        this.initPointsChart();
-        this.initWeekdayChart();
-        this.initGoalCategoryChart();
+        this.init_points_chart();
+        this.init_weekday_chart();
+        this.init_goal_category_chart();
     }
 
-    initPointsChart() {
-        const pointsData = window.progressData.pointsData;
-        const dataPoints = pointsData.map(item => ({
+    init_points_chart() {
+        const points_data = window.progress_data.points_data;
+        const data_points = points_data.map(item => ({
             x: item[0],  // "YYYY-MM-DD"
             y: item[1]
         }));
@@ -27,12 +27,12 @@ class ProgressCharts {
         const ctx = document.getElementById('pointsChart').getContext('2d');
         Chart.register(ChartZoom);
 
-        this.pointsChart = new Chart(ctx, {
+        this.points_chart = new Chart(ctx, {
             type: 'line',
             data: { 
                 datasets: [{ 
                     label: 'Points Earned', 
-                    data: dataPoints, 
+                    data: data_points, 
                     borderColor: 'teal', 
                     tension: 0.1 
                 }] 
@@ -85,29 +85,29 @@ class ProgressCharts {
         });
     }
 
-    initWeekdayChart() {
-        const weekdayConfig = window.progressData.weekdayConfig;
-        const weekdayData = weekdayConfig.weekdayData;
-        const hasSufficientWeekdayData = weekdayConfig.hasSufficientWeekdayData;
-        const sampleWeekdayData = weekdayConfig.sampleWeekdayData;
+    init_weekday_chart() {
+        const weekday_config = window.progress_data.weekday_config;
+        const weekday_data = weekday_config.weekday_data;
+        const has_sufficient_weekday_data = weekday_config.has_sufficient_weekday_data;
+        const sample_weekday_data = weekday_config.sample_weekday_data;
 
         // Always show sample data in background, real data if available
-        const displayData = hasSufficientWeekdayData ? weekdayData : sampleWeekdayData;
+        const display_data = has_sufficient_weekday_data ? weekday_data : sample_weekday_data;
 
-        const weekdayLabels = displayData.map(item => item.name);
-        const weekdayPoints = displayData.map(item => item.avg_points);
+        const weekday_labels = display_data.map(item => item.name);
+        const weekday_points = display_data.map(item => item.avg_points);
 
         // Create the weekday bar chart
         const weekdayCtx = document.getElementById('weekdayChart').getContext('2d');
-        this.weekdayChart = new Chart(weekdayCtx, {
+        this.weekday_chart = new Chart(weekdayCtx, {
             type: 'bar',
             data: {
-                labels: weekdayLabels,
+                labels: weekday_labels,
                 datasets: [{
                     label: 'Average Points',
-                    data: weekdayPoints,
-                    backgroundColor: hasSufficientWeekdayData ? 'rgba(0, 212, 255, 0.6)' : 'rgba(0, 212, 255, 0.2)',
-                    borderColor: hasSufficientWeekdayData ? '#00d4ff' : 'rgba(0, 212, 255, 0.3)',
+                    data: weekday_points,
+                    backgroundColor: has_sufficient_weekday_data ? 'rgba(0, 212, 255, 0.6)' : 'rgba(0, 212, 255, 0.2)',
+                    borderColor: has_sufficient_weekday_data ? '#00d4ff' : 'rgba(0, 212, 255, 0.3)',
                     borderWidth: 1
                 }]
             },
@@ -152,40 +152,40 @@ class ProgressCharts {
         });
 
         // Apply visual effects for insufficient data
-        if (!hasSufficientWeekdayData) {
+        if (!has_sufficient_weekday_data) {
             // The overlay will handle the visual blocking, chart stays visible but dimmed
-            this.weekdayChart.canvas.style.opacity = '0.3';
-            this.weekdayChart.canvas.style.pointerEvents = 'none';
+            this.weekday_chart.canvas.style.opacity = '0.3';
+            this.weekday_chart.canvas.style.pointerEvents = 'none';
         }
     }
 
-    initGoalCategoryChart() {
-        const goalStatsData = window.progressData.goalStatsData;
-        if (!goalStatsData || !goalStatsData.has_stats) {
+    init_goal_category_chart() {
+        const goal_stats_data = window.progress_data.goal_stats_data;
+        if (!goal_stats_data || !goal_stats_data.has_stats) {
             return;
         }
 
-        const categoryStats = goalStatsData.category_stats;
-        const labels = Object.keys(categoryStats);
-        const completedData = labels.map(label => categoryStats[label].completed);
-        const failedData = labels.map(label => categoryStats[label].failed);
+        const category_stats = goal_stats_data.category_stats;
+        const labels = Object.keys(category_stats);
+        const completed_data = labels.map(label => category_stats[label].completed);
+        const failed_data = labels.map(label => category_stats[label].failed);
 
         const ctx = document.getElementById('goalCategoryChart').getContext('2d');
-        this.goalCategoryChart = new Chart(ctx, {
+        this.goal_category_chart = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: labels,
                 datasets: [
                     {
                         label: 'Completed',
-                        data: completedData,
+                        data: completed_data,
                         backgroundColor: 'rgba(0, 255, 127, 0.6)',
                         borderColor: '#00ff7f',
                         borderWidth: 1
                     },
                     {
                         label: 'Not Completed',
-                        data: failedData,
+                        data: failed_data,
                         backgroundColor: 'rgba(255, 99, 132, 0.6)',
                         borderColor: '#ff6384',
                         borderWidth: 1

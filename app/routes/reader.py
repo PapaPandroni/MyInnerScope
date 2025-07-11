@@ -42,7 +42,7 @@ def read_diary() -> Union[str, WerkzeugResponse]:
         is_new_user = len(recent_entries) == 0
         
         return render_template(
-            "read_diary.html", display_name=display_name, no_entries=True, is_new_user=is_new_user
+            "reader/read_diary.html", display_name=display_name, no_entries=True, is_new_user=is_new_user
         )
 
     # Check for search parameters
@@ -77,7 +77,7 @@ def read_diary() -> Union[str, WerkzeugResponse]:
         is_new_user = len(recent_entries) == 0
         
         return render_template(
-            "read_diary.html",
+            "reader/read_diary.html",
             display_name=display_name,
             first_entry_date=first_entry_date,
             show_front_page=True,
@@ -132,7 +132,7 @@ def read_diary() -> Union[str, WerkzeugResponse]:
     is_new_user = len(recent_entries) == 0
     
     return render_template(
-        "read_diary.html",
+        "reader/read_diary.html",
         display_name=display_name,
         entries=entries,
         current_date=current_date,

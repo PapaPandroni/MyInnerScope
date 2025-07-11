@@ -83,7 +83,7 @@ def diary_entry() -> Union[str, tuple[str, int], WerkzeugResponse]:
         is_new_user = len(recent_entries) == 0
 
         return render_template(
-            "diary.html",
+            "diary/diary.html",
             display_name=display_name,
             recent_entries=recent_entries,
             form=form,
@@ -101,7 +101,7 @@ def diary_entry() -> Union[str, tuple[str, int], WerkzeugResponse]:
         
         return (
             render_template(
-                "diary.html",
+                "diary/diary.html",
                 display_name=display_name,
                 recent_entries=recent_entries,
                 form=form,
@@ -116,7 +116,7 @@ def diary_entry() -> Union[str, tuple[str, int], WerkzeugResponse]:
     is_new_user = len(recent_entries) == 0
     
     return render_template(
-        "diary.html",
+        "diary/diary.html",
         display_name=display_name,
         recent_entries=recent_entries,
         form=form,

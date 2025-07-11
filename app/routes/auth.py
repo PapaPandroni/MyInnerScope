@@ -37,7 +37,7 @@ def login_page() -> Union[str, tuple[str, int], WerkzeugResponse]:
         if not user or not user.check_password(password):
             flash("Invalid email or password.", "danger")
             current_app.logger.warning(f"Failed login attempt.")
-            return render_template("login.html", form=form), 401
+            return render_template("auth/login.html", form=form), 401
 
         # Success! Session!
         session["user_id"] = user.id
@@ -57,7 +57,7 @@ def login_page() -> Union[str, tuple[str, int], WerkzeugResponse]:
         return redirect("/diary")
 
     # If GET request or validation fails, show login form
-    return render_template("login.html", form=form)
+    return render_template("auth/login.html", form=form)
 
 
 @auth_bp.route("/register", methods=["GET", "POST"])
@@ -80,7 +80,7 @@ def register() -> Union[str, tuple[str, int], WerkzeugResponse]:
             current_app.logger.warning(
                 f"Registration attempt with existing email: {email}"
             )
-            return render_template("register.html", form=form), 400
+            return render_template("auth/register.html", form=form), 400
 
         # Create user with automatic password hashing
         new_user = User(email=email, password=password, user_name=user_name)
@@ -92,7 +92,7 @@ def register() -> Union[str, tuple[str, int], WerkzeugResponse]:
         return redirect("/login")
 
     # If GET request or validation fails, show registration form
-    return render_template("register.html", form=form)
+    return render_template("auth/register.html", form=form)
 
 
 @auth_bp.route("/logout")

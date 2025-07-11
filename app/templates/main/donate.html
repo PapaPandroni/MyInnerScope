@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "shared/base.html" %}
 
 {% block title %}Donate - Aim for the Stars{% endblock %}
 
@@ -26,8 +26,8 @@
                         <a href="https://buymeacoffee.com/papapandroni" target="_blank" class="btn btn-lg mt-3" style="background-color: #00d4ff; color: #171A25; border: none; font-weight: bold; font-size: 1.3rem; padding: 16px 40px; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.3); transition: background 0.2s;">
                             ☕ Buy Me a Coffee
                         </a>
-                        <div id="bmc-widget-wrapper" class="bmc-widget-wrapper mt-4"></div>
-                        <div id="bmc-widget-error" style="display:none; color:#ff6384; margin-top:1rem; font-size:1rem;">Widget failed to load? Use the button above!</div>
+                        <div id="bmc_widget_wrapper" class="bmc_widget_wrapper mt-4"></div>
+                        <div id="bmc_widget_error" style="display:none; color:#ff6384; margin-top:1rem; font-size:1rem;">Widget failed to load? Use the button above!</div>
                     </div>
                 </div>
             </div>
@@ -60,14 +60,14 @@ window.addEventListener('DOMContentLoaded', function() {
     script.setAttribute('data-x_margin', '18');
     script.setAttribute('data-y_margin', '18');
     script.onerror = function() {
-        document.getElementById('bmc-widget-error').style.display = 'block';
+        document.getElementById('bmc_widget_error').style.display = 'block';
     };
     document.getElementById('bmc-widget-wrapper').appendChild(script);
     // If widget doesn't load in 5 seconds, show error
     setTimeout(function() {
         var widget = document.querySelector('#bmc-widget-wrapper iframe');
         if (!widget) {
-            document.getElementById('bmc-widget-error').style.display = 'block';
+            document.getElementById('bmc_widget_error').style.display = 'block';
         }
     }, 5000);
 });

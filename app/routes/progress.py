@@ -350,7 +350,7 @@ def progress() -> Union[str, WerkzeugResponse]:
     unique_weekdays_count = get_unique_weekdays_with_entries(user_id)
 
     return render_template(
-        "progress.html",
+        "progress/progress.html",
         points_today=points_today,
         total_points=total_points,
         current_streak=current_streak,

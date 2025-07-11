@@ -10,54 +10,54 @@ class ProgressPage {
     }
 
     init() {
-        this.setupData();
-        this.initCharts();
-        this.initTooltips();
+        this.setup_data();
+        this.init_charts();
+        this.init_tooltips();
     }
 
     /**
      * Setup data from the server
      */
-    setupData() {
+    setup_data() {
         // Get weekday data from the JSON script tag
-        const weekdayDataElement = document.getElementById('weekday-data');
-        const weekdayConfig = JSON.parse(weekdayDataElement.textContent);
+        const weekday_data_element = document.getElementById('weekday_data');
+        const weekday_config = JSON.parse(weekday_data_element.textContent);
         
         // Setup global data object for other modules to access
-        window.progressData = {
-            pointsData: JSON.parse(document.getElementById('points-data').textContent),
-            weekdayConfig: weekdayConfig,
-            goalStatsData: JSON.parse(document.getElementById('goal-stats-data').textContent)
+        window.progress_data = {
+            points_data: JSON.parse(document.getElementById('points_data').textContent),
+            weekday_config: weekday_config,
+            goal_stats_data: JSON.parse(document.getElementById('goal_stats_data').textContent)
         };
     }
 
     /**
      * Initialize charts
      */
-    initCharts() {
+    init_charts() {
         this.charts = new ProgressCharts();
     }
 
     /**
      * Initialize Bootstrap tooltips
      */
-    initTooltips() {
-        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl);
+    init_tooltips() {
+        const tooltip_trigger_list = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltip_trigger_list.map(function (tooltip_trigger_el) {
+            return new bootstrap.Tooltip(tooltip_trigger_el);
         });
     }
 }
 
 // Initialize the page when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    window.progressPage = new ProgressPage();
+    window.progress_page = new ProgressPage();
 });
 
 // Word Cloud rendering
 // Requires wordcloud2.js to be loaded on the page
-if (window.wordcloudData && document.getElementById('wordcloud')) {
-    console.log('Wordcloud data available:', window.wordcloudData);
+if (window.wordcloud_data && document.getElementById('wordcloud')) {
+    console.log('Wordcloud data available:', window.wordcloud_data);
     console.log('Wordcloud element found:', document.getElementById('wordcloud'));
     
     // Dynamically load wordcloud2.js if not already loaded
@@ -95,12 +95,12 @@ if (window.wordcloudData && document.getElementById('wordcloud')) {
     }
 
     loadWordCloudScript(function() {
-        console.log('Creating wordcloud with data:', window.wordcloudData);
-        console.log('Raw wordcloud data type:', typeof window.wordcloudData);
-        console.log('Raw wordcloud data length:', window.wordcloudData.length);
-        console.log('First few raw items:', window.wordcloudData.slice(0, 3));
+        console.log('Creating wordcloud with data:', window.wordcloud_data);
+        console.log('Raw wordcloud data type:', typeof window.wordcloud_data);
+        console.log('Raw wordcloud data length:', window.wordcloud_data.length);
+        console.log('First few raw items:', window.wordcloud_data.slice(0, 3));
         
-        var words = window.wordcloudData.map(function(item) {
+        var words = window.wordcloud_data.map(function(item) {
             return [item[0], item[1]];
         });
         console.log('Processed words:', words);
@@ -140,7 +140,7 @@ if (window.wordcloudData && document.getElementById('wordcloud')) {
         });
 
         // Render to hidden canvas for export with real data, matching the visible wordcloud's size
-        var exportCanvas = document.getElementById('wordcloud-canvas');
+        var exportCanvas = document.getElementById('wordcloud_canvas');
         if (exportCanvas && wordcloudElem) {
             // Match the export canvas size to the visible wordcloud div
             var rect = wordcloudElem.getBoundingClientRect();
@@ -176,9 +176,9 @@ if (window.wordcloudData && document.getElementById('wordcloud')) {
     });
 } else {
     console.log('Wordcloud conditions not met:');
-    console.log('- wordcloudData available:', !!window.wordcloudData);
+    console.log('- wordcloudData available:', !!window.wordcloud_data);
     console.log('- wordcloud element exists:', !!document.getElementById('wordcloud'));
-    if (window.wordcloudData) {
-        console.log('- wordcloudData:', window.wordcloudData);
+    if (window.wordcloud_data) {
+        console.log('- wordcloudData:', window.wordcloud_data);
     }
 } 

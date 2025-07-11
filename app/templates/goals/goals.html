@@ -1,10 +1,10 @@
-{% extends "base.html" %}
+{% extends "shared/base.html" %}
 
 {% block title %}Weekly Goals{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/goals.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/tour.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/shared/goals.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/shared/tour.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -48,7 +48,7 @@
                             {{ goal_form.title(class="form-control", id="title", placeholder="Enter your goal...") }}
                             <div id="suggestions" class="suggestions-container mt-2" style="display: none;">
                                 <small class="text-muted">Suggestions:</small>
-                                <div id="suggestions-list" class="suggestions-list"></div>
+                                <div id="suggestions_list" class="suggestions_list"></div>
                             </div>
                             {% if goal_form.title.errors %}
                                 <div class="invalid-feedback d-block">
@@ -102,7 +102,7 @@
                                 {% endif %}
                             {% endfor %}
                             {% if goal_history|length > 5 %}
-                                <button class="btn btn-outline-primary btn-sm mt-2" type="button" onclick="toggleExtraGoals()" id="show-more-goals-btn">Show more</button>
+                                <button class="btn btn-outline-primary btn-sm mt-2" type="button" onclick="toggle_extra_goals()" id="show_more_goals_btn">Show more</button>
                             {% endif %}
                         </div>
                     {% else %}
@@ -200,13 +200,13 @@
 
 <script>
 // Configure onboarding tour
-window.tourConfig = {
-    isNewUser: {{ is_new_user|tojson }},
-    userEntryCount: 0  // Goals page doesn't directly track diary entries
+window.tour_config = {
+    is_new_user: {{ is_new_user|tojson }},
+    user_entry_count: 0  // Goals page doesn't directly track diary entries
 };
 </script>
 
 {% block extra_js %}
 <script src="{{ url_for('static', filename='js/goals/goals.js') }}"></script>
-<script src="{{ url_for('static', filename='js/tour/tour-controller.js') }}"></script>
+<script src="{{ url_for('static', filename='js/shared/tour-controller.js') }}"></script>
 {% endblock %} 

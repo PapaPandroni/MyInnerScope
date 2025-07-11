@@ -55,7 +55,7 @@ def goals_page() -> Union[str, WerkzeugResponse]:
     is_new_user = len(recent_entries) == 0
 
     return render_template(
-        "goals.html",
+        "goals/goals.html",
         current_goals=current_goals,
         overdue_goals=overdue_goals,
         goal_history=goal_history,
@@ -125,7 +125,7 @@ def create_new_goal() -> Union[WerkzeugResponse, Tuple[str, int]]:
                 flash(error, "danger")
         return (
             render_template(
-                "goals.html",
+                "goals/goals.html",
                 current_goals=current_goals,
                 overdue_goals=overdue_goals,
                 goal_history=goal_history,
@@ -186,7 +186,7 @@ def update_goal(goal_id: int) -> Union[WerkzeugResponse, Tuple[str, int]]:
                 flash(error, "danger")
         return (
             render_template(
-                "goals.html",
+                "goals/goals.html",
                 current_goals=current_goals,
                 overdue_goals=overdue_goals,
                 goal_history=goal_history,
@@ -241,7 +241,7 @@ def mark_goal_complete(goal_id: int) -> Tuple[str, int]:
 
             return (
                 render_template(
-                    "goals.html",
+                    "goals/goals.html",
                     current_goals=current_goals,
                     overdue_goals=overdue_goals,
                     goal_history=goal_history,
@@ -267,7 +267,7 @@ def mark_goal_complete(goal_id: int) -> Tuple[str, int]:
 
         return (
             render_template(
-                "goals.html",
+                "goals/goals.html",
                 current_goals=current_goals,
                 overdue_goals=overdue_goals,
                 goal_history=goal_history,
@@ -293,7 +293,7 @@ def mark_goal_complete(goal_id: int) -> Tuple[str, int]:
 
         return (
             render_template(
-                "goals.html",
+                "goals/goals.html",
                 current_goals=current_goals,
                 overdue_goals=overdue_goals,
                 goal_history=goal_history,
@@ -336,7 +336,7 @@ def mark_goal_failed(goal_id: int) -> Tuple[str, int]:
 
             return (
                 render_template(
-                    "goals.html",
+                    "goals/goals.html",
                     current_goals=current_goals,
                     overdue_goals=overdue_goals,
                     goal_history=goal_history,
@@ -361,7 +361,7 @@ def mark_goal_failed(goal_id: int) -> Tuple[str, int]:
 
             return (
                 render_template(
-                    "goals.html",
+                    "goals/goals.html",
                     current_goals=current_goals,
                     overdue_goals=overdue_goals,
                     goal_history=goal_history,
@@ -386,7 +386,7 @@ def mark_goal_failed(goal_id: int) -> Tuple[str, int]:
 
         return (
             render_template(
-                "goals.html",
+                "goals/goals.html",
                 current_goals=current_goals,
                 overdue_goals=overdue_goals,
                 goal_history=goal_history,

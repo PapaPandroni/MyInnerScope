@@ -128,7 +128,7 @@ def test_database_connection(app):
 def test_static_files(client):
     """Test that static files are served correctly"""
     # Test CSS files
-    response = client.get("/static/css/custom_css.css")
+    response = client.get("/static/css/shared/base.css")
     assert response.status_code == 200
 
     # Test JS files

@@ -106,3 +106,4 @@ zopfli==0.2.3.post1
 gunicorn==21.2.0
 psycopg2-binary==2.9.9
 redis
+beautifulsoup4==4.13.4

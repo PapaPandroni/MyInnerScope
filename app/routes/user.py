@@ -36,7 +36,7 @@ def profile() -> Union[str, WerkzeugResponse]:
     is_new_user = len(recent_entries) == 0
 
     return render_template(
-        "settings.html",
+        "user/settings.html",
         user=user,
         username_form=username_form,
         password_form=password_form,
@@ -215,4 +215,4 @@ def delete_account() -> Union[str, WerkzeugResponse]:
     recent_entries = get_recent_entries(session["user_id"])
     is_new_user = len(recent_entries) == 0
 
-    return render_template("delete_account_confirm.html", form=form, is_new_user=is_new_user)
+    return render_template("user/delete_account_confirm.html", form=form, is_new_user=is_new_user)

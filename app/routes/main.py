@@ -10,12 +10,12 @@ main_bp = Blueprint("main", __name__)
 
 @main_bp.route("/")
 def hello() -> str:
-    return render_template("index.html")
+    return render_template("main/index.html")
 
 
 @main_bp.route("/about")
 def about() -> str:
-    return render_template("about.html")
+    return render_template("main/about.html")
 
 
 @main_bp.app_errorhandler(404)

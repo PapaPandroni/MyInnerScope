@@ -124,10 +124,10 @@ class OnboardingTour {
      */
     shouldShowTour() {
         const completed = localStorage.getItem('tour_completed');
-        const isNewUser = window.tourConfig?.isNewUser || false;
-        const userEntryCount = window.tourConfig?.userEntryCount || 0;
+        const is_new_user = window.tour_config?.is_new_user || false;
+        const user_entry_count = window.tour_config?.user_entry_count || 0;
         
-        return !completed && isNewUser && userEntryCount === 0;
+        return !completed && is_new_user && user_entry_count === 0;
     }
 
     /**
@@ -243,17 +243,17 @@ class OnboardingTour {
                             
                             <div class="tour-navigation">
                                 ${this.currentPage > 0 ? 
-                                    '<button class="btn btn-outline-secondary tour-btn-prev" id="tour-prev-btn">Previous</button>' : 
+                                    '<button class="btn btn-outline-secondary tour-btn-prev" id="tour_prev_btn">Previous</button>' : 
                                     ''
                                 }
                                 
-                                <button class="btn btn-outline-light tour-btn-skip" id="tour-skip-btn">Skip</button>
+                                <button class="btn btn-outline-light tour-btn-skip" id="tour_skip_btn">Skip</button>
                                 
                                 ${page.isDone ? 
-                                    '<button class="btn btn-primary tour-btn-primary" id="tour-done-btn"><i class="fas fa-check me-2"></i>Done</button>' :
+                                    '<button class="btn btn-primary tour-btn-primary" id="tour_done_btn"><i class="fas fa-check me-2"></i>Done</button>' :
                                     page.isLast ? 
-                                        '<button class="btn btn-primary tour-btn-primary" id="tour-journey-btn"><i class="fas fa-rocket me-2"></i>Start Journey</button>' :
-                                        '<button class="btn btn-primary tour-btn-primary" id="tour-next-btn">Next</button>'
+                                        '<button class="btn btn-primary tour-btn-primary" id="tour_journey_btn"><i class="fas fa-rocket me-2"></i>Start Journey</button>' :
+                                        '<button class="btn btn-primary tour-btn-primary" id="tour_next_btn">Next</button>'
                                 }
                             </div>
                         </div>
@@ -283,11 +283,11 @@ class OnboardingTour {
      * Add event listeners to modal buttons
      */
     addModalEventListeners() {
-        const prevBtn = document.getElementById('tour-prev-btn');
-        const nextBtn = document.getElementById('tour-next-btn');
-        const skipBtn = document.getElementById('tour-skip-btn');
-        const journeyBtn = document.getElementById('tour-journey-btn');
-        const doneBtn = document.getElementById('tour-done-btn');
+        const prevBtn = document.getElementById('tour_prev_btn');
+        const nextBtn = document.getElementById('tour_next_btn');
+        const skipBtn = document.getElementById('tour_skip_btn');
+        const journeyBtn = document.getElementById('tour_journey_btn');
+        const doneBtn = document.getElementById('tour_done_btn');
         
         if (prevBtn) {
             prevBtn.addEventListener('click', this.prevPage);
@@ -377,7 +377,7 @@ class OnboardingTour {
             const currentPageName = this.getCurrentPageName();
             if (currentPageName === 'diary') {
                 // Focus on diary textarea
-                const textarea = document.getElementById('diary-textarea');
+                const textarea = document.getElementById('diary_textarea');
                 if (textarea) {
                     textarea.focus();
                 }

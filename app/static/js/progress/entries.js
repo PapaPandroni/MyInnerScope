@@ -15,11 +15,11 @@ class EntryManager {
 
     /**
      * Toggle between preview and full view of an entry
-     * @param {string} entryId - The ID of the entry to toggle
+     * @param {string} entry_id - The ID of the entry to toggle
      */
-    toggleEntry(entryId) {
-        const preview = document.getElementById('preview-' + entryId);
-        const full = document.getElementById('full-' + entryId);
+    toggle_entry(entry_id) {
+        const preview = document.getElementById('preview_' + entry_id);
+        const full = document.getElementById('full_' + entry_id);
         
         if (preview.classList.contains('d-none')) {
             // Currently showing full, switch to preview
@@ -37,16 +37,16 @@ class EntryManager {
 window.entryManager = new EntryManager();
 
 // Keep the global function for backward compatibility with inline onclick handlers
-window.toggleEntry = function(entryId) {
-    window.entryManager.toggleEntry(entryId);
+window.toggle_entry = function(entry_id) {
+    window.entryManager.toggle_entry(entry_id);
 };
 
 // Toggle extra entries for Top 3 Days
-window.toggleExtraEntries = function(dayIndex) {
-    const extraEntries = document.querySelectorAll('.extra-entry-' + dayIndex);
-    const btn = document.getElementById('show-more-btn-' + dayIndex);
+window.toggle_extra_entries = function(day_index) {
+    const extra_entries = document.querySelectorAll('.extra_entry_' + day_index);
+    const btn = document.getElementById('show_more_btn_' + day_index);
     let expanded = false;
-    extraEntries.forEach(entry => {
+    extra_entries.forEach(entry => {
         if (entry.classList.contains('d-none')) {
             entry.classList.remove('d-none');
             expanded = true;
@@ -60,11 +60,11 @@ window.toggleExtraEntries = function(dayIndex) {
 }
 
 // Toggle extra goals in Recent Goals section
-window.toggleExtraGoals = function() {
-    const extraGoals = document.querySelectorAll('.extra-goal');
-    const btn = document.getElementById('show-more-goals-btn');
+window.toggle_extra_goals = function() {
+    const extra_goals = document.querySelectorAll('.extra-goal');
+    const btn = document.getElementById('show_more_goals_btn');
     let expanded = false;
-    extraGoals.forEach(goal => {
+    extra_goals.forEach(goal => {
         if (goal.classList.contains('d-none')) {
             goal.classList.remove('d-none');
             expanded = true;
