@@ -7,6 +7,7 @@ Create Date: 2025-07-11 22:00:00.000000
 """
 from alembic import op
 import sqlalchemy as sa
+from sqlalchemy import inspect
 
 
 # revision identifiers, used by Alembic.
@@ -22,12 +23,11 @@ def upgrade():
     # Get database connection for verification
     connection = op.get_bind()
     
-    # Check if PointsLog table already exists
-    result = connection.execute(sa.text(
-        "SELECT name FROM sqlite_master WHERE type='table' AND name='points_log'"
-    )).fetchone()
+    # Check if PointsLog table already exists (database-agnostic)
+    inspector = inspect(connection)
+    table_exists = 'points_log' in inspector.get_table_names()
     
-    if result:
+    if table_exists:
         print("ℹ PointsLog table already exists, skipping creation")
     else:
         # Create PointsLog table with enum type for SQLite compatibility
@@ -63,12 +63,11 @@ def downgrade():
     # Get database connection for verification
     connection = op.get_bind()
     
-    # Check if table exists before trying to drop
-    result = connection.execute(sa.text(
-        "SELECT name FROM sqlite_master WHERE type='table' AND name='points_log'"
-    )).fetchone()
+    # Check if table exists before trying to drop (database-agnostic)
+    inspector = inspect(connection)
+    table_exists = 'points_log' in inspector.get_table_names()
     
-    if result:
+    if table_exists:
         # Get count for logging
         count_result = connection.execute(sa.text("SELECT COUNT(*) FROM points_log")).fetchone()
         entry_count = count_result[0] if count_result else 0

@@ -7,6 +7,7 @@ Create Date: 2025-07-11 16:25:49.435286
 """
 from alembic import op
 import sqlalchemy as sa
+from sqlalchemy import inspect
 
 
 # revision identifiers, used by Alembic.
@@ -57,12 +58,23 @@ def upgrade():
             print(f"⚠ Failed to create index idx_{index_name}: {e}")
             # Continue with other indexes rather than failing completely
     
-    # Verify indexes were created by querying sqlite_master
-    result = connection.execute(sa.text(
-        "SELECT name FROM sqlite_master WHERE type='index' AND name LIKE 'idx_%' ORDER BY name"
-    )).fetchall()
+    # Verify indexes were created using database-agnostic inspector
+    inspector = inspect(connection)
     
-    actual_indexes = [row[0] for row in result]
+    # Get indexes for each table and filter for our idx_ prefixed indexes
+    all_indexes = []
+    tables = ['diary_entry', 'daily_stats', 'goals']
+    
+    for table in tables:
+        try:
+            table_indexes = inspector.get_indexes(table)
+            for idx in table_indexes:
+                if idx['name'] and idx['name'].startswith('idx_'):
+                    all_indexes.append(idx['name'])
+        except Exception as e:
+            print(f"⚠ Could not verify indexes for table {table}: {e}")
+    
+    actual_indexes = sorted(all_indexes)
     print(f"✓ Migration completed. Created indexes: {actual_indexes}")
     
     # Ensure we created at least the critical indexes
