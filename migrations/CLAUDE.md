@@ -56,6 +56,16 @@ migrations/
 - **Changes**: Renamed tables to use snake_case plural naming
 - **Benefits**: Consistent naming across database schema
 
+#### `bb3c496b0bdc_add_pointslog_table_clean.py` ⭐ **NEW**
+- **Purpose**: Add PointsLog table for detailed transaction tracking
+- **Features**: Detailed points transaction history with source tracking
+- **Database Compatibility**: PostgreSQL/SQLite compatible using SQLAlchemy inspector
+
+#### `1d01d06679e8_add_performance_indexes_for_user_id_and_.py` ⭐ **NEW**
+- **Purpose**: Add performance indexes for common query patterns
+- **Features**: Indexes on user_id, dates, and composite columns
+- **Database Compatibility**: Uses database-agnostic index creation patterns
+
 ## Migration Management
 
 ### Creating New Migrations
@@ -72,11 +82,13 @@ flask db downgrade                         # Rollback migrations
 4. **Test migration**: Test migration in development environment
 5. **Apply migration**: Use `flask db upgrade` to apply changes
 
-### Migration Best Practices
+### Migration Best Practices ⭐ **UPDATED**
+- **Database compatibility**: Use SQLAlchemy inspector instead of sqlite_master queries
+- **Enum handling**: Store enum values as strings for PostgreSQL compatibility
 - **Descriptive messages**: Use clear, descriptive migration messages
 - **Review before applying**: Always review auto-generated migrations
-- **Backup before major changes**: Backup database before destructive migrations
-- **Test rollbacks**: Ensure migrations can be rolled back if needed
+- **Test both databases**: Test migrations with both SQLite and PostgreSQL
+- **Error handling**: Include proper error handling in complex migrations
 
 ## Migration Types
 
@@ -107,10 +119,10 @@ flask db downgrade                         # Rollback migrations
 - **Reset capability**: Easy database reset when needed
 
 ### Production Environment
-- **PostgreSQL database**: Uses PostgreSQL for production
-- **Careful migrations**: More cautious migration approach
-- **Backup requirements**: Mandatory backups before migrations
-- **Rollback planning**: Always have rollback strategy
+- **PostgreSQL database**: Uses PostgreSQL for production via Railway.com
+- **Automatic migrations**: Railway automatically runs migrations on deploy
+- **Database compatibility**: Migrations use database-agnostic patterns
+- **Rollback planning**: Always have rollback strategy for complex changes
 
 ### Testing Environment
 - **In-memory database**: Uses in-memory SQLite for testing

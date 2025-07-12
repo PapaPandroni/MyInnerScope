@@ -7,8 +7,14 @@ This directory contains static assets for the "Aim for the Stars" web applicatio
 ```
 static/
 ├── assets/             # Image and media files
-├── css/               # Stylesheets
-└── js/                # JavaScript files organized by feature
+├── css/               # Feature-organized stylesheets
+│   ├── progress/      # Progress dashboard specific CSS
+│   └── shared/        # Shared components and base styles
+└── js/                # Feature-organized JavaScript modules
+    ├── goals/         # Goal management scripts
+    ├── legal/         # Legal compliance (cookies, consent)
+    ├── progress/      # Progress dashboard and analytics
+    └── shared/        # Shared utilities and tour system
 ```
 
 ## Asset Organization
@@ -18,31 +24,44 @@ static/
 - **starry_sky.jpg**: Main background/header image for the space theme
 - **Purpose**: Static media files served directly by Flask
 
-### `css/` - Stylesheets
-- **custom_css.css**: Global custom styles and theme overrides
-- **goals.css**: Goal-specific styling and layouts
-- **progress.css**: Progress dashboard and chart styling
-- **Framework**: Built on Bootstrap 5 foundation with custom overrides
+### `css/` - Feature-Organized Stylesheets
 
-### `js/` - JavaScript Files
+#### `css/shared/` - Shared Components
+- **base.css**: Global styles, theme variables, and Bootstrap overrides
+- **goals.css**: Goal management styling and layouts  
+- **tour.css**: User onboarding tour styling and animations
 
-#### Feature-Based Organization
-JavaScript is organized by application feature for maintainability:
+#### `css/progress/` - Progress Dashboard
+- **progress.css**: Progress dashboard, chart styling, and interactive elements
 
-#### `goals/` - Goal Management Scripts
-- **goals.js**: Goal creation, editing, and management functionality
-- **Features**: Dynamic form handling, goal progress updates
+**Framework**: Built on Bootstrap 5 with cosmic theme customization
 
-#### `legal/` - Legal Compliance Scripts  
-- **cookie_consent.js**: Cookie consent banner and preferences management
-- **GDPR Compliance**: Handles user consent for tracking and analytics
+### `js/` - Feature-Organized JavaScript Modules
 
-#### `progress/` - Progress Dashboard Scripts
-- **charts.js**: Chart.js integration for progress visualizations
-- **entries.js**: Diary entry display and interaction
+#### `js/goals/` - Goal Management
+- **goals.js**: Goal creation, editing, management, and progress tracking
+- **Features**: Dynamic form handling, goal status updates
+
+#### `js/legal/` - Legal Compliance  
+- Files moved to shared/ (see shared section below)
+
+#### `js/progress/` - Progress Dashboard & Analytics
+- **charts.js**: Chart.js integration with clickable data points
+- **entries.js**: Diary entry display and interaction patterns
 - **entry-toggles.js**: Toggle functionality for diary entry views
-- **main.js**: Core progress dashboard functionality
-- **Data Visualization**: Interactive charts showing user progress over time
+- **main.js**: Core progress dashboard with interactive analytics
+- **Features**: 
+  - Clickable progress cards with detailed breakdowns
+  - Interactive Chart.js visualizations
+  - Points breakdown modals with transaction history
+
+#### `js/shared/` - Shared Utilities ⭐ **NEW**
+- **cookie_consent.js**: GDPR cookie consent and preferences management
+- **tour-controller.js**: Interactive user onboarding tour system
+- **Features**:
+  - Multi-page tour with localStorage persistence
+  - Progressive disclosure of application features
+  - First-visit detection and guidance
 
 ## Frontend Technology Stack
 
@@ -52,9 +71,10 @@ JavaScript is organized by application feature for maintainability:
 - **Responsive Design**: Mobile-first approach
 
 ### JavaScript Libraries
-- **Chart.js**: Data visualization for progress tracking
-- **Bootstrap JS**: Component interactivity
-- **Vanilla JS**: Custom application logic
+- **Chart.js**: Interactive data visualization with clickable elements
+- **Bootstrap JS**: Component interactivity and modal management
+- **Vanilla JS**: Custom application logic and tour system
+- **localStorage API**: User preferences and tour state persistence
 
 ## Development Patterns
 
@@ -64,9 +84,11 @@ JavaScript is organized by application feature for maintainability:
 - **CSS variables**: Used for theming and consistency
 
 ### JavaScript Architecture
-- **Feature modules**: Each feature directory contains related scripts
-- **Event-driven**: Uses modern event handling patterns
-- **Progressive enhancement**: Works without JavaScript enabled
+- **Feature modules**: Directory-based organization by application feature
+- **Event-driven**: Modern event handling with delegation patterns
+- **Progressive enhancement**: Core functionality works without JavaScript
+- **API Integration**: AJAX requests to API blueprint endpoints
+- **State Management**: localStorage for user preferences and tour progress
 
 ### Asset Management
 - **Static serving**: Flask serves files directly from static/
@@ -86,9 +108,22 @@ JavaScript is organized by application feature for maintainability:
 - **Caching**: Appropriate cache headers for static files
 - **Loading**: JavaScript loaded at end of body for performance
 
+## Recent Frontend Improvements
+
+### User Experience Enhancements
+- **Interactive Analytics**: Clickable progress cards with detailed point breakdowns
+- **Onboarding System**: Multi-page guided tour for new users
+- **Enhanced Visualizations**: Chart.js integration with clickable data points
+
+### Code Organization
+- **Feature-based Structure**: CSS and JS organized by application feature
+- **Shared Components**: Common utilities in shared/ directories
+- **API Integration**: Frontend communicates with backend via API endpoints
+
 ## Development Workflow
 
-1. **CSS Changes**: Edit feature-specific CSS files
-2. **JavaScript**: Add new scripts to appropriate feature directory
+1. **CSS Changes**: Edit feature-specific CSS files in appropriate subdirectory
+2. **JavaScript**: Add new scripts to feature-based directories (goals/, progress/, shared/)
 3. **Images**: Add to assets/ with descriptive names
-4. **Testing**: Verify asset loading in development server
+4. **API Integration**: Use API blueprint endpoints for dynamic content
+5. **Testing**: Verify asset loading and feature functionality in development server

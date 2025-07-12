@@ -1,62 +1,72 @@
 # app/static/css/ Directory
 
-This directory contains CSS stylesheets for the "Aim for the Stars" application, built on Bootstrap 5 with custom styling.
+This directory contains feature-organized CSS stylesheets for the "Aim for the Stars" application, built on Bootstrap 5 with cosmic theme customization.
 
-## Stylesheet Files
+## Feature-Based Organization
 
-### `custom_css.css` - Global Styles
-- **Purpose**: Application-wide custom styles and Bootstrap overrides
-- **Scope**: Global styles, theme variables, utility classes
-- **Usage**: Loaded on every page for consistent styling
-- **Content**: 
-  - Color scheme and theme variables
-  - Typography overrides
+### `shared/` - Shared Components
+#### `shared/base.css` - Global Cosmic Theme
+- **Purpose**: Application-wide cosmic theme and Bootstrap overrides
+- **Features**:
+  - Cosmic color palette with space-inspired gradients
+  - Typography with celestial theme
   - Global component styling
   - Responsive design utilities
+  - Theme variables for consistency
 
-### `goals.css` - Goal Management Styles
-- **Purpose**: Styles specific to goal creation, display, and management
-- **Scope**: Goal-specific components and layouts
+#### `shared/goals.css` - Goal Management Styles
+- **Purpose**: Goal-specific components and layouts
 - **Features**:
-  - Goal card styling
-  - Progress indicators
+  - Goal card styling with cosmic theme
+  - Progress indicators with star motifs
   - Form layouts for goal creation/editing
   - Goal status displays
 
-### `progress.css` - Progress Dashboard Styles
-- **Purpose**: Styles for progress tracking and analytics visualization
-- **Scope**: Progress dashboard, charts, and statistics displays
+#### `shared/tour.css` - User Onboarding Tour ⭐ **NEW**
+- **Purpose**: Interactive tour system styling
 - **Features**:
-  - Chart container styling
-  - Statistics card layouts
-  - Progress visualization components
-  - Diary entry displays in progress context
+  - Tour overlay and modal styling
+  - Step indicator animations
+  - Highlighted element styling
+  - Responsive tour layout
+
+### `progress/` - Progress Dashboard
+#### `progress/progress.css` - Enhanced Progress Visualization
+- **Purpose**: Interactive progress tracking and analytics
+- **Features**:
+  - **Clickable cards**: Interactive progress cards with hover effects
+  - **Chart styling**: Chart.js container and responsive layouts
+  - **Modal integration**: Points breakdown modal styling
+  - **Statistics displays**: Enhanced statistics card layouts
+  - **Cosmic theme**: Space-inspired progress visualizations
 
 ## CSS Architecture
 
 ### Framework Foundation
-- **Bootstrap 5**: Primary CSS framework providing base styles
-- **Custom overrides**: Feature-specific customizations
-- **Responsive design**: Mobile-first responsive layouts
+- **Bootstrap 5**: Primary CSS framework with cosmic theme overrides
+- **Feature organization**: Directory-based CSS organization by feature
+- **Responsive design**: Mobile-first with enhanced interactive elements
 
-### Design System
-- **Color palette**: Consistent color scheme across features
-- **Typography**: Hierarchical text styling
-- **Spacing**: Consistent margins and padding
-- **Components**: Reusable styled components
+### Cosmic Design System
+- **Color palette**: Space-inspired cosmic colors with gradients
+- **Typography**: Celestial-themed text styling and hierarchy
+- **Interactive elements**: Hover effects and transitions
+- **Theme consistency**: Unified cosmic branding across all features
+- **Accessibility**: High contrast ratios and readable color combinations
 
 ## Development Patterns
 
 ### CSS Organization
-- **Feature-based files**: Each major feature has its own CSS file
-- **Global base**: Common styles in custom_css.css
-- **Bootstrap integration**: Custom styles build on Bootstrap foundation
-- **Component-scoped**: Styles specific to particular components
+- **Directory-based**: Feature-specific CSS organized in subdirectories
+- **Shared components**: Common styles in `shared/` directory
+- **Feature isolation**: Feature-specific styles in dedicated directories
+- **Bootstrap integration**: Custom cosmic theme builds on Bootstrap foundation
 
 ### Naming Conventions
-- **BEM methodology**: Block-Element-Modifier naming where appropriate
-- **Semantic names**: Classes named for purpose, not appearance
-- **Feature prefixes**: Goal-specific classes prefixed with `goal-`
+- **BEM methodology**: Block-Element-Modifier naming for complex components
+- **Semantic names**: Classes named for purpose (e.g., `.progress-card-clickable`)
+- **Feature prefixes**: Clear feature identification in class names
+- **Cosmic theme**: Consistent cosmic-themed class names
 
 ### Responsive Design
 - **Mobile-first**: Base styles for mobile, enhanced for larger screens
@@ -65,9 +75,11 @@ This directory contains CSS stylesheets for the "Aim for the Stars" application,
 
 ## File Loading Order
 
-1. **Bootstrap 5 CSS** (from CDN or local)
-2. **custom_css.css** (global overrides)
-3. **Feature-specific CSS** (goals.css, progress.css) as needed per page
+1. **Bootstrap 5 CSS** (from CDN)
+2. **shared/base.css** (global cosmic theme)
+3. **shared/goals.css** (goal management styles)
+4. **shared/tour.css** (onboarding tour styles)
+5. **progress/progress.css** (progress dashboard specific)
 
 ## Customization Guidelines
 

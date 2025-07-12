@@ -1,88 +1,97 @@
 # app/templates/ Directory
 
-This directory contains Jinja2 HTML templates for the "Aim for the Stars" Flask application.
+This directory contains Jinja2 HTML templates for the "Aim for the Stars" Flask application, organized by feature for better maintainability.
 
 ## Template Architecture
 
-### Template Structure
-- **base.html**: Master template with common layout and includes
-- **_navbar.html**: Reusable navigation component
-- **Feature templates**: Individual pages for each application feature
-- **errors/**: Error page templates (403, 404, 500)
+### Feature-Based Organization
+```
+templates/
+├── shared/           # Shared components and base templates
+│   ├── base.html     # Master template with cosmic theme
+│   └── _navbar.html  # Navigation component
+├── auth/            # Authentication templates
+├── diary/           # Diary management templates
+├── goals/           # Goal management templates
+├── main/            # Landing and info pages
+├── progress/        # Progress dashboard templates
+├── reader/          # Diary reading and search
+├── user/            # User settings and profile
+├── legal/           # Privacy, terms, cookies
+└── errors/          # Custom error pages (403, 404, 500)
+```
 
 ## Core Templates
 
 ### Layout Templates
 
-#### `base.html` - Master Template
+#### `shared/base.html` - Master Template
 - **Purpose**: Base layout template extended by all other templates
 - **Features**:
-  - HTML document structure
-  - Bootstrap 5 CSS/JS includes
-  - Common meta tags and SEO elements
-  - Flash message display system
-  - CSRF token meta tag for JavaScript
-  - Common JavaScript includes
+  - Cosmic theme with space-inspired design
+  - Bootstrap 5 CSS/JS includes with custom overrides
+  - Tour system integration for user onboarding
+  - Flash message display system with animations
+  - CSRF token meta tag for JavaScript/AJAX
+  - Chart.js and feature-specific JavaScript includes
+  - Mobile-responsive navigation
 
-#### `_navbar.html` - Navigation Component
+#### `shared/_navbar.html` - Navigation Component
 - **Purpose**: Reusable navigation bar included in base template
 - **Features**:
-  - Responsive navigation menu
+  - Cosmic-themed responsive navigation
   - User authentication state awareness
   - Dynamic menu items based on user status
   - Mobile-friendly hamburger menu
+  - Tour system integration with guided highlights
 
-### Main Application Templates
+### Feature-Organized Templates
 
-#### `index.html` - Home Page
-- **Purpose**: Application landing page and dashboard
-- **Features**: Welcome content, recent activity, quick actions
+#### `main/` - Landing and Information Pages
+- **index.html**: Application landing page with tour system integration
+- **about.html**: Application description and feature overview
+- **donate.html**: Support and donation information
 
-#### `about.html` - About Page
-- **Purpose**: Information about the application and its purpose
-- **Features**: Application description, feature overview
+#### `auth/` - Authentication Templates
+- **login.html**: User authentication with login bonus tracking
+- **register.html**: User registration with form validation
+- **Features**: Flask-WTF integration, CSRF protection, validation display
 
-#### `login.html` & `register.html` - Authentication
-- **Purpose**: User authentication and registration forms
-- **Features**: Flask-WTF form integration, validation display, CSRF protection
+#### `diary/` - Diary Management
+- **diary.html**: Main diary interface for creating and managing entries
+- **Features**: Entry forms, behavior rating system, points integration
 
-#### `diary.html` - Diary Management
-- **Purpose**: Main diary interface for creating and managing entries
-- **Features**: Entry forms, rating system, entry display
+#### `reader/` - Diary Reading and Search
+- **read_diary.html**: Enhanced diary reading with filtering
+- **Features**: Combined date + rating filters, search functionality, pagination
 
-#### `read_diary.html` - Diary Reading
-- **Purpose**: Read and search through diary entries
-- **Features**: Entry display, search functionality, pagination
+#### `progress/` - Progress Dashboard ⭐ **ENHANCED**
+- **progress.html**: Interactive progress visualization
+- **Features**: 
+  - Clickable progress cards with detailed breakdowns
+  - Chart.js integration with interactive data points
+  - Points breakdown modals with transaction history
+  - Real-time statistics updates
 
-#### `progress.html` - Progress Dashboard
-- **Purpose**: User progress visualization and statistics
-- **Features**: Chart.js integration, statistics display, progress tracking
+#### `goals/` - Goal Management
+- **goals.html**: Goal creation, editing, and tracking interface
+- **Features**: Goal forms, progress displays, goal management with points integration
 
-#### `goals.html` - Goal Management
-- **Purpose**: Goal creation, editing, and tracking interface
-- **Features**: Goal forms, progress displays, goal management
+#### `user/` - User Settings and Profile
+- **settings.html**: User profile and account settings
+- **delete_account_confirm.html**: Account deletion confirmation
+- **Features**: Profile editing, account management, data export options
 
-#### `settings.html` - User Settings
-- **Purpose**: User profile and account settings
-- **Features**: Profile editing, account management, preferences
+#### `legal/` - Legal and Compliance Templates
+- **privacy.html**: Privacy policy and data handling information
+- **terms.html**: Terms of service and usage agreements
+- **Features**: GDPR compliance, cookie consent integration
 
-### Legal and Information Templates
-
-#### `privacy.html` - Privacy Policy
-- **Purpose**: Privacy policy and data handling information
-- **Features**: Legal compliance content, cookie information
-
-#### `terms.html` - Terms of Service
-- **Purpose**: Terms of service and usage agreements
-- **Features**: Legal terms and conditions
-
-#### `donate.html` - Donation Page
-- **Purpose**: Support and donation information
-- **Features**: Donation options and support information
-
-#### `delete_account_confirm.html` - Account Deletion
-- **Purpose**: Account deletion confirmation and process
-- **Features**: Confirmation form, data deletion information
+#### `errors/` - Custom Error Pages ⭐ **NEW**
+- **403.html**: Forbidden access error with user-friendly messaging
+- **404.html**: Page not found error with navigation options
+- **500.html**: Server error with contact information
+- **Features**: Consistent branding, helpful navigation, error context
 
 ## Template Features
 
@@ -105,25 +114,30 @@ This directory contains Jinja2 HTML templates for the "Aim for the Stars" Flask 
 - **Field types**: Support for various input types and widgets
 
 ### JavaScript Integration
+- **API Integration**: Templates support AJAX requests to API blueprint endpoints
+- **Tour System**: Interactive onboarding tour with localStorage persistence
 - **Data attributes**: Pass server data to JavaScript via data attributes
-- **Event handling**: JavaScript enhancements for forms and interactions
-- **AJAX support**: Templates structured to support AJAX updates
+- **Event handling**: Enhanced interactions for clickable progress cards
+- **Chart.js Integration**: Interactive data visualizations with clickable elements
 - **Progressive enhancement**: Core functionality works without JavaScript
 
 ## Development Patterns
 
 ### Template Inheritance
 ```html
-{% extends "base.html" %}
+{% extends "shared/base.html" %}
 {% block title %}Page Title{% endblock %}
 {% block content %}
-<!-- Page content -->
+<!-- Page content with tour integration -->
+{% endblock %}
+{% block scripts %}
+<!-- Feature-specific JavaScript -->
 {% endblock %}
 ```
 
 ### Include Pattern
 ```html
-{% include "_navbar.html" %}
+{% include "shared/_navbar.html" %}
 ```
 
 ### Context Usage
@@ -166,11 +180,26 @@ This directory contains Jinja2 HTML templates for the "Aim for the Stars" Flask 
 - **Touch-friendly**: Interactive elements sized for touch
 - **Readable text**: Appropriate font sizes and contrast
 
+## Recent Template Improvements
+
+### User Experience Enhancements
+- **Interactive Analytics**: Clickable progress cards with detailed modals
+- **Tour System**: Multi-page guided onboarding for new users
+- **Enhanced Navigation**: Responsive design with cosmic theme
+- **Error Pages**: Custom error templates with helpful guidance
+
+### Technical Enhancements
+- **Feature Organization**: Templates organized by application feature
+- **API Integration**: AJAX-ready templates for dynamic content
+- **Points Integration**: Templates show detailed transaction history
+- **Mobile Optimization**: Improved responsive design patterns
+
 ## Development Workflow
 
 ### Adding New Templates
-1. **Create template**: Follow naming conventions
-2. **Extend base**: Use template inheritance
-3. **Add blocks**: Define necessary content blocks
-4. **Test responsive**: Verify across device sizes
-5. **Accessibility check**: Ensure accessibility compliance
+1. **Choose directory**: Place in appropriate feature directory
+2. **Extend base**: Use `shared/base.html` template inheritance
+3. **Add tour integration**: Include tour system data attributes if needed
+4. **API integration**: Structure for AJAX updates if required
+5. **Test responsive**: Verify across device sizes with cosmic theme
+6. **Accessibility check**: Ensure accessibility compliance

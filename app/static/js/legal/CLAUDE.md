@@ -1,17 +1,17 @@
 # app/static/js/legal/ Directory
 
-This directory contains JavaScript functionality for legal compliance and privacy features in the "Aim for the Stars" application.
+**⚠️ NOTE: This directory's content has been moved to `shared/` for better organization.**
+
+This directory previously contained JavaScript functionality for legal compliance and privacy features.
 
 ## Scripts
 
-### `cookie_consent.js` - Cookie Consent Management
-- **Purpose**: Handles cookie consent banner and user privacy preferences
-- **GDPR Compliance**: Ensures compliance with European privacy regulations
-- **Features**:
-  - Cookie consent banner display and interaction
-  - User preference storage and management
-  - Analytics tracking consent management
-  - Cookie category selection (essential, analytics, etc.)
+### `cookie_consent.js` - **MOVED to `shared/`**
+**New Location**: `app/static/js/shared/cookie_consent.js`
+
+For current documentation, see: `app/static/js/shared/CLAUDE.md`
+
+**Previous functionality**: Cookie consent management and GDPR compliance
 
 ## Functionality Overview
 

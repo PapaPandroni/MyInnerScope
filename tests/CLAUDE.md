@@ -125,10 +125,11 @@ tests/
 - Template rendering and context
 
 ### Business Logic
-- Points calculation system
+- **Points system**: PointsLog and PointsService transaction integrity
+- **Dual tracking**: PointsLog (detailed) and DailyStats (cache) consistency
 - Streak calculation and maintenance
-- Goal progress tracking
-- Statistics aggregation
+- Goal progress tracking with points integration
+- Statistics aggregation and API endpoints
 
 ## Running Tests
 
@@ -143,6 +144,8 @@ pytest --cov=app                # Run with coverage
 ### Test Filtering
 ```bash
 pytest -m "not slow"            # Skip slow tests
+pytest -m "unit"                # Run only unit tests
+pytest -m "integration"         # Run only integration tests
 pytest -k "test_user"           # Run tests matching pattern
 pytest tests/test_basic.py::test_app_creation  # Run specific test
 ```

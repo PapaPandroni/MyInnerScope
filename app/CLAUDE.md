@@ -1,6 +1,6 @@
 # app/ Directory
 
-This is the main Flask application directory containing the core application code for "Aim for the Stars" - a self-reflection web application.
+This is the main Flask application directory containing the core application code for "Aim for the Stars" - a self-reflection web application with sophisticated points tracking, user onboarding, and analytics.
 
 ## Directory Structure
 
@@ -8,12 +8,12 @@ This is the main Flask application directory containing the core application cod
 app/
 ├── __init__.py          # Application factory pattern implementation
 ├── config.py            # Environment-based configuration settings
-├── forms.py            # Flask-WTF form definitions
-├── models/             # Database models (SQLAlchemy)
-├── routes/             # Blueprint-based route handlers
-├── static/             # Static assets (CSS, JS, images)
-├── templates/          # Jinja2 HTML templates
-└── utils/              # Utility functions and helpers
+├── forms.py            # Flask-WTF form definitions for auth and user input
+├── models/             # Database models (User, DiaryEntry, DailyStats, PointsLog, Goal)
+├── routes/             # Blueprint-based route handlers (auth, diary, goals, progress, api)
+├── static/             # Feature-organized static assets (CSS, JS, images)
+├── templates/          # Feature-organized Jinja2 HTML templates
+└── utils/              # Utility functions (points service, goal helpers, search)
 ```
 
 ## Key Files
@@ -37,11 +37,13 @@ app/
 ## Application Architecture
 
 This Flask application follows the **Application Factory Pattern** with:
-- Blueprint-based modular routing
-- SQLAlchemy ORM for database operations
-- Session-based authentication
-- Rate limiting for security
-- CSRF protection on all forms
+- **Blueprint-based modular routing**: Separate blueprints for auth, diary, goals, progress, api
+- **SQLAlchemy ORM**: Database operations with dual-database compatibility (SQLite/PostgreSQL)
+- **Points tracking system**: Centralized PointsService with detailed transaction logging
+- **Session-based authentication**: 24-hour timeout with renewal middleware
+- **Rate limiting**: Flask-Limiter for security (configurable per route)
+- **CSRF protection**: All forms protected via Flask-WTF
+- **User onboarding**: Interactive tour system with localStorage persistence
 
 ## Security Features
 
@@ -53,7 +55,17 @@ This Flask application follows the **Application Factory Pattern** with:
 
 ## Development Notes
 
-- Uses environment variables for configuration
-- Supports hot-reloading in development mode
-- Comprehensive error handling and logging
-- Database migrations via Flask-Migrate
+- **Environment configuration**: Uses `.env` file for secrets and database URLs
+- **Hot-reloading**: Development mode with automatic file change detection
+- **Database migrations**: Flask-Migrate with PostgreSQL/SQLite compatibility patterns
+- **Error handling**: Custom error pages (403, 404, 500) with user-friendly messages
+- **Logging**: Comprehensive logging for authentication, errors, and security events
+- **Code formatting**: Black (88-char) and isort configured via pyproject.toml
+
+## Recent Architecture Improvements
+
+- **Dual database compatibility**: SQLite for development, PostgreSQL for production
+- **Points logging system**: Detailed transaction history with PointsLog model
+- **API endpoints**: RESTful API blueprint for frontend-backend communication
+- **Frontend modularization**: Feature-based organization of templates and static assets
+- **User experience**: Interactive onboarding tour and clickable analytics

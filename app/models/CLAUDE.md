@@ -40,6 +40,17 @@ This directory contains SQLAlchemy database models for the "Aim for the Stars" a
   - `status` (active/completed/paused)
   - `points_target`
 
+#### `points_log.py` - PointsLog Model ⭐ **NEW**
+- **Purpose**: Detailed transaction log for all point-earning activities
+- **Key Fields**:
+  - `id`, `user_id`, `date`, `points`
+  - `source_type` (diary_entry, goal_completed, goal_failed, daily_login)
+  - `source_id` (References diary entry or goal ID)
+  - `description` (Human-readable transaction description)
+  - `created_at` (Timestamp)
+- **Architecture**: Source of truth for points; DailyStats serves as aggregated cache
+- **Enum**: `PointsSourceType` enum for type safety and consistency
+
 ### Database Configuration
 
 #### `database.py`
@@ -50,7 +61,8 @@ This directory contains SQLAlchemy database models for the "Aim for the Stars" a
 #### `__init__.py`
 - Exports all models and database instance
 - Provides centralized import point for models
-- **Import pattern**: `from app.models import db, User, DiaryEntry, DailyStats, Goal`
+- **Import pattern**: `from app.models import db, User, DiaryEntry, DailyStats, Goal, PointsLog`
+- **Points enum**: `from app.models.points_log import PointsSourceType`
 
 ## Database Schema Notes
 
@@ -66,9 +78,31 @@ This directory contains SQLAlchemy database models for the "Aim for the Stars" a
 - **Property decorators**: Used for computed fields and validation
 - **Relationship loading**: Configured for optimal query performance
 
+## Points System Architecture
+
+### Dual Tracking System
+- **PointsLog**: Detailed transaction history (source of truth)
+- **DailyStats**: Aggregated daily cache for performance
+- **Consistency**: PointsService ensures both are synchronized
+
+### Point Values
+- Encouraged behavior diary: +5 points
+- Growth opportunity diary: +2 points  
+- Goal completion: +10 points
+- Goal failure: +1 point (effort recognition)
+- Daily login bonus: +1 point
+
+## Database Compatibility
+
+### PostgreSQL vs SQLite
+- **Storage types**: Use String(20) instead of Enum for PostgreSQL compatibility
+- **Query patterns**: Handle both enum objects and string values in filters
+- **Migrations**: Use SQLAlchemy inspector instead of sqlite_master queries
+
 ## Migration Management
 
 Models work with Flask-Migrate for schema versioning:
 - Changes to models require new migrations: `flask db migrate -m "description"`
 - Apply migrations: `flask db upgrade`
-- Always review generated migrations before applying
+- **Database compatibility**: Always use database-agnostic patterns in migrations
+- **Testing**: Test migrations against both SQLite and PostgreSQL

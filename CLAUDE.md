@@ -16,10 +16,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Security**: CSRF protection (Flask-WTF), rate limiting (Flask-Limiter)
 
 ### Key Components
-- **Models** (`app/models/`): User, DiaryEntry, DailyStats, Goal database models
-- **Routes** (`app/routes/`): Blueprint-based routing (auth, diary, goals, progress, etc.)
-- **Templates** (`app/templates/`): Bootstrap 5 frontend with Chart.js visualizations
-- **Utilities** (`app/utils/`): Helper functions for goals, progress, and search
+- **Models** (`app/models/`): User, DiaryEntry, DailyStats, Goal, PointsLog database models
+- **Routes** (`app/routes/`): Blueprint-based routing (auth, diary, goals, progress, api)
+- **Templates** (`app/templates/`): Bootstrap 5 frontend with Chart.js visualizations (organized by feature)
+- **Utilities** (`app/utils/`): Helper functions for goals, progress, search, and points management
+- **Static Assets** (`app/static/`): Feature-organized CSS/JS (goals/, progress/, shared/, etc.)
 
 ## Development Commands
 
@@ -46,10 +47,24 @@ flask db upgrade               # Apply migrations
 python check_db.py             # Check database schema
 ```
 
+### Code Quality & Formatting
+```bash
+black .                        # Format code (88-char line length)
+isort .                        # Sort imports
+pytest -m "unit"               # Run unit tests only
+pytest -m "integration"        # Run integration tests only
+```
+
 ### Security Auditing
 ```bash
 safety check                   # Check dependencies for vulnerabilities
 pip-audit                     # Alternative security audit tool
+```
+
+### Data Maintenance
+```bash
+python data_integrity_check.py    # Check database consistency
+python backfill_points_log.py     # Backfill historical points data
 ```
 
 ## Key Features & Implementation Details
@@ -57,7 +72,8 @@ pip-audit                     # Alternative security audit tool
 ### Database Schema
 - **User**: id, email, password (hashed), user_name
 - **DiaryEntry**: id, user_id, entry_date, content, rating (-1 or 1)
-- **DailyStats**: id, user_id, date, points, current_streak, longest_streak
+- **DailyStats**: id, user_id, date, points, current_streak, longest_streak (aggregated cache)
+- **PointsLog**: id, user_id, date, points, source_type, source_id, description (detailed transactions)
 - **Goal**: id, user_id, name, description, target_date, status, points_target
 
 ### Authentication Flow
@@ -67,10 +83,12 @@ pip-audit                     # Alternative security audit tool
 - Rate limiting (200/day, 50/hour default)
 
 ### Points System
-- Encouraged behavior: +5 points
-- Behavior to change: +2 points
-- Daily stats tracking with streak calculation
-- Analytics dashboard with Chart.js visualizations
+- **Point Values**: Encouraged behavior (+5), Growth opportunity (+2), Goal completion (+10), Goal failure (+1), Daily login (+1)
+- **Dual Tracking**: PointsLog (detailed transactions) + DailyStats (aggregated cache)
+- **Points Service**: Centralized `PointsService` manages transactions and consistency
+- **Point Sources**: `PointsSourceType` enum (diary_entry, goal_completed, goal_failed, daily_login)
+- **Analytics**: Clickable breakdown modals with detailed transaction history
+- **Streak Calculation**: Automatic current/longest streak tracking
 
 ### Security Features
 - Environment-based configuration (requires .env with SECRET_KEY)
@@ -96,13 +114,18 @@ FLASK_ENV=development            # or production
 
 ## Testing Strategy
 
-Tests are organized by component:
+Tests are organized by component and type:
 - `test_models/`: Database model tests
-- `test_routes/`: Route/endpoint tests
+- `test_routes/`: Route/endpoint tests  
 - `test_utils/`: Utility function tests
 - `test_forms/`: Form validation tests
 
-Uses pytest with Flask-testing integration and coverage reporting.
+### Test Categories
+- **Unit tests**: Fast, isolated component tests
+- **Integration tests**: Database and service integration
+- **Slow tests**: Comprehensive end-to-end scenarios
+
+Uses pytest with Flask-testing integration, coverage reporting, and custom markers for test organization.
 
 ## Common Workflows
 
@@ -113,7 +136,35 @@ Uses pytest with Flask-testing integration and coverage reporting.
 
 ## Production Deployment
 
-- Uses Gunicorn WSGI server
-- Supports PostgreSQL and Redis
-- Configured for Railway/Heroku deployment
-- Environment-based configuration switching
+- **WSGI Server**: Gunicorn with 3 workers (`Procfile`)
+- **Database**: PostgreSQL (Railway/Heroku)
+- **System Dependencies**: WeasyPrint, Cairo, Pango for PDF generation (`nixpacks.toml`)
+- **Environment**: Automatic Railway deployment with migrations
+- **CI/CD**: GitHub Actions security audit workflow
+- **Database Compatibility**: SQLite (dev) ↔ PostgreSQL (prod) using database-agnostic migrations
+
+## Frontend Architecture
+
+### Template Organization
+- Feature-based directories: `auth/`, `diary/`, `goals/`, `main/`, `progress/`
+- Shared components in `partials/`
+- Custom error pages (403, 404, 500)
+
+### JavaScript & CSS
+- **Modular JS**: Feature-specific files (goals.js, charts.js, entry-toggles.js)
+- **CSS Organization**: Shared components + feature-specific styles
+- **User Onboarding**: Interactive tour system with localStorage persistence
+- **Chart Integration**: Chart.js for analytics with clickable data points
+
+## Important Implementation Notes
+
+### Database Compatibility
+- **PostgreSQL vs SQLite**: Use SQLAlchemy inspector instead of `sqlite_master`
+- **Enum Handling**: Store as String(20) for PostgreSQL compatibility
+- **Migration Safety**: Database-agnostic patterns for production deployment
+
+### Points System Implementation
+- **Transaction Integrity**: All point awards go through `PointsService.award_points()`
+- **Data Consistency**: PointsLog is source of truth, DailyStats is cache
+- **Enum Conversion**: Handle both enum objects and string values in queries
+- **Login Bonus**: Check `PointsLog` with `source_type=PointsSourceType.DAILY_LOGIN.value`

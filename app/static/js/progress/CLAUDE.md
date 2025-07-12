@@ -4,13 +4,14 @@ This directory contains JavaScript functionality for progress tracking and visua
 
 ## Scripts
 
-### `charts.js` - Data Visualization
-- **Purpose**: Chart.js integration for progress visualization
+### `charts.js` - Interactive Data Visualization ⭐ **ENHANCED**
+- **Purpose**: Advanced Chart.js integration with clickable analytics
 - **Features**:
-  - Points progress charts over time
-  - Streak visualization and trends
-  - Goal progress tracking charts
-  - Interactive chart controls and filtering
+  - **Clickable data points**: Interactive chart elements with detailed breakdowns
+  - Points progress charts over time with trend analysis
+  - Streak visualization and milestone tracking
+  - Goal progress tracking with completion forecasts
+  - **API integration**: Real-time data fetching from API endpoints
 
 ### `entries.js` - Diary Entry Display
 - **Purpose**: Enhanced diary entry viewing and interaction
@@ -28,21 +29,23 @@ This directory contains JavaScript functionality for progress tracking and visua
   - Date range selection
   - Sort order controls
 
-### `main.js` - Core Progress Dashboard
-- **Purpose**: Main progress dashboard functionality and coordination
+### `main.js` - Interactive Progress Dashboard ⭐ **ENHANCED**
+- **Purpose**: Advanced dashboard with clickable analytics and API integration
 - **Features**:
-  - Dashboard initialization and setup
-  - Component coordination and communication
-  - Data fetching and management
-  - Overall progress statistics display
+  - **Clickable progress cards**: Interactive cards with detailed point breakdowns
+  - **Modal integration**: Points breakdown modals with transaction history
+  - Dashboard initialization and component coordination
+  - **API communication**: Real-time data fetching from `/api/points-breakdown`
+  - Overall progress statistics with detailed analytics
 
 ## Functionality Overview
 
-### Data Visualization
-- **Chart rendering**: Uses Chart.js for interactive charts
-- **Real-time updates**: Charts update as new data becomes available
+### Interactive Data Visualization ⭐ **ENHANCED**
+- **Clickable charts**: Chart.js with clickable data points for detailed views
+- **Modal breakdowns**: Detailed points breakdown modals with transaction history
+- **Real-time updates**: Charts and cards update with fresh API data
 - **Multiple chart types**: Line charts for trends, bar charts for comparisons
-- **Responsive design**: Charts adapt to different screen sizes
+- **Responsive design**: Charts and interactive elements adapt to all screen sizes
 
 ### Entry Management
 - **Dynamic loading**: Entries loaded dynamically for performance
@@ -119,11 +122,12 @@ This directory contains JavaScript functionality for progress tracking and visua
 
 ## Integration with Backend
 
-### Flask API Endpoints
+### Flask API Endpoints ⭐ **ENHANCED**
+- **Points breakdown**: `/api/points-breakdown` for detailed transaction history
 - **Progress data**: Endpoints for progress statistics and trends
 - **Entry data**: Endpoints for diary entry retrieval and search
 - **Goal data**: Endpoints for goal progress and status
-- **Real-time updates**: WebSocket or polling for live updates
+- **Real-time analytics**: API-driven dashboard updates
 
 ### Authentication and Security
 - **Session handling**: Respects user authentication state
