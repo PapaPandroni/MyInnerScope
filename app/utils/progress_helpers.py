@@ -5,10 +5,10 @@ from ..models import User, DiaryEntry, DailyStats, db
 
 def get_display_name(user: User) -> str:
     """Return the display name for a user.
-    
+
     Args:
         user: The User object.
-        
+
     Returns:
         The user's display name or email prefix if no display name is set.
     """
@@ -17,11 +17,11 @@ def get_display_name(user: User) -> str:
 
 def get_today_stats(user_id: int, today: date) -> int:
     """Return today's points for the user.
-    
+
     Args:
         user_id: The ID of the user.
         today: Today's date.
-        
+
     Returns:
         The points earned today, or 0 if no stats exist.
     """
@@ -31,10 +31,10 @@ def get_today_stats(user_id: int, today: date) -> int:
 
 def get_total_points(user_id: int) -> int:
     """Return the total points for the user.
-    
+
     Args:
         user_id: The ID of the user.
-        
+
     Returns:
         The cumulative points earned by the user.
     """
@@ -47,28 +47,40 @@ def get_total_points(user_id: int) -> int:
 
 
 def get_current_streak(user_id: int) -> int:
-    """Return the current streak for the user.
-    
+    """Return the current streak for the user based on consecutive diary entries.
+
     Args:
         user_id: The ID of the user.
-        
+
     Returns:
-        The user's current daily streak count.
+        The user's current daily streak count based on consecutive days with diary entries.
     """
-    row = (
-        DailyStats.query.filter_by(user_id=user_id)
-        .order_by(DailyStats.date.desc())
-        .first()
-    )
-    return row.current_streak if row else 0
+    today = date.today()
+    current_streak = 0
+    check_date = today
+
+    # Work backwards from today checking for diary entries
+    while True:
+        has_diary_entry = (
+            DiaryEntry.query.filter_by(user_id=user_id, entry_date=check_date).first()
+            is not None
+        )
+
+        if has_diary_entry:
+            current_streak += 1
+            check_date = check_date - timedelta(days=1)
+        else:
+            break
+
+    return current_streak
 
 
 def get_longest_streak(user_id: int) -> int:
     """Return the longest streak for the user.
-    
+
     Args:
         user_id: The ID of the user.
-        
+
     Returns:
         The user's longest recorded daily streak.
     """
@@ -82,10 +94,10 @@ def get_longest_streak(user_id: int) -> int:
 
 def get_total_entries(user_id: int) -> int:
     """Return the total number of diary entries for the user.
-    
+
     Args:
         user_id: The ID of the user.
-        
+
     Returns:
         The total count of diary entries.
     """
@@ -94,10 +106,10 @@ def get_total_entries(user_id: int) -> int:
 
 def get_points_data(user_id: int) -> List[List[Any]]:
     """Return cumulative points data for the user.
-    
+
     Args:
         user_id: The ID of the user.
-        
+
     Returns:
         List of [date_string, cumulative_points] pairs for charting.
     """
@@ -117,10 +129,10 @@ def get_points_data(user_id: int) -> List[List[Any]]:
 
 def get_top_days_with_entries(user_id: int) -> List[Dict[str, Any]]:
     """Return the top 3 days with most points and their diary entries.
-    
+
     Args:
         user_id: The ID of the user.
-        
+
     Returns:
         List of dictionaries containing date, points, and entries for top days.
     """
@@ -141,10 +153,10 @@ def get_top_days_with_entries(user_id: int) -> List[Dict[str, Any]]:
 
 def get_weekday_data(user_id: int) -> Tuple[List[Dict[str, Any]], bool]:
     """Return weekday analysis data and data sufficiency indicator.
-    
+
     Args:
         user_id: The ID of the user.
-        
+
     Returns:
         Tuple of (weekday_data_list, has_sufficient_data_boolean).
     """
@@ -177,7 +189,7 @@ def get_weekday_data(user_id: int) -> Tuple[List[Dict[str, Any]], bool]:
             )
         else:
             weekday_data.append({"name": weekday_names[i], "avg_points": 0})
-    
+
     # Chart unlocks based on diary entries on different weekdays, not daily stats
     has_sufficient_weekday_data = get_unique_weekdays_with_entries(user_id) >= 2
     return weekday_data, has_sufficient_weekday_data
@@ -185,7 +197,7 @@ def get_weekday_data(user_id: int) -> Tuple[List[Dict[str, Any]], bool]:
 
 def get_sample_weekday_data() -> List[Dict[str, Any]]:
     """Return sample weekday data for placeholder purposes.
-    
+
     Returns:
         List of sample weekday statistics for demonstration.
     """
@@ -202,11 +214,11 @@ def get_sample_weekday_data() -> List[Dict[str, Any]]:
 
 def get_trend_message(user_id: int, today: date) -> str:
     """Return the trend message for the user based on recent activity.
-    
+
     Args:
         user_id: The ID of the user.
         today: Today's date.
-        
+
     Returns:
         Motivational message based on the last 14 days of activity.
     """
@@ -249,10 +261,10 @@ def get_trend_message(user_id: int, today: date) -> str:
 
 def get_unique_weekdays_with_entries(user_id: int) -> int:
     """Get the count of unique weekdays that have diary entries.
-    
+
     Args:
         user_id: The ID of the user.
-        
+
     Returns:
         Count of unique weekdays (0-7) that have at least one diary entry.
     """
@@ -267,11 +279,11 @@ def get_unique_weekdays_with_entries(user_id: int) -> int:
 
 def get_recent_entries(user_id: int, limit: int = 3) -> List[DiaryEntry]:
     """Get the most recent diary entries for the user.
-    
+
     Args:
         user_id: The ID of the user.
         limit: Maximum number of entries to return.
-        
+
     Returns:
         List of the most recent DiaryEntry objects.
     """
