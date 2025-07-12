@@ -1,4 +1,4 @@
-from datetime import date, timedelta
+from datetime import date, datetime, timezone, timedelta
 from typing import List, Dict, Tuple, Any
 from ..models import User, DiaryEntry, DailyStats, db
 
@@ -55,7 +55,7 @@ def get_current_streak(user_id: int) -> int:
     Returns:
         The user's current daily streak count based on consecutive days with diary entries.
     """
-    today = date.today()
+    today = datetime.now(timezone.utc).date()
     current_streak = 0
     check_date = today
 

@@ -64,7 +64,7 @@ class PointsLog(db.Model):
             The created PointsLog entry
         """
         if date is None:
-            date = datetime.now().date()
+            date = datetime.now(timezone.utc).date()
 
         log_entry = PointsLog(
             user_id=user_id,
@@ -96,7 +96,7 @@ class PointsLog(db.Model):
             List of PointsLog entries for the specified date
         """
         if target_date is None:
-            target_date = datetime.now().date()
+            target_date = datetime.now(timezone.utc).date()
 
         return (
             PointsLog.query.filter_by(user_id=user_id, date=target_date)
@@ -116,7 +116,7 @@ class PointsLog(db.Model):
             Total points earned on the specified date
         """
         if target_date is None:
-            target_date = datetime.now().date()
+            target_date = datetime.now(timezone.utc).date()
 
         result = (
             db.session.query(db.func.sum(PointsLog.points))

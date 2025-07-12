@@ -12,7 +12,7 @@ from flask import (
 )
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.wrappers import Response as WerkzeugResponse
-from datetime import date
+from datetime import date, datetime, timezone
 from ..models import User, DailyStats, PointsLog, db
 from ..models.points_log import PointsSourceType
 from ..utils.points_service import award_login_bonus
@@ -46,7 +46,7 @@ def login_page() -> Union[str, tuple[str, int], WerkzeugResponse]:
         current_app.logger.info(f"User {email} logged in successfully.")
 
         # Award daily login bonus if not already awarded today
-        today = date.today()
+        today = datetime.now(timezone.utc).date()
         existing_login_bonus = PointsLog.query.filter_by(
             user_id=user.id,
             date=today,

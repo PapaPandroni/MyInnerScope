@@ -3,7 +3,7 @@ Tests for points service including streak milestone rewards
 """
 
 import pytest
-from datetime import date, timedelta
+from datetime import date, datetime, timezone, timedelta
 from app.models import User, DiaryEntry, DailyStats, PointsLog, db
 from app.models.points_log import PointsSourceType
 from app.utils.points_service import PointsService
@@ -179,7 +179,7 @@ class TestPointsService:
         """Test that milestone awards use today's date correctly"""
         with app.app_context():
             user_id = sample_user.id
-            today = date.today()
+            today = datetime.now(timezone.utc).date()
 
             # Award milestone
             PointsService.check_and_award_streak_milestones(user_id, 7)

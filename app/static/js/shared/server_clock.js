@@ -1,6 +1,6 @@
 /**
  * Server Clock Component
- * Creates a live updating clock synchronized with server time
+ * Shows current UTC time (server time)
  */
 
 class ServerClock {
@@ -13,10 +13,11 @@ class ServerClock {
             return;
         }
         
-        // Calculate offset between server time and local time
+        // Parse the server time string to avoid browser timezone interference
         this.serverTime = new Date(serverTimeISO);
-        this.localTime = new Date();
-        this.offset = this.serverTime.getTime() - this.localTime.getTime();
+        this.startTime = Date.now();
+        
+        console.log('Server clock initialized for UTC time display');
         
         // Start the clock
         this.updateClock();
@@ -24,12 +25,14 @@ class ServerClock {
     }
     
     updateClock() {
-        // Get current local time and apply server offset
-        const now = new Date();
-        const serverNow = new Date(now.getTime() + this.offset);
+        // Calculate elapsed time since initialization
+        const elapsed = Date.now() - this.startTime;
         
-        // Format time as HH:MM:SS
-        const timeString = serverNow.toTimeString().split(' ')[0];
+        // Add elapsed time to server time
+        const currentTime = new Date(this.serverTime.getTime() + elapsed);
+        
+        // Extract UTC time components to avoid browser timezone conversion
+        const timeString = currentTime.toISOString().slice(11, 19);
         
         // Update the display
         this.element.textContent = `Server Time: ${timeString} ${this.timezone}`;
@@ -51,6 +54,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const serverTime = serverTimeElement.dataset.serverTime;
         const timezone = serverTimeElement.dataset.timezone;
         
+        console.log('Initializing server clock with:', serverTime, timezone);
         new ServerClock('server-clock', serverTime, timezone);
+    } else {
+        console.error('Server time data element not found');
     }
 });

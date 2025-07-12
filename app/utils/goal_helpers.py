@@ -1,5 +1,5 @@
 from typing import Optional, List, Dict, Any
-from datetime import datetime, date
+from datetime import datetime, date, timezone
 from ..models.goal import Goal, GoalCategory, GoalStatus
 from ..models.database import db
 
@@ -13,7 +13,7 @@ def get_current_goals(user_id: int) -> List[Goal]:
     Returns:
         List of active Goal objects within their time period.
     """
-    today = datetime.now().date()
+    today = datetime.now(timezone.utc).date()
     return Goal.query.filter(
         Goal.user_id == user_id,
         Goal.status == GoalStatus.ACTIVE,
@@ -23,7 +23,7 @@ def get_current_goals(user_id: int) -> List[Goal]:
 
 
 def get_overdue_goals(user_id: int) -> List[Goal]:
-    today = datetime.now().date()
+    today = datetime.now(timezone.utc).date()
     return Goal.query.filter(
         Goal.user_id == user_id, Goal.status == GoalStatus.ACTIVE, Goal.week_end < today
     ).all()

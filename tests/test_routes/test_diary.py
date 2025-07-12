@@ -1,6 +1,6 @@
 import pytest
 from flask import url_for, session
-from datetime import date, timedelta
+from datetime import date, datetime, timezone, timedelta
 from app.models import User, DiaryEntry, DailyStats, db
 from tests.conftest import extract_csrf_token
 
@@ -54,10 +54,10 @@ class TestDiaryRoutes:
             ).first()
             assert entry is not None
             assert entry.rating == 1
-            assert entry.entry_date == date.today()
+            assert entry.entry_date == datetime.now(timezone.utc).date()
 
             stats = DailyStats.query.filter_by(
-                user_id=sample_user.id, date=date.today()
+                user_id=sample_user.id, date=datetime.now(timezone.utc).date()
             ).first()
             assert stats is not None
             assert stats.points == 5  # 5 points for positive rating
@@ -88,7 +88,7 @@ class TestDiaryRoutes:
             assert entry.rating == -1
 
             stats = DailyStats.query.filter_by(
-                user_id=sample_user.id, date=date.today()
+                user_id=sample_user.id, date=datetime.now(timezone.utc).date()
             ).first()
             assert stats is not None
             assert stats.points == 2  # 2 points for negative rating
@@ -169,14 +169,14 @@ class TestDiaryRoutes:
                 user_id=sample_user.id,
                 content="Day 1",
                 rating=1,
-                entry_date=date.today() - timedelta(days=1),
+                entry_date=datetime.now(timezone.utc).date() - timedelta(days=1),
             )
             db.session.add(entry1)
             db.session.commit()
 
             stats1 = DailyStats(
                 user_id=sample_user.id,
-                date=date.today() - timedelta(days=1),
+                date=datetime.now(timezone.utc).date() - timedelta(days=1),
                 points=5,
                 current_streak=1,
                 longest_streak=1,
@@ -196,7 +196,7 @@ class TestDiaryRoutes:
 
         with app.app_context():
             stats2 = DailyStats.query.filter_by(
-                user_id=sample_user.id, date=date.today()
+                user_id=sample_user.id, date=datetime.now(timezone.utc).date()
             ).first()
             assert stats2 is not None
             assert stats2.current_streak == 2
@@ -210,14 +210,14 @@ class TestDiaryRoutes:
                 user_id=sample_user.id,
                 content="Day 1",
                 rating=1,
-                entry_date=date.today() - timedelta(days=2),
+                entry_date=datetime.now(timezone.utc).date() - timedelta(days=2),
             )
             db.session.add(entry1)
             db.session.commit()
 
             stats1 = DailyStats(
                 user_id=sample_user.id,
-                date=date.today() - timedelta(days=2),
+                date=datetime.now(timezone.utc).date() - timedelta(days=2),
                 points=5,
                 current_streak=1,
                 longest_streak=1,
@@ -237,7 +237,7 @@ class TestDiaryRoutes:
 
         with app.app_context():
             stats2 = DailyStats.query.filter_by(
-                user_id=sample_user.id, date=date.today()
+                user_id=sample_user.id, date=datetime.now(timezone.utc).date()
             ).first()
             assert stats2 is not None
             assert stats2.current_streak == 1  # Streak should reset to 1

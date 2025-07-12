@@ -50,7 +50,7 @@ class Goal(db.Model):
     @property
     def is_current(self) -> bool:
         """Check if this goal is still active (today between start and end)"""
-        today = datetime.now().date()
+        today = datetime.now(timezone.utc).date()
         return (
             self.week_start <= today <= self.week_end
             and self.status == GoalStatus.ACTIVE
@@ -58,7 +58,7 @@ class Goal(db.Model):
 
     @property
     def days_remaining(self) -> int:
-        today = datetime.now().date()
+        today = datetime.now(timezone.utc).date()
         if today > self.week_end:
             return 0
         return (self.week_end - today).days
@@ -66,14 +66,14 @@ class Goal(db.Model):
     @property
     def progress_percentage(self) -> float:
         total_days = (self.week_end - self.week_start).days + 1
-        days_passed = (datetime.now().date() - self.week_start).days + 1
+        days_passed = (datetime.now(timezone.utc).date() - self.week_start).days + 1
         return min(100, max(0, (days_passed / total_days) * 100))
 
     @staticmethod
     def get_goal_dates(target_date: date = None) -> Tuple[date, date]:
         """Get the start and end date for a new goal (start = today, end = today+6)"""
         if target_date is None:
-            target_date = datetime.now().date()
+            target_date = datetime.now(timezone.utc).date()
         start = target_date
         end = start + timedelta(days=6)
         return start, end

@@ -3,7 +3,7 @@ Tests for progress helper functions
 """
 
 import pytest
-from datetime import date, timedelta
+from datetime import date, datetime, timezone, timedelta
 from app.models import User, DiaryEntry, DailyStats, db
 from app.utils.progress_helpers import (
     get_display_name,
@@ -50,7 +50,7 @@ class TestProgressHelpers:
     def test_get_today_stats_with_data(self, app, sample_user):
         """Test get_today_stats when user has stats for today."""
         with app.app_context():
-            today = date.today()
+            today = datetime.now(timezone.utc).date()
             stats = DailyStats(
                 user_id=sample_user.id,
                 date=today,
@@ -67,7 +67,7 @@ class TestProgressHelpers:
     def test_get_today_stats_without_data(self, app, sample_user):
         """Test get_today_stats when user has no stats for today."""
         with app.app_context():
-            today = date.today()
+            today = datetime.now(timezone.utc).date()
             points = get_today_stats(sample_user.id, today)
             assert points == 0
 
@@ -78,7 +78,7 @@ class TestProgressHelpers:
             for i in range(3):
                 stats = DailyStats(
                     user_id=sample_user.id,
-                    date=date.today() - timedelta(days=i),
+                    date=datetime.now(timezone.utc).date() - timedelta(days=i),
                     points=10 + i,
                     current_streak=1,
                     longest_streak=1,
@@ -98,7 +98,7 @@ class TestProgressHelpers:
     def test_get_current_streak_with_data(self, app, sample_user):
         """Test get_current_streak when user has diary entries."""
         with app.app_context():
-            today = date.today()
+            today = datetime.now(timezone.utc).date()
             
             # Create diary entries for consecutive days ending today
             for i in range(5):
@@ -128,7 +128,7 @@ class TestProgressHelpers:
             for i in range(3):
                 stats = DailyStats(
                     user_id=sample_user.id,
-                    date=date.today() - timedelta(days=i),
+                    date=datetime.now(timezone.utc).date() - timedelta(days=i),
                     points=10,
                     current_streak=1,
                     longest_streak=5 + i,
@@ -154,7 +154,7 @@ class TestProgressHelpers:
                     user_id=sample_user.id,
                     content=f"Entry {i+1}",
                     rating=1,
-                    entry_date=date.today() - timedelta(days=i),
+                    entry_date=datetime.now(timezone.utc).date() - timedelta(days=i),
                 )
                 db.session.add(entry)
             db.session.commit()
@@ -175,7 +175,7 @@ class TestProgressHelpers:
             for i in range(3):
                 stats = DailyStats(
                     user_id=sample_user.id,
-                    date=date.today()
+                    date=datetime.now(timezone.utc).date()
                     - timedelta(days=2 - i),  # Order: 2 days ago, 1 day ago, today
                     points=10,
                     current_streak=1,
@@ -201,7 +201,7 @@ class TestProgressHelpers:
         with app.app_context():
             # Create stats and entries for multiple days
             for i in range(3):
-                day_date = date.today() - timedelta(days=i)
+                day_date = datetime.now(timezone.utc).date() - timedelta(days=i)
                 stats = DailyStats(
                     user_id=sample_user.id,
                     date=day_date,
@@ -239,7 +239,7 @@ class TestProgressHelpers:
         """Test get_weekday_data when user has sufficient data."""
         with app.app_context():
             # Create diary entries on 2+ different weekdays (to unlock chart)
-            base_date = date.today()
+            base_date = datetime.now(timezone.utc).date()
             monday_date = base_date - timedelta(days=base_date.weekday())
             tuesday_date = monday_date + timedelta(days=1)
             
@@ -297,7 +297,7 @@ class TestProgressHelpers:
                 user_id=sample_user.id,
                 content="Single entry",
                 rating=1,
-                entry_date=date.today(),
+                entry_date=datetime.now(timezone.utc).date(),
             )
             db.session.add(entry)
             
@@ -305,7 +305,7 @@ class TestProgressHelpers:
             for i in range(3):
                 stats = DailyStats(
                     user_id=sample_user.id,
-                    date=date.today() - timedelta(days=i),
+                    date=datetime.now(timezone.utc).date() - timedelta(days=i),
                     points=10,
                     current_streak=1,
                     longest_streak=1,
@@ -358,12 +358,12 @@ class TestProgressHelpers:
                 user_id=sample_user.id,
                 content="Test entry",
                 rating=1,
-                entry_date=date.today(),
+                entry_date=datetime.now(timezone.utc).date(),
             )
             db.session.add(entry)
             db.session.commit()
 
-            trend_message = get_trend_message(sample_user.id, date.today())
+            trend_message = get_trend_message(sample_user.id, datetime.now(timezone.utc).date())
             assert "Keep writing to unlock insights" in trend_message
 
     def test_get_trend_message_improving_trend(self, app, sample_user):
@@ -371,7 +371,7 @@ class TestProgressHelpers:
         with app.app_context():
             # Create entries and stats for 14 days
             for i in range(14):
-                day_date = date.today() - timedelta(days=13 - i)
+                day_date = datetime.now(timezone.utc).date() - timedelta(days=13 - i)
                 entry = DiaryEntry(
                     user_id=sample_user.id,
                     content=f"Entry {i+1}",
@@ -392,7 +392,7 @@ class TestProgressHelpers:
                 db.session.add(stats)
             db.session.commit()
 
-            trend_message = get_trend_message(sample_user.id, date.today())
+            trend_message = get_trend_message(sample_user.id, datetime.now(timezone.utc).date())
             assert "earning more points than last week" in trend_message
 
     def test_get_trend_message_declining_trend(self, app, sample_user):
@@ -400,7 +400,7 @@ class TestProgressHelpers:
         with app.app_context():
             # Create entries and stats for 14 days
             for i in range(14):
-                day_date = date.today() - timedelta(days=13 - i)
+                day_date = datetime.now(timezone.utc).date() - timedelta(days=13 - i)
                 entry = DiaryEntry(
                     user_id=sample_user.id,
                     content=f"Entry {i+1}",
@@ -421,7 +421,7 @@ class TestProgressHelpers:
                 db.session.add(stats)
             db.session.commit()
 
-            trend_message = get_trend_message(sample_user.id, date.today())
+            trend_message = get_trend_message(sample_user.id, datetime.now(timezone.utc).date())
             assert "Let's beat last week" in trend_message
 
     def test_get_trend_message_steady_trend(self, app, sample_user):
@@ -429,7 +429,7 @@ class TestProgressHelpers:
         with app.app_context():
             # Create entries and stats for 14 days
             for i in range(14):
-                day_date = date.today() - timedelta(days=13 - i)
+                day_date = datetime.now(timezone.utc).date() - timedelta(days=13 - i)
                 entry = DiaryEntry(
                     user_id=sample_user.id,
                     content=f"Entry {i+1}",
@@ -450,7 +450,7 @@ class TestProgressHelpers:
                 db.session.add(stats)
             db.session.commit()
 
-            trend_message = get_trend_message(sample_user.id, date.today())
+            trend_message = get_trend_message(sample_user.id, datetime.now(timezone.utc).date())
             assert "Steady progress" in trend_message
 
     def test_get_recent_entries_with_data(self, app, sample_user):
@@ -462,7 +462,7 @@ class TestProgressHelpers:
                     user_id=sample_user.id,
                     content=f"Entry {i+1}",
                     rating=1,
-                    entry_date=date.today() - timedelta(days=i),
+                    entry_date=datetime.now(timezone.utc).date() - timedelta(days=i),
                 )
                 db.session.add(entry)
             db.session.commit()
@@ -489,7 +489,7 @@ class TestProgressHelpers:
                     user_id=sample_user.id,
                     content=f"Entry {i+1}",
                     rating=1,
-                    entry_date=date.today(),
+                    entry_date=datetime.now(timezone.utc).date(),
                 )
                 db.session.add(entry)
             db.session.commit()
@@ -501,7 +501,7 @@ class TestProgressHelpers:
         """Test get_unique_weekdays_with_entries when user has entries on multiple weekdays."""
         with app.app_context():
             # Create entries on different weekdays
-            base_date = date.today()
+            base_date = datetime.now(timezone.utc).date()
             
             # Monday (weekday 0)
             monday_date = base_date - timedelta(days=base_date.weekday())
@@ -558,7 +558,7 @@ class TestProgressHelpers:
         """Test get_unique_weekdays_with_entries when user has entries on only one weekday."""
         with app.app_context():
             # Create multiple entries on the same weekday
-            today = date.today()
+            today = datetime.now(timezone.utc).date()
             
             entry1 = DiaryEntry(
                 user_id=sample_user.id,
@@ -585,7 +585,7 @@ class TestProgressHelpers:
         """Test get_unique_weekdays_with_entries when user has entries on all weekdays."""
         with app.app_context():
             # Create entries for all 7 weekdays
-            base_date = date.today()
+            base_date = datetime.now(timezone.utc).date()
             monday_date = base_date - timedelta(days=base_date.weekday())
             
             for i in range(7):
@@ -611,12 +611,12 @@ class TestProgressHelpers:
                 user_id=sample_user.id,
                 content="Only diary entry",
                 rating=1,
-                entry_date=date.today(),
+                entry_date=datetime.now(timezone.utc).date(),
             )
             db.session.add(entry)
             
             # But user has daily stats on multiple weekdays (e.g., from login bonuses)
-            base_date = date.today()
+            base_date = datetime.now(timezone.utc).date()
             monday_date = base_date - timedelta(days=base_date.weekday())
             
             for i in range(3):  # Monday, Tuesday, Wednesday

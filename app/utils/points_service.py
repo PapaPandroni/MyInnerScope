@@ -6,7 +6,7 @@ between PointsLog (detailed transactions) and DailyStats (aggregated cache).
 """
 
 from typing import Optional, List
-from datetime import datetime, date, timedelta
+from datetime import datetime, date, timedelta, timezone
 from ..models import db, DiaryEntry, DailyStats, PointsLog
 from ..models.points_log import PointsSourceType
 
@@ -37,7 +37,7 @@ class PointsService:
             The created PointsLog entry
         """
         if target_date is None:
-            target_date = datetime.now().date()
+            target_date = datetime.now(timezone.utc).date()
 
         # Create detailed log entry
         log_entry = PointsLog.create_entry(
@@ -76,7 +76,7 @@ class PointsService:
         stats.points += points
 
         # Update streak calculations if this is today
-        today = datetime.now().date()
+        today = datetime.now(timezone.utc).date()
         if target_date == today:
             PointsService._update_streak_calculations(user_id)
 
@@ -87,7 +87,7 @@ class PointsService:
         Args:
             user_id: User to update streaks for
         """
-        today = datetime.now().date()
+        today = datetime.now(timezone.utc).date()
 
         # Calculate current streak (consecutive days with diary entries ending today)
         current_streak = 0
@@ -154,7 +154,7 @@ class PointsService:
             List of dictionaries with point transaction details
         """
         if target_date is None:
-            target_date = datetime.now().date()
+            target_date = datetime.now(timezone.utc).date()
 
         log_entries = PointsLog.get_daily_breakdown(user_id, target_date)
 
@@ -231,7 +231,7 @@ class PointsService:
         if current_streak <= 0:
             return
 
-        today = datetime.now().date()
+        today = datetime.now(timezone.utc).date()
 
         # Check if we've already awarded streak points today to prevent duplicates
         # Use string values directly for better PostgreSQL compatibility

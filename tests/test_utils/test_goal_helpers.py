@@ -3,7 +3,7 @@ Tests for goal helper utilities
 """
 
 import pytest
-from datetime import datetime, date, timedelta
+from datetime import datetime, date, timezone, timedelta
 from app.models import Goal, db
 from app.models.goal import GoalCategory, GoalStatus
 from app.utils.goal_helpers import (
@@ -21,7 +21,7 @@ class TestGoalHelpers:
         """Test getting current goals for a user"""
         with app.app_context():
             # Create a current goal
-            today = date.today()
+            today = datetime.now(timezone.utc).date()
             goal = Goal(
                 user_id=sample_user.id,
                 category=GoalCategory.EXERCISE,
@@ -44,7 +44,7 @@ class TestGoalHelpers:
         """Test getting overdue goals for a user"""
         with app.app_context():
             # Create an overdue goal
-            today = date.today()
+            today = datetime.now(timezone.utc).date()
             overdue_goal = Goal(
                 user_id=sample_user.id,
                 category=GoalCategory.EXERCISE,
@@ -84,7 +84,7 @@ class TestGoalHelpers:
         """Test getting goal statistics"""
         with app.app_context():
             # Create goals with different statuses
-            today = date.today()
+            today = datetime.now(timezone.utc).date()
 
             # Active goal
             active_goal = Goal(

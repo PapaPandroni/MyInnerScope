@@ -1,7 +1,7 @@
 from typing import Union
 from flask import Blueprint, render_template, redirect, session, send_file, request, Response
 from werkzeug.wrappers import Response as WerkzeugResponse
-from datetime import date
+from datetime import date, datetime, timezone
 from ..models import User, DiaryEntry, DailyStats, db
 
 from ..utils.progress_helpers import (
@@ -34,7 +34,7 @@ def progress() -> Union[str, WerkzeugResponse]:
         return redirect("/login")
     user_id = session["user_id"]
     user = User.query.get(user_id)
-    today = date.today()
+    today = datetime.now(timezone.utc).date()
 
     display_name = get_display_name(user)
     points_today = get_today_stats(user_id, today)
