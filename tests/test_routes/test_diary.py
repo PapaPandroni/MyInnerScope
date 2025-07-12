@@ -22,7 +22,10 @@ class TestDiaryRoutes:
         response = client.get("/diary")
         assert response.status_code == 200
         assert b"Daily Reflection" in response.data
-        assert b"Describe one specific moment from today" in response.data
+        # Check for diary form elements instead of specific placeholder text
+        assert b'id="diary_textarea"' in response.data
+        assert b"I'm Proud of This" in response.data
+        assert b"I'll Grow from This" in response.data
 
     def test_create_diary_entry_success_positive_rating(self, client, app, sample_user):
         """Test successful creation of a diary entry with a positive rating."""

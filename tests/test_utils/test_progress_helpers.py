@@ -96,16 +96,20 @@ class TestProgressHelpers:
             assert total_points == 0
 
     def test_get_current_streak_with_data(self, app, sample_user):
-        """Test get_current_streak when user has stats."""
+        """Test get_current_streak when user has diary entries."""
         with app.app_context():
-            stats = DailyStats(
-                user_id=sample_user.id,
-                date=date.today(),
-                points=10,
-                current_streak=5,
-                longest_streak=10,
-            )
-            db.session.add(stats)
+            today = date.today()
+            
+            # Create diary entries for consecutive days ending today
+            for i in range(5):
+                entry_date = today - timedelta(days=4-i)  # 5 days ago to today
+                entry = DiaryEntry(
+                    user_id=sample_user.id,
+                    content=f"Day {i+1} entry",
+                    rating=1,
+                    entry_date=entry_date
+                )
+                db.session.add(entry)
             db.session.commit()
 
             current_streak = get_current_streak(sample_user.id)

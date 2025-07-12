@@ -217,6 +217,63 @@ class PointsService:
 
         db.session.commit()
 
+    @staticmethod
+    def check_and_award_streak_milestones(user_id: int, current_streak: int) -> None:
+        """Check for streak milestones and award points if achieved.
+
+        Awards 10 points every 7 days and 50 points every 30 days.
+        Prevents duplicate awards on the same day.
+
+        Args:
+            user_id: User to check milestones for
+            current_streak: User's current streak count
+        """
+        if current_streak <= 0:
+            return
+
+        today = datetime.now().date()
+
+        # Check if we've already awarded streak points today to prevent duplicates
+        existing_streak_awards = (
+            PointsLog.query.filter_by(user_id=user_id, date=today)
+            .filter(
+                PointsLog.source_type.in_(
+                    [
+                        PointsSourceType.STREAK_7_DAY.value,
+                        PointsSourceType.STREAK_30_DAY.value,
+                    ]
+                )
+            )
+            .first()
+        )
+
+        if existing_streak_awards:
+            return  # Already awarded streak points today
+
+        points_awarded = 0
+
+        # Award 10 points every 7 days
+        if current_streak % 7 == 0:
+            PointsService.award_points(
+                user_id=user_id,
+                points=10,
+                source_type=PointsSourceType.STREAK_7_DAY,
+                description=f"7-Day Streak Milestone (Day {current_streak})",
+                target_date=today,
+            )
+            points_awarded += 10
+
+        # Award 50 points every 30 days
+        if current_streak % 30 == 0:
+            PointsService.award_points(
+                user_id=user_id,
+                points=50,
+                source_type=PointsSourceType.STREAK_30_DAY,
+                description=f"30-Day Streak Milestone (Day {current_streak})",
+                target_date=today,
+            )
+            points_awarded += 50
+
 
 # Convenience functions for common point awards
 def award_diary_points(user_id: int, diary_entry_id: int, rating: int) -> PointsLog:

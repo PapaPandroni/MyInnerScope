@@ -3,8 +3,12 @@ from flask import Blueprint, render_template, request, redirect, session, flash
 from werkzeug.wrappers import Response as WerkzeugResponse
 from datetime import date, timedelta
 from ..models import User, DiaryEntry, DailyStats, db
-from ..utils.progress_helpers import get_recent_entries, get_current_streak, get_total_points
-from ..utils.points_service import award_diary_points
+from ..utils.progress_helpers import (
+    get_recent_entries,
+    get_current_streak,
+    get_total_points,
+)
+from ..utils.points_service import award_diary_points, PointsService
 from ..forms import DiaryEntryForm
 
 diary_bp = Blueprint("diary", __name__)
@@ -40,12 +44,16 @@ def diary_entry() -> Union[str, tuple[str, int], WerkzeugResponse]:
         # Commit all changes
         db.session.commit()
 
+        # Check for streak milestones after diary entry and points are committed
+        current_streak = get_current_streak(user_id)
+        PointsService.check_and_award_streak_milestones(user_id, current_streak)
+
         # Clear the form for the next entry
         form = DiaryEntryForm(formdata=None)
 
         recent_entries = get_recent_entries(user_id)
         is_new_user = len(recent_entries) == 0
-        
+
         # Get updated user stats for header
         current_streak = get_current_streak(user_id)
         total_points = get_total_points(user_id)
@@ -68,11 +76,11 @@ def diary_entry() -> Union[str, tuple[str, int], WerkzeugResponse]:
                 flash(error, "danger")
         recent_entries = get_recent_entries(user_id)
         is_new_user = len(recent_entries) == 0
-        
+
         # Get user stats for header
         current_streak = get_current_streak(user_id)
         total_points = get_total_points(user_id)
-        
+
         return (
             render_template(
                 "diary/diary.html",
@@ -87,14 +95,14 @@ def diary_entry() -> Union[str, tuple[str, int], WerkzeugResponse]:
         )
 
     recent_entries = get_recent_entries(user_id)
-    
+
     # Check if user should see onboarding tour (new user with no entries)
     is_new_user = len(recent_entries) == 0
-    
+
     # Get user stats for header
     current_streak = get_current_streak(user_id)
     total_points = get_total_points(user_id)
-    
+
     return render_template(
         "diary/diary.html",
         display_name=display_name,
