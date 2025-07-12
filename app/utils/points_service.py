@@ -159,7 +159,7 @@ class PointsService:
             breakdown.append({
                 "source": entry.description,
                 "points": entry.points,
-                "source_type": entry.source_type.value,
+                "source_type": entry.source_type,
                 "source_id": entry.source_id,
                 "created_at": entry.created_at
             })
