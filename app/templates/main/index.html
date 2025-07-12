@@ -8,18 +8,23 @@
 body {
     background-color: transparent !important;
 }
+/* Ensure navbar stays above everything */
+.navbar {
+    position: relative !important;
+    z-index: 1000 !important;
+}
 /* Hero Section */
 .hero-bg {
     position: fixed;
     top: 0; left: 0; width: 100vw; height: 100vh;
     z-index: -2;
-    background: url("/static/assets/starry_sky.jpg") center center/cover no-repeat;
+    background: url("{{ url_for('static', filename='assets/starry_sky.jpg') }}") center center/cover no-repeat !important;
 }
 .hero-gradient {
     position: fixed;
     top: 0; left: 0; width: 100vw; height: 100vh;
     z-index: -1;
-    background: linear-gradient(to top, rgba(10,24,51,0.4) 70%, rgba(10,24,51,0.1) 85%, transparent 100%);
+    background: linear-gradient(to top, #171A25 0%, rgba(23,26,37,0.8) 30%, rgba(23,26,37,0.4) 50%, rgba(23,26,37,0.1) 65%, transparent 70%);
 }
 .hero-section {
     min-height: 100vh;
@@ -30,12 +35,15 @@ body {
     text-align: center;
     color: #fff;
     padding: 2rem;
+    position: relative;
+    z-index: 10;
+    background: transparent !important;
 }
 .hero-title {
     font-size: 3.5rem;
     font-weight: bold;
     letter-spacing: 1px;
-    text-shadow: 0 2px 16px #000, 0 0 8px #00d4ff;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.8), 0 4px 16px rgba(0,0,0,0.6), 0 0 3px #00d4ff;
     margin-bottom: 1.5rem;
 }
 .hero-subtitle {
@@ -89,7 +97,7 @@ body {
 .main-content {
     background: #171A25;
     position: relative;
-    z-index: 1;
+    z-index: 100;
 }
 
 /* Problem/Value Section */
@@ -271,8 +279,8 @@ body {
 
 {% block content %}
 <!-- Hero Background -->
-<div class="hero-bg" style="background: url('{{ url_for('static', filename='assets/starry_sky.jpg') }}') center center/cover no-repeat;"></div>
-<!-- <div class="hero-gradient"></div> -->
+<div class="hero-bg"></div>
+<div class="hero-gradient"></div>
 
 <!-- Hero Section -->
 <section class="hero-section">
