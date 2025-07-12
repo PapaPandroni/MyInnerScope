@@ -13,7 +13,9 @@ from flask import (
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.wrappers import Response as WerkzeugResponse
 from datetime import date
-from ..models import User, DailyStats, db
+from ..models import User, DailyStats, PointsLog, db
+from ..models.points_log import PointsSourceType
+from ..utils.points_service import award_login_bonus
 from ..forms import LoginForm, RegisterForm
 
 auth_bp = Blueprint("auth", __name__)
@@ -43,16 +45,16 @@ def login_page() -> Union[str, tuple[str, int], WerkzeugResponse]:
         session["user_id"] = user.id
         current_app.logger.info(f"User {email} logged in successfully.")
 
-        # Inside login route, after login is successful
+        # Award daily login bonus if not already awarded today
         today = date.today()
-        user_id = user.id
+        existing_login_bonus = PointsLog.query.filter_by(
+            user_id=user.id,
+            date=today,
+            source_type=PointsSourceType.DAILY_LOGIN
+        ).first()
 
-        stats = DailyStats.query.filter_by(user_id=user_id, date=today).first()
-
-        if not stats:
-            stats = DailyStats(user_id=user_id, date=today, points=1)
-            db.session.add(stats)
-            db.session.commit()
+        if not existing_login_bonus:
+            award_login_bonus(user.id)
 
         return redirect("/diary")
 
