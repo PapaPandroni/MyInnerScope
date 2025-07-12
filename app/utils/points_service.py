@@ -234,15 +234,11 @@ class PointsService:
         today = datetime.now().date()
 
         # Check if we've already awarded streak points today to prevent duplicates
+        # Use string values directly for better PostgreSQL compatibility
         existing_streak_awards = (
             PointsLog.query.filter_by(user_id=user_id, date=today)
             .filter(
-                PointsLog.source_type.in_(
-                    [
-                        PointsSourceType.STREAK_7_DAY.value,
-                        PointsSourceType.STREAK_30_DAY.value,
-                    ]
-                )
+                PointsLog.source_type.in_(["streak_7_day", "streak_30_day"])
             )
             .first()
         )
