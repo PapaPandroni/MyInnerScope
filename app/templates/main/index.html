@@ -4,138 +4,459 @@
 
 {% block extra_css %}
 <style>
-.landing-bg {
+/* Override body background for landing page */
+body {
+    background-color: transparent !important;
+}
+/* Hero Section */
+.hero-bg {
     position: fixed;
     top: 0; left: 0; width: 100vw; height: 100vh;
     z-index: -2;
-    background: url("{{ url_for('static', filename='assets/starry_sky.jpg') }}") center center/cover no-repeat;
+    background: url("/static/assets/starry_sky.jpg") center center/cover no-repeat;
 }
-.landing-gradient {
+.hero-gradient {
     position: fixed;
     top: 0; left: 0; width: 100vw; height: 100vh;
     z-index: -1;
-    /* Softer, lower gradient for more visible stars */
-    background: linear-gradient(to top, rgba(10,24,51,0.92) 85%, rgba(10,24,51,0.5) 95%, rgba(10,24,51,0.1) 100%);
+    background: linear-gradient(to top, rgba(10,24,51,0.4) 70%, rgba(10,24,51,0.1) 85%, transparent 100%);
 }
-.landing-content {
-    min-height: 90vh;
+.hero-section {
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
     color: #fff;
-    padding-top: 7vh;
+    padding: 2rem;
 }
-.landing-title {
-    font-size: 3rem;
+.hero-title {
+    font-size: 3.5rem;
     font-weight: bold;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     text-shadow: 0 2px 16px #000, 0 0 8px #00d4ff;
+    margin-bottom: 1.5rem;
 }
-.landing-subtitle {
-    font-size: 1.4rem;
+.hero-subtitle {
+    font-size: 1.5rem;
     color: #cce6ff;
-    margin-bottom: 2.5rem;
-    margin-top: 1rem;
+    margin-bottom: 3rem;
+    max-width: 600px;
+    line-height: 1.4;
 }
-.landing-cta .btn {
-    font-size: 1.2rem;
+.hero-cta {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.btn-primary-hero {
+    font-size: 1.3rem;
     font-weight: 600;
-    margin: 0 1rem 2.5rem 1rem;
-    padding: 0.75rem 2.5rem;
+    padding: 1rem 3rem;
     border-radius: 2rem;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.2);
     background: #00d4ff;
     color: #171A25;
     border: none;
-    transition: background 0.2s;
+    text-decoration: none;
+    transition: all 0.3s;
+    box-shadow: 0 4px 20px rgba(0,212,255,0.3);
 }
-.landing-cta .btn:hover {
+.btn-primary-hero:hover {
     background: #009ec3;
     color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(0,212,255,0.4);
 }
-.landing-features {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 3rem;
-    margin: 3rem 0 2.5rem 0;
-}
-.landing-feature {
-    background: rgba(23,26,37,0.90);
+.btn-secondary-hero {
+    font-size: 1.1rem;
+    font-weight: 500;
+    padding: 1rem 2.5rem;
     border-radius: 2rem;
-    padding: 2.5rem 2rem 2rem 2rem;
-    min-width: 250px;
-    max-width: 350px;
-    box-shadow: 0 2px 24px rgba(0,0,0,0.28);
-    color: #fff;
-    text-align: center;
-    font-size: 1.15rem;
-}
-.landing-feature i {
-    font-size: 3.2rem;
-    color: #00d4ff;
-    margin-bottom: 1.2rem;
-}
-.landing-feature .fw-bold {
-    font-size: 1.25rem;
-}
-.landing-quote {
-    margin-top: 3.5rem;
-    font-style: italic;
+    background: transparent;
     color: #cce6ff;
-    font-size: 1.6rem;
-    font-weight: 600;
-    text-shadow: 0 1px 12px #000;
-    letter-spacing: 0.5px;
+    border: 2px solid #cce6ff;
+    text-decoration: none;
+    transition: all 0.3s;
 }
+.btn-secondary-hero:hover {
+    background: #cce6ff;
+    color: #171A25;
+}
+
+/* Main Content Sections */
+.main-content {
+    background: #171A25;
+    position: relative;
+    z-index: 1;
+}
+
+/* Problem/Value Section */
+.value-section {
+    padding: 5rem 0;
+    text-align: center;
+    background: linear-gradient(135deg, #1a1d29 0%, #171A25 100%);
+}
+.value-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+.value-title {
+    font-size: 2.5rem;
+    color: #fff;
+    margin-bottom: 2rem;
+    font-weight: 600;
+}
+.value-text {
+    font-size: 1.3rem;
+    color: #cce6ff;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+/* Feature Sections */
+.feature-section {
+    padding: 6rem 0;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+}
+.feature-section:nth-child(odd) {
+    background: #171A25;
+}
+.feature-section:nth-child(even) {
+    background: linear-gradient(135deg, #1a1d29 0%, #171A25 100%);
+}
+.feature-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+.feature-row {
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+}
+.feature-text {
+    flex: 1;
+    color: #fff;
+}
+.feature-image {
+    flex: 1;
+}
+.feature-title {
+    font-size: 2.8rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    color: #00d4ff;
+}
+.feature-description {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: #cce6ff;
+    margin-bottom: 2rem;
+}
+.feature-highlights {
+    list-style: none;
+    padding: 0;
+}
+.feature-highlights li {
+    font-size: 1.1rem;
+    color: #fff;
+    margin-bottom: 0.8rem;
+    padding-left: 1.5rem;
+    position: relative;
+}
+.feature-highlights li:before {
+    content: "✦";
+    color: #00d4ff;
+    position: absolute;
+    left: 0;
+    font-size: 1.2rem;
+}
+.app-screenshot {
+    width: 100%;
+    max-width: 500px;
+    border-radius: 1rem;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    transition: transform 0.3s;
+}
+.app-screenshot:hover {
+    transform: scale(1.02);
+}
+
+/* Social Proof Section */
+.social-proof {
+    padding: 5rem 0;
+    background: linear-gradient(135deg, #1a1d29 0%, #171A25 100%);
+    text-align: center;
+}
+.social-proof-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+.testimonial {
+    font-size: 2rem;
+    font-style: italic;
+    color: #00d4ff;
+    font-weight: 500;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    margin-bottom: 1.5rem;
+    line-height: 1.4;
+}
+.testimonial-author {
+    font-size: 1.2rem;
+    color: #cce6ff;
+}
+
+/* Final CTA Section */
+.final-cta {
+    padding: 6rem 0;
+    background: linear-gradient(135deg, #171A25 0%, #1a1d29 100%);
+    text-align: center;
+}
+.final-cta-content {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+.final-cta-title {
+    font-size: 2.5rem;
+    color: #fff;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+.final-cta-text {
+    font-size: 1.2rem;
+    color: #cce6ff;
+    margin-bottom: 3rem;
+    line-height: 1.5;
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
-    .landing-title { font-size: 2.1rem; }
-    .landing-features { flex-direction: column; gap: 2rem; }
-    .landing-feature { min-width: 0; max-width: 100%; font-size: 1.05rem; padding: 2rem 1rem 1.5rem 1rem; }
-    .landing-feature i { font-size: 2.2rem; }
-    .landing-quote { font-size: 1.2rem; }
+    .hero-title { font-size: 2.5rem; }
+    .hero-subtitle { font-size: 1.2rem; }
+    .hero-cta { flex-direction: column; align-items: center; }
+    .btn-primary-hero, .btn-secondary-hero { 
+        padding: 0.8rem 2rem; 
+        font-size: 1.1rem;
+        width: 200px;
+    }
+    
+    .value-title { font-size: 2rem; }
+    .value-text { font-size: 1.1rem; }
+    
+    .feature-row { 
+        flex-direction: column; 
+        gap: 3rem; 
+        text-align: center;
+    }
+    .feature-title { font-size: 2.2rem; }
+    .feature-description { font-size: 1.1rem; }
+    
+    .testimonial { font-size: 1.5rem; }
+    .final-cta-title { font-size: 2rem; }
+}
+
+/* Section spacing adjustments */
+.feature-section:first-of-type {
+    margin-top: 0;
 }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="landing-bg"></div>
-<div class="landing-gradient"></div>
-<div class="landing-content">
-    <div class="landing-title">My Inner Scope</div>
-    <div class="landing-subtitle">
-        Reflect on your journey. Set goals. Visualize your growth.<br>
-        Become the best version of yourself.
-    </div>
-    <div class="landing-cta">
+<!-- Hero Background -->
+<div class="hero-bg" style="background: url('{{ url_for('static', filename='assets/starry_sky.jpg') }}') center center/cover no-repeat;"></div>
+<!-- <div class="hero-gradient"></div> -->
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <h1 class="hero-title">Discover yourself through daily reflection</h1>
+    <p class="hero-subtitle">
+        Write. Reflect. Grow.<br>
+        Track your journey to becoming your best self.
+    </p>
+    <div class="hero-cta">
         {% if not session.get('user_id') %}
-            <a href="/register" class="btn btn-lg">Register</a>
-            <a href="/login" class="btn btn-lg">Log In</a>
+            <a href="/register" class="btn-primary-hero">Start Your Journey</a>
+            <a href="/login" class="btn-secondary-hero">Sign In</a>
         {% else %}
-            <a href="/progress" class="btn btn-lg">Go to Dashboard</a>
+            <a href="/progress" class="btn-primary-hero">Continue Your Journey</a>
         {% endif %}
     </div>
-    <div class="landing-features">
-        <div class="landing-feature">
-            <i class="fas fa-book"></i>
-            <div class="mt-2 mb-1 fw-bold">Track Your Reflections</div>
-            <div>Write daily entries and see your thoughts evolve over time.</div>
+</section>
+
+<!-- Main Content -->
+<div class="main-content">
+    <!-- Value Proposition Section -->
+    <section class="value-section">
+        <div class="value-content">
+            <h2 class="value-title">Most people go through life on autopilot</h2>
+            <p class="value-text">
+                Detect patterns in your behavior and consciously shape who you become.
+            </p>
+            <p class="value-text">
+                My Inner Scope helps you reflect on your daily experiences, identify growth opportunities, and track your progress toward becoming your best self.
+            </p>
         </div>
-        <div class="landing-feature">
-            <i class="fas fa-bullseye"></i>
-            <div class="mt-2 mb-1 fw-bold">Set & Achieve Goals</div>
-            <div>Define weekly goals and celebrate your progress.</div>
+    </section>
+
+    <!-- Daily Reflection Feature -->
+    <section class="feature-section">
+        <div class="feature-container">
+            <div class="feature-row">
+                <div class="feature-text">
+                    <h3 class="feature-title">Write your thoughts, identify your patterns</h3>
+                    <p class="feature-description">
+                        Self-reflection is the foundation of personal growth. Write about your experiences, rate your behaviors, and watch patterns emerge over time.
+                    </p>
+                    <ul class="feature-highlights">
+                        <li>Simple daily diary entries with behavior rating</li>
+                        <li>Identify positive behaviors worth celebrating</li>
+                        <li>Recognize growth opportunities for improvement</li>
+                        <li>Track your thoughts and feelings over time</li>
+                    </ul>
+                </div>
+                <div class="feature-image">
+                    <img src="{{ url_for('static', filename='assets/DIARY_ENTRY.png') }}" 
+                         alt="Daily diary entry interface showing reflection writing and behavior rating" 
+                         class="app-screenshot">
+                </div>
+            </div>
         </div>
-        <div class="landing-feature">
-            <i class="fas fa-chart-line"></i>
-            <div class="mt-2 mb-1 fw-bold">Visualize Your Growth</div>
-            <div>Interactive charts and stats help you see your journey.</div>
+    </section>
+
+    <!-- Progress Tracking Feature -->
+    <section class="feature-section">
+        <div class="feature-container">
+            <div class="feature-row">
+                <div class="feature-image">
+                    <img src="{{ url_for('static', filename='assets/PROGRESS_OVERVIEW.png') }}" 
+                         alt="Progress tracking dashboard showing points, streaks, and behavior analytics" 
+                         class="app-screenshot">
+                </div>
+                <div class="feature-text">
+                    <h3 class="feature-title">See your growth in real-time</h3>
+                    <p class="feature-description">
+                        Transform self-reflection into an engaging journey with detailed analytics, points, and streaks that motivate continuous growth.
+                    </p>
+                    <ul class="feature-highlights">
+                        <li>Earn points for positive behaviors and reflections</li>
+                        <li>Build daily streaks to form lasting habits</li>
+                        <li>Track opportunities for growth and improvement</li>
+                        <li>Interactive analytics dashboard with detailed insights</li>
+                    </ul>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="landing-quote">
-        “It's a fun way to discover yourself and become the best version of yourself.”
-    </div>
+    </section>
+
+    <!-- Goal Achievement Feature -->
+    <section class="feature-section">
+        <div class="feature-container">
+            <div class="feature-row">
+                <div class="feature-text">
+                    <h3 class="feature-title">Set meaningful goals and track success</h3>
+                    <p class="feature-description">
+                        Turn insights into action by setting weekly goals across different life categories and tracking your success rate over time.
+                    </p>
+                    <ul class="feature-highlights">
+                        <li>Weekly goal setting across multiple life areas</li>
+                        <li>Track completion rates and identify patterns</li>
+                        <li>Category-based goal organization</li>
+                        <li>Celebrate achievements and learn from challenges</li>
+                    </ul>
+                </div>
+                <div class="feature-image">
+                    <img src="{{ url_for('static', filename='assets/GOALS_OVERVIEW.png') }}" 
+                         alt="Goals dashboard showing completion rates and category performance" 
+                         class="app-screenshot">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Journey Visualization Feature -->
+    <section class="feature-section">
+        <div class="feature-container">
+            <div class="feature-row">
+                <div class="feature-image">
+                    <img src="{{ url_for('static', filename='assets/GRAPH_OVERVIEW.png') }}" 
+                         alt="Progress chart showing upward growth trend over time" 
+                         class="app-screenshot">
+                </div>
+                <div class="feature-text">
+                    <h3 class="feature-title">Watch your progress trend upward</h3>
+                    <p class="feature-description">
+                        Visualize your growth journey with interactive charts that show your progress over time and motivate continued improvement.
+                    </p>
+                    <ul class="feature-highlights">
+                        <li>Interactive progress charts and trend analysis</li>
+                        <li>See your growth trajectory over weeks and months</li>
+                        <li>Identify peak performance periods</li>
+                        <li>Data-driven insights to guide your journey</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Self-Discovery Feature -->
+    <section class="feature-section">
+        <div class="feature-container">
+            <div class="feature-row">
+                <div class="feature-text">
+                    <h3 class="feature-title">Uncover patterns in your thoughts</h3>
+                    <p class="feature-description">
+                        Discover deeper insights about yourself through word pattern analysis and reflection themes that emerge from your writing.
+                    </p>
+                    <ul class="feature-highlights">
+                        <li>Word cloud analysis of your reflection patterns</li>
+                        <li>Identify recurring themes in your thoughts</li>
+                        <li>Discover subconscious patterns and insights</li>
+                        <li>Visual representation of your mental landscape</li>
+                    </ul>
+                </div>
+                <div class="feature-image">
+                    <img src="{{ url_for('static', filename='assets/WORDCLOUD_OVERVIEW.png') }}" 
+                         alt="Word cloud visualization showing frequently used words in reflections" 
+                         class="app-screenshot">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof Section -->
+    <section class="social-proof">
+        <div class="social-proof-content">
+            <blockquote class="testimonial">
+                "It's a fun way to discover yourself and become the best version of yourself."
+            </blockquote>
+            <p class="testimonial-author">— Early User</p>
+        </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section class="final-cta">
+        <div class="final-cta-content">
+            <h2 class="final-cta-title">Ready to start your journey of self-discovery?</h2>
+            <p class="final-cta-text">
+                Join thousands who are already using daily reflection to become more self-aware and intentional about their growth.
+            </p>
+            <div class="hero-cta">
+                {% if not session.get('user_id') %}
+                    <a href="/register" class="btn-primary-hero">Start Reflecting Today</a>
+                    <a href="/login" class="btn-secondary-hero">Sign In</a>
+                {% else %}
+                    <a href="/progress" class="btn-primary-hero">Continue Your Journey</a>
+                {% endif %}
+            </div>
+        </div>
+    </section>
 </div>
 {% endblock %}
