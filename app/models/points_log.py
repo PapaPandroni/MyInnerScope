@@ -24,7 +24,7 @@ class PointsLog(db.Model):
     points = db.Column(db.Integer, nullable=False)
     
     # Source tracking
-    source_type = db.Column(db.Enum(PointsSourceType), nullable=False)
+    source_type = db.Column(db.String(20), nullable=False)
     source_id = db.Column(db.Integer, nullable=True)  # diary_entry.id or goal.id (null for login)
     description = db.Column(db.Text, nullable=False)  # Human-readable description
     
@@ -66,7 +66,7 @@ class PointsLog(db.Model):
             user_id=user_id,
             date=date,
             points=points,
-            source_type=source_type,
+            source_type=source_type.value if isinstance(source_type, PointsSourceType) else source_type,
             source_id=source_id,
             description=description
         )
