@@ -44,7 +44,7 @@ This directory contains SQLAlchemy database models for the "Aim for the Stars" a
 - **Purpose**: Detailed transaction log for all point-earning activities
 - **Key Fields**:
   - `id`, `user_id`, `date`, `points`
-  - `source_type` (diary_entry, goal_completed, goal_failed, daily_login)
+  - `source_type` (diary_entry, goal_completed, goal_failed, daily_login, streak_7_day, streak_30_day)
   - `source_id` (References diary entry or goal ID)
   - `description` (Human-readable transaction description)
   - `created_at` (Timestamp)

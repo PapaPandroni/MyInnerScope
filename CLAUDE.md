@@ -84,11 +84,12 @@ python backfill_points_log.py     # Backfill historical points data
 
 ### Points System
 - **Point Values**: Encouraged behavior (+5), Growth opportunity (+2), Goal completion (+10), Goal failure (+1), Daily login (+1)
+- **Streak Milestone Rewards**: Rolling rewards for consistency (7-day: +10 points, 30-day: +50 points)
 - **Dual Tracking**: PointsLog (detailed transactions) + DailyStats (aggregated cache)
 - **Points Service**: Centralized `PointsService` manages transactions and consistency
-- **Point Sources**: `PointsSourceType` enum (diary_entry, goal_completed, goal_failed, daily_login)
+- **Point Sources**: `PointsSourceType` enum (diary_entry, goal_completed, goal_failed, daily_login, streak_7_day, streak_30_day)
 - **Analytics**: Clickable breakdown modals with detailed transaction history
-- **Streak Calculation**: Automatic current/longest streak tracking
+- **Streak Calculation**: Real-time calculation based on consecutive diary entries only
 
 ### Security Features
 - Environment-based configuration (requires .env with SECRET_KEY)
@@ -156,6 +157,13 @@ Uses pytest with Flask-testing integration, coverage reporting, and custom marke
 - **User Onboarding**: Interactive tour system with localStorage persistence
 - **Chart Integration**: Chart.js for analytics with clickable data points
 
+### Diary Page Modernization
+- **Growth Mindset Buttons**: "I'm Proud of This" / "I'll Grow from This" (replacing outcome-focused language)
+- **Rotating Daily Prompts**: 10 thoughtful reflection questions that rotate daily for fresh engagement
+- **Subtle Streak Display**: Current streak shown in header with elegant golden styling
+- **Enhanced Micro-Interactions**: Smooth hover effects, gentle animations, improved visual feedback
+- **Visual Polish**: Better shadows, depth, responsive design while maintaining minimal aesthetic
+
 ## Important Implementation Notes
 
 ### Database Compatibility
@@ -166,5 +174,8 @@ Uses pytest with Flask-testing integration, coverage reporting, and custom marke
 ### Points System Implementation
 - **Transaction Integrity**: All point awards go through `PointsService.award_points()`
 - **Data Consistency**: PointsLog is source of truth, DailyStats is cache
+- **Streak Calculation**: Fixed to use real-time diary entry checking instead of stored values
+- **Milestone Rewards**: Rolling system with modulo logic (`streak % 7 == 0`, `streak % 30 == 0`)
+- **Duplicate Prevention**: Milestone awards only given once per day via PointsLog checking
 - **Enum Conversion**: Handle both enum objects and string values in queries
-- **Login Bonus**: Check `PointsLog` with `source_type=PointsSourceType.DAILY_LOGIN.value`
+- **Database Agnostic**: All new features work with SQLite (dev) and PostgreSQL (prod)

@@ -12,6 +12,14 @@ This directory contains unit tests for utility functions and helper modules in t
 - **Purpose**: Test progress tracking and statistics utilities
 - **Coverage**: Daily statistics, streak calculations, progress analytics
 
+### `test_points_service.py` - Points Service Tests ⭐ **NEW**
+- **Purpose**: Test centralized points management and streak milestone rewards
+- **Coverage**: Streak milestone logic, rolling rewards, duplicate prevention, integration testing
+- **Test Classes**:
+  - `TestPointsService`: Core milestone functionality (20 tests)
+  - `TestStreakMilestoneIntegration`: Integration with diary entries and real-world scenarios
+- **Key Tests**: 7-day/30-day milestones, overlapping rewards (day 210), re-earning after resets
+
 ## Future Test Files
 
 ### `test_search_helpers.py` - Search Utility Tests (To Be Added)

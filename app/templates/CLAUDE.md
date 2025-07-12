@@ -59,7 +59,12 @@ templates/
 
 #### `diary/` - Diary Management
 - **diary.html**: Main diary interface for creating and managing entries
-- **Features**: Entry forms, behavior rating system, points integration
+- **Features**: 
+  - Growth mindset button labels ("I'm Proud of This" / "I'll Grow from This")
+  - Rotating daily reflection prompts (10 thoughtful questions)
+  - Subtle streak indicator in header with current streak display
+  - Enhanced micro-interactions and hover states
+  - Entry forms, behavior rating system, points integration
 
 #### `reader/` - Diary Reading and Search
 - **read_diary.html**: Enhanced diary reading with filtering

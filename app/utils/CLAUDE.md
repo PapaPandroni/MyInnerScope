@@ -40,6 +40,7 @@ This directory contains utility functions and helper modules for the "Aim for th
   - `get_daily_breakdown()`: Detailed points breakdown for specific dates
   - `get_daily_total()`: Total points calculation
   - `rebuild_daily_stats_from_log()`: Data consistency maintenance
+  - `check_and_award_streak_milestones()`: Rolling streak milestone rewards (7-day: 10pts, 30-day: 50pts)
 - **Convenience Functions**:
   - `award_diary_points()`: Diary entry point awards
   - `award_goal_completion_points()`: Goal completion rewards  
@@ -67,7 +68,8 @@ This directory contains utility functions and helper modules for the "Aim for th
 
 ### Statistics and Analytics
 - **Daily aggregation**: Calculate daily points and statistics
-- **Streak calculation**: Maintain current and longest streaks
+- **Streak calculation**: Real-time calculation based on consecutive diary entries (fixed from stored values)
+- **Streak milestones**: Rolling rewards system (every 7 days: 10 points, every 30 days: 50 points)
 - **Trend analysis**: Identify patterns in user behavior
 - **Progress visualization**: Prepare data for charts and graphs
 
