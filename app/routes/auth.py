@@ -50,7 +50,7 @@ def login_page() -> Union[str, tuple[str, int], WerkzeugResponse]:
         existing_login_bonus = PointsLog.query.filter_by(
             user_id=user.id,
             date=today,
-            source_type=PointsSourceType.DAILY_LOGIN
+            source_type=PointsSourceType.DAILY_LOGIN.value
         ).first()
 
         if not existing_login_bonus:
