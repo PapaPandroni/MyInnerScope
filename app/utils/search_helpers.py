@@ -28,8 +28,8 @@ def handle_search(
     Returns:
         Rendered template or redirect response.
     """
-    # If only date is provided (no search text), redirect to that date
-    if search_date and not search_text:
+    # If only date is provided (no search text and no rating filter), redirect to that date
+    if search_date and not search_text and rating is None:
         return redirect(f"/read-diary?date={search_date}")
 
     # Build the search query
