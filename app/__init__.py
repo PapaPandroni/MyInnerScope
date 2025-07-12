@@ -120,4 +120,13 @@ def create_app(config_name: Optional[str] = None) -> Flask:
             user = User.query.get(session["user_id"])
         return dict(current_user=user)
 
+    @app.context_processor
+    def inject_server_time() -> Dict[str, str]:
+        """Inject server time and timezone into all templates"""
+        now = datetime.now(timezone.utc)
+        return dict(
+            server_time=now.isoformat(),
+            server_timezone=str(now.tzinfo)
+        )
+
     return app

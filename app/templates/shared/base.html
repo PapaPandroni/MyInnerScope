@@ -56,6 +56,8 @@
                 <a href="{{ url_for('legal.privacy') }}" class="link-light">Privacy Policy</a>
                 <span class="mx-2">|</span>
                 <a href="{{ url_for('legal.terms') }}" class="link-light">Terms of Service</a>
+                <span class="mx-2">|</span>
+                <span id="server-clock" class="text-light">Server Time: Loading...</span>
             </small>
         </div>
     </footer>
@@ -72,8 +74,12 @@
     </nav>
     {% endif %}
     {% block extra_js %}{% endblock %}
+    <!-- Hidden data for server clock -->
+    <div id="server-time-data" data-server-time="{{ server_time }}" data-timezone="{{ server_timezone }}" style="display: none;"></div>
+    
     {% block scripts %}
         <script src="{{ url_for('static', filename='js/shared/cookie_consent.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/shared/server_clock.js') }}"></script>
     {% endblock %}
 </body>
 </html> 
