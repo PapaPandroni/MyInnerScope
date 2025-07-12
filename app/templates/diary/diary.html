@@ -10,7 +10,16 @@
 <div class="container mt-3 mt-md-5">
     <!-- Header Section -->
     <div class="text-center mb-4 mb-md-5">
-        <h1 class="display-4 mb-3">Daily Reflection</h1>
+        <div class="d-flex justify-content-center align-items-center mb-3">
+            <h1 class="display-4 mb-0 me-4">Daily Reflection</h1>
+            {% if current_streak > 0 %}
+            <div class="streak-indicator">
+                <span class="streak-number">{{ current_streak }}</span>
+                <span class="streak-text">day streak</span>
+                <span class="streak-emoji">⭐</span>
+            </div>
+            {% endif %}
+        </div>
         <p class="lead text-whitesmoke">Take a moment to reflect on your day. What did you do well? What could you improve?</p>
     </div>
 
@@ -34,7 +43,7 @@
                         {{ form.hidden_tag() }}
                         {{ form.rating(class="d-none", id="rating_input") }} 
                         <div class="mb-4">
-                            {{ form.content(class="form-control", rows="6", placeholder="Describe one specific moment from today... What happened? How did you feel? What would you do differently next time?", style="resize: none; border: 2px solid #2a2d3a; border-radius: 12px; padding: 12px; font-size: 16px; background-color: #2a2d3a; color: whitesmoke;", id="diary_textarea", maxlength="2000") }}
+                            {{ form.content(class="form-control", rows="6", placeholder="", style="resize: none; border: 2px solid #2a2d3a; border-radius: 12px; padding: 12px; font-size: 16px; background-color: #2a2d3a; color: whitesmoke;", id="diary_textarea", maxlength="2000") }}
                             <div class="d-flex justify-content-end mt-2">
                                 <small id="char_counter" style="color: #FFFFFF;">0 / 2000</small>
                             </div>
@@ -53,18 +62,18 @@
 
                         <div class="d-flex flex-column flex-md-row justify-content-center gap-3 gap-md-4">
                             <div class="d-flex flex-column align-items-center">
-                                <button type="button" class="btn btn-outline-success btn-lg px-4 py-3 rating-btn" data-rating="1" style="transition: transform 0.2s ease;">
-                                    <i class="fas fa-thumbs-up me-2"></i>
-                                    Keep Doing This
+                                <button type="button" class="btn btn-outline-success btn-lg px-4 py-3 rating-btn" data-rating="1" style="transition: all 0.2s ease;">
+                                    <i class="fas fa-star me-2"></i>
+                                    I'm Proud of This
                                 </button>
-                                <small class="mt-1" style="color: whitesmoke; font-style: italic;">This is a behavior I want to continue and encourage.</small>
+                                <small class="mt-1" style="color: whitesmoke; font-style: italic;">Celebrate and continue this positive behavior</small>
                             </div>
                             <div class="d-flex flex-column align-items-center">
-                                <button type="button" class="btn btn-outline-danger btn-lg px-4 py-3 rating-btn" data-rating="-1" style="transition: transform 0.2s ease;">
-                                    <i class="fas fa-pen me-2"></i>
-                                    Change This
+                                <button type="button" class="btn btn-outline-warning btn-lg px-4 py-3 rating-btn" data-rating="-1" style="transition: all 0.2s ease;">
+                                    <i class="fas fa-seedling me-2"></i>
+                                    I'll Grow from This
                                 </button>
-                                <small class="mt-1" style="color: whitesmoke; font-style: italic;">This is a behavior I want to improve or do differently.</small>
+                                <small class="mt-1" style="color: whitesmoke; font-style: italic;">Learn and develop from this experience</small>
                             </div>
                         </div>
                     </form>
@@ -114,24 +123,104 @@
 </div>
 
 <style>
-.btn:hover {
-    transform: scale(1.05);
+/* Enhanced button interactions */
+.btn {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.btn:active {
+    transform: translateY(0);
+    transition: all 0.1s ease;
+}
+
+.btn-outline-success:hover {
+    background-color: #198754;
+    border-color: #198754;
+    box-shadow: 0 4px 12px rgba(25, 135, 84, 0.4);
+}
+
+.btn-outline-warning:hover {
+    background-color: #fd7e14;
+    border-color: #fd7e14;
+    color: white;
+    box-shadow: 0 4px 12px rgba(253, 126, 20, 0.4);
+}
+
+/* Streak indicator styling */
+.streak-indicator {
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    color: #333;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.streak-number {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.streak-emoji {
+    font-size: 1rem;
+}
+
+/* Enhanced cards */
 .dark-card {
     background-color: #2a2d3a;
     color: whitesmoke;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    transition: box-shadow 0.3s ease;
 }
+
+.dark-card:hover {
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* Entry items */
 .entry-item {
     background-color: #3a3d4a;
-    transition: background-color 0.2s ease;
+    transition: all 0.3s ease;
     border-color: #4a4d5a !important;
 }
+
 .entry-item:hover {
     background-color: #4a4d5a;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
+
+/* Form elements */
+#diary_textarea {
+    transition: all 0.3s ease;
+}
+
+#diary_textarea:focus {
+    border-color: #007bff !important;
+    box-shadow: 0 0 15px rgba(0, 123, 255, 0.3) !important;
+}
+
 #diary_textarea::placeholder {
     color: #ffffff !important;
     font-style: italic;
+}
+
+/* Success alert enhancement */
+.alert-success {
+    border: none;
+    background: linear-gradient(135deg, #d4edda, #c3e6cb);
+    color: #155724;
 }
 
 /* Mobile-specific adjustments */
@@ -153,16 +242,49 @@
     .lead {
         font-size: 1rem;
     }
+    
+    .streak-indicator {
+        font-size: 0.8rem;
+        padding: 6px 10px;
+    }
+    
+    .d-flex.justify-content-center.align-items-center {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .d-flex.justify-content-center.align-items-center h1 {
+        margin-right: 0 !important;
+    }
 }
 </style>
 
 <script>
+// Rotating daily prompts
+const reflectionPrompts = [
+    "What's one moment from today that made you feel accomplished?",
+    "Describe a challenge you faced and how you handled it",
+    "What interaction with someone else stood out today?",
+    "What choice are you most proud of making today?",
+    "What's something you learned about yourself today?",
+    "How did you show kindness to yourself or others today?",
+    "What would you do differently if you could repeat one moment?",
+    "What emotions did you experience most strongly today?",
+    "How did you step outside your comfort zone today?",
+    "What are you most grateful for from today?"
+];
+
 // Auto-focus the textarea when page loads
 document.addEventListener('DOMContentLoaded', function() {
     const diaryTextarea = document.getElementById('diary_textarea');
     const charCounter = document.getElementById('char_counter');
     const ratingButtons = document.querySelectorAll('.rating-btn');
     const maxLength = 2000;
+
+    // Set rotating placeholder
+    const today = new Date();
+    const promptIndex = today.getDate() % reflectionPrompts.length;
+    diaryTextarea.placeholder = reflectionPrompts[promptIndex];
 
     diaryTextarea.focus();
 

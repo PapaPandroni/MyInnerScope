@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, request, redirect, session, flash
 from werkzeug.wrappers import Response as WerkzeugResponse
 from datetime import date, timedelta
 from ..models import User, DiaryEntry, DailyStats, db
-from ..utils.progress_helpers import get_recent_entries
+from ..utils.progress_helpers import get_recent_entries, get_current_streak, get_total_points
 from ..utils.points_service import award_diary_points
 from ..forms import DiaryEntryForm
 
@@ -45,6 +45,10 @@ def diary_entry() -> Union[str, tuple[str, int], WerkzeugResponse]:
 
         recent_entries = get_recent_entries(user_id)
         is_new_user = len(recent_entries) == 0
+        
+        # Get updated user stats for header
+        current_streak = get_current_streak(user_id)
+        total_points = get_total_points(user_id)
 
         return render_template(
             "diary/diary.html",
@@ -53,6 +57,8 @@ def diary_entry() -> Union[str, tuple[str, int], WerkzeugResponse]:
             form=form,
             is_new_user=is_new_user,
             entry_saved=True,
+            current_streak=current_streak,
+            total_points=total_points,
         )
 
     # Flash errors if validation fails
@@ -63,6 +69,10 @@ def diary_entry() -> Union[str, tuple[str, int], WerkzeugResponse]:
         recent_entries = get_recent_entries(user_id)
         is_new_user = len(recent_entries) == 0
         
+        # Get user stats for header
+        current_streak = get_current_streak(user_id)
+        total_points = get_total_points(user_id)
+        
         return (
             render_template(
                 "diary/diary.html",
@@ -70,6 +80,8 @@ def diary_entry() -> Union[str, tuple[str, int], WerkzeugResponse]:
                 recent_entries=recent_entries,
                 form=form,
                 is_new_user=is_new_user,
+                current_streak=current_streak,
+                total_points=total_points,
             ),
             400,
         )
@@ -79,10 +91,16 @@ def diary_entry() -> Union[str, tuple[str, int], WerkzeugResponse]:
     # Check if user should see onboarding tour (new user with no entries)
     is_new_user = len(recent_entries) == 0
     
+    # Get user stats for header
+    current_streak = get_current_streak(user_id)
+    total_points = get_total_points(user_id)
+    
     return render_template(
         "diary/diary.html",
         display_name=display_name,
         recent_entries=recent_entries,
         form=form,
         is_new_user=is_new_user,
+        current_streak=current_streak,
+        total_points=total_points,
     )
