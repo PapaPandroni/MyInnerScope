@@ -2,6 +2,47 @@
 
 {% block title %}My Inner Scope{% endblock %}
 
+{% block meta_description %}Discover yourself through daily reflection with My Inner Scope. Write, reflect, and grow with our personal development app that helps you track progress, set meaningful goals, and identify patterns in your thoughts and behaviors.{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "My Inner Scope",
+  "description": "Personal growth and self-reflection web application for tracking daily progress and achieving meaningful goals",
+  "url": "{{ request.url_root }}",
+  "applicationCategory": "HealthApplication",
+  "operatingSystem": "Web",
+  "author": {
+    "@type": "Person",
+    "name": "Peremil Starklint Söderström"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Daily reflection and diary entries",
+    "Progress tracking with points and streaks",
+    "Goal setting and achievement tracking",
+    "Behavioral pattern analysis",
+    "Interactive analytics dashboard",
+    "Word cloud visualization",
+    "Growth mindset development"
+  ],
+  "screenshot": "{{ url_for('static', filename='assets/social-preview.jpg', _external=True) }}",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "5",
+    "ratingCount": "1",
+    "bestRating": "5"
+  }
+}
+</script>
+{% endblock %}
+
 {% block extra_css %}
 <style>
 /* Override body background for landing page */

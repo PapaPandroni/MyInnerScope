@@ -29,6 +29,10 @@ class Config:
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = "Lax"
 
+    # Analytics
+    GOOGLE_ANALYTICS_ID = os.environ.get("GOOGLE_ANALYTICS_ID")
+    GOOGLE_SEARCH_CONSOLE_ID = os.environ.get("GOOGLE_SEARCH_CONSOLE_ID")
+
     @staticmethod
     def validate():
         """Validate that required environment variables are set"""

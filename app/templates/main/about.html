@@ -2,6 +2,51 @@
 
 {% block title %}About My Inner Scope{% endblock %}
 
+{% block meta_description %}Learn about My Inner Scope - a personal development platform based on the concept of "Värderad Riktning" (Valued Direction). Discover how our self-reflection tools help you track progress, set meaningful goals, and move closer to becoming your best self.{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is My Inner Scope?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "My Inner Scope is a personal journey towards self-reflection and continuous growth. Born from the insights gained through years of personal development and therapy, this platform is designed to empower you to take control of your inner world and gain profound insights into your own actions and behaviors."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is Värderad Riktning (Valued Direction)?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Värderad Riktning (Valued Direction) is a core philosophy embedded within My Inner Scope, a powerful idea from therapy. This isn't about setting an achievable goal with a finish line, but rather an ongoing, aspirational direction, like 'being a better father' or 'living more kindly.' There's no end to such a goal, but every action you take either moves you closer to that valued direction or further away."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does My Inner Scope help with personal growth?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "My Inner Scope provides tools to track your reflections, set meaningful goals, and visualize your progress through gamified elements like points and streaks. It's a supportive environment to help you consistently engage with your self-improvement journey by reflecting on daily actions, categorizing them, and considering their impact."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Who created My Inner Scope?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "This application was created by Peremil Starklint Söderström, with the hope of sharing effective strategies for personal growth that have proven invaluable on his own path."
+      }
+    }
+  ]
+}
+</script>
+{% endblock %}
+
 {% block content %}
 <div class="container mt-5">
     <div class="row justify-content-center">
