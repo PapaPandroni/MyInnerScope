@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Application Overview
 
-"Aim for the Stars" is a Flask-based self-reflection web application that helps users track personal growth through daily diary entries and behavioral reflection. Users write diary entries, rate them as positive behavior (+5 points) or behavior to change (+2 points), and track their progress through gamification elements like points, streaks, and analytics.
+"My Inner Scope" is a Flask-based self-reflection web application that helps users track personal growth through daily diary entries and behavioral reflection. Users write diary entries, rate them as positive behavior (+5 points) or behavior to change (+2 points), and track their progress through gamification elements like points, streaks, and analytics.
 
 ## Core Architecture
 
@@ -97,6 +97,15 @@ python backfill_points_log.py     # Backfill historical points data
 - Input validation and sanitization
 - CSRF protection on forms
 - Rate limiting on routes
+- GDPR-compliant cookie consent system
+
+### SEO & Analytics Features ⭐ **NEW**
+- **Search Engine Optimization**: Comprehensive SEO implementation with meta tags, Open Graph, and structured data
+- **Google Analytics 4**: Optional analytics integration with GDPR-compliant consent management
+- **Social Media Ready**: Open Graph and Twitter Cards for enhanced social sharing
+- **Search Engine Tools**: robots.txt, XML sitemap, and canonical URLs
+- **Rich Snippets**: Schema.org structured data for enhanced search results
+- **Favicon System**: Multi-format favicon support for all devices and platforms
 
 ## Configuration
 
@@ -106,6 +115,10 @@ Create `.env` file with:
 SECRET_KEY=your-secret-key-here
 DATABASE_URL=sqlite:///users.db  # or PostgreSQL URL for production
 FLASK_ENV=development            # or production
+
+# SEO & Analytics (Optional)
+GOOGLE_ANALYTICS_ID=G-XXXXXXXXXX    # Google Analytics 4 Measurement ID
+GOOGLE_SEARCH_CONSOLE_ID=your-id    # Google Search Console Property ID
 ```
 
 ### Database Configuration
@@ -134,6 +147,7 @@ Uses pytest with Flask-testing integration, coverage reporting, and custom marke
 2. **Database changes**: Modify model → `flask db migrate` → `flask db upgrade`
 3. **Security updates**: Run `safety check` and `pip-audit` regularly
 4. **Testing**: Always run full test suite before commits
+5. **SEO Updates**: Update meta descriptions, structured data, and sitemap as needed
 
 ## Production Deployment
 
@@ -179,3 +193,40 @@ Uses pytest with Flask-testing integration, coverage reporting, and custom marke
 - **Duplicate Prevention**: Milestone awards only given once per day via PointsLog checking
 - **Enum Conversion**: Handle both enum objects and string values in queries
 - **Database Agnostic**: All new features work with SQLite (dev) and PostgreSQL (prod)
+
+## SEO Implementation Details ⭐ **NEW**
+
+### Search Engine Optimization
+- **Meta Tags**: Dynamic title, description, keywords, and robots directives
+- **Open Graph**: Full Facebook, LinkedIn, and general social media sharing support
+- **Twitter Cards**: Enhanced Twitter sharing with large image cards
+- **Canonical URLs**: Prevent duplicate content issues with proper canonical tags
+- **Structured Data**: JSON-LD schema markup for WebApplication and FAQ types
+
+### Technical SEO
+- **robots.txt**: Located at `/robots.txt` - guides search engine crawlers
+- **XML Sitemap**: Auto-generated at `/sitemap.xml` - includes all public pages with priorities
+- **Favicons**: Complete favicon system with multiple formats (ICO, PNG, Apple Touch)
+- **Web App Manifest**: PWA-ready manifest file for app installation
+
+### Analytics & Privacy
+- **Google Analytics 4**: Optional integration via environment variable
+- **GDPR Compliance**: Enhanced cookie consent system with granular controls
+- **Privacy Controls**: Users can manage essential vs analytics cookies separately
+- **Anonymous Tracking**: IP anonymization enabled by default
+
+### Page-Specific SEO
+- **Homepage**: Enhanced with WebApplication structured data and feature highlights
+- **About Page**: FAQ structured data for rich snippets
+- **Legal Pages**: Privacy and terms pages properly optimized
+- **Auth Pages**: Login and registration pages with appropriate meta descriptions
+
+### Social Media Assets
+- **Social Preview**: 1200x630 social media preview image (placeholder included)
+- **Multiple Formats**: Favicon support for all devices and platforms
+- **Brand Consistency**: Consistent branding across all social media platforms
+
+### SEO Monitoring Setup
+- **Google Search Console**: Infrastructure ready for property verification
+- **Analytics Dashboard**: Track organic traffic, search queries, and user behavior
+- **Performance Monitoring**: Core Web Vitals integration with Google Analytics

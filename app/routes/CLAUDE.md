@@ -1,6 +1,6 @@
 # app/routes/ Directory
 
-This directory contains Flask Blueprint-based route handlers for the "Aim for the Stars" application.
+This directory contains Flask Blueprint-based route handlers for the "My Inner Scope" application.
 
 ## Blueprint Architecture
 
@@ -76,12 +76,18 @@ All routes are organized as Flask Blueprints for modularity and maintainability.
   - `/cookies` - Cookie policy
 - **Features**: Cookie consent management
 
-#### `main.py` - Main Application Blueprint (`main_bp`)
-- **Purpose**: Home page, about page, general application routes
+#### `main.py` - Main Application Blueprint (`main_bp`) ⭐ **ENHANCED**
+- **Purpose**: Home page, about page, general application routes, SEO infrastructure
 - **Key Routes**:
   - `/` - Home page
   - `/about` - About page
   - `/donate` - Donation page
+  - `/robots.txt` - Search engine crawler guidance
+  - `/sitemap.xml` - XML sitemap generation for search engines
+- **SEO Features**: 
+  - Dynamic sitemap generation with page priorities
+  - Robots.txt with public/private area distinction
+  - Search engine optimization support
 
 #### `api.py` - API Blueprint (`api_bp`) ⭐ **NEW**
 - **Purpose**: RESTful API endpoints for frontend-backend communication

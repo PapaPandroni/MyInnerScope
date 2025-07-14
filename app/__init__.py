@@ -23,6 +23,7 @@ from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+from flask_compress import Compress
 from datetime import datetime, timedelta, timezone
 from .config import config
 
@@ -61,6 +62,9 @@ def create_app(config_name: Optional[str] = None) -> Flask:
 
     # Initialize Flask-WTF for CSRF protection
     csrf = CSRFProtect(app)
+
+    # Initialize Flask-Compress for automatic compression
+    compress = Compress(app)
 
     # Initialize Flask-Limiter for rate limiting
     limiter = Limiter(
@@ -128,5 +132,28 @@ def create_app(config_name: Optional[str] = None) -> Flask:
             server_time=now.isoformat(),
             server_timezone=str(now.tzinfo)
         )
+
+    @app.after_request
+    def add_caching_headers(response):
+        """Add caching headers for static assets and performance optimization"""
+        from flask import request
+        
+        # Only add caching headers for successful responses
+        if response.status_code == 200:
+            # Cache static assets for 1 year
+            if (request.path.startswith('/static/') or 
+                request.path.endswith(('.css', '.js', '.png', '.jpg', '.jpeg', '.gif', '.ico', '.svg', '.woff', '.woff2', '.ttf'))):
+                response.cache_control.max_age = 31536000  # 1 year
+                response.cache_control.public = True
+                # Add ETag for better caching
+                response.add_etag()
+                response.make_conditional(request)
+            
+            # Cache HTML pages for a short time
+            elif response.content_type and response.content_type.startswith('text/html'):
+                response.cache_control.max_age = 300  # 5 minutes
+                response.cache_control.public = True
+        
+        return response
 
     return app

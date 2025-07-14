@@ -1,0 +1,244 @@
+/**
+ * Charts functionality for the progress page
+ * Handles points over time chart and weekday performance chart
+ */
+
+class ProgressCharts {
+    constructor() {
+        this.points_chart = null;
+        this.weekday_chart = null;
+        this.goal_category_chart = null;
+        this.init();
+    }
+
+    init() {
+        this.init_points_chart();
+        this.init_weekday_chart();
+        this.init_goal_category_chart();
+    }
+
+    init_points_chart() {
+        const points_data = window.progress_data.points_data;
+        const data_points = points_data.map(item => ({
+            x: item[0],  // "YYYY-MM-DD"
+            y: item[1]
+        }));
+
+        const ctx = document.getElementById('pointsChart').getContext('2d');
+        Chart.register(ChartZoom);
+
+        this.points_chart = new Chart(ctx, {
+            type: 'line',
+            data: { 
+                datasets: [{ 
+                    label: 'Points Earned', 
+                    data: data_points, 
+                    borderColor: 'teal', 
+                    tension: 0.1 
+                }] 
+            },
+            options: {
+                scales: {
+                    x: { 
+                        type: 'time', 
+                        time: { 
+                            parser: 'yyyy-MM-dd', 
+                            unit: 'day' 
+                        } 
+                    },
+                    y: { 
+                        beginAtZero: true 
+                    }
+                },
+                plugins: {
+                    zoom: {
+                        zoom: {
+                            wheel: {
+                                enabled: true,
+                                modifierKey: "ctrl"
+                            },
+                            pinch: {
+                                enabled: true
+                            },
+                            mode: 'x'
+                        },
+                        pan: {
+                            enabled: true,
+                            mode: 'x',
+                            modifierKey: null 
+                        },
+                    }   
+                },
+                onClick: (event, elements, chart) => {
+                    if (elements && elements.length > 0) {
+                        const element = elements[0];
+                        const datasetIndex = element.datasetIndex;
+                        const index = element.index;
+                        const point = chart.data.datasets[datasetIndex].data[index];
+                        const date = point.x;
+                        if (date) {
+                            window.location.href = `/read-diary?date=${date}`;
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    init_weekday_chart() {
+        const weekday_config = window.progress_data.weekday_config;
+        const weekday_data = weekday_config.weekday_data;
+        const has_sufficient_weekday_data = weekday_config.has_sufficient_weekday_data;
+        const sample_weekday_data = weekday_config.sample_weekday_data;
+
+        // Always show sample data in background, real data if available
+        const display_data = has_sufficient_weekday_data ? weekday_data : sample_weekday_data;
+
+        const weekday_labels = display_data.map(item => item.name);
+        const weekday_points = display_data.map(item => item.avg_points);
+
+        // Create the weekday bar chart
+        const weekdayCtx = document.getElementById('weekdayChart').getContext('2d');
+        this.weekday_chart = new Chart(weekdayCtx, {
+            type: 'bar',
+            data: {
+                labels: weekday_labels,
+                datasets: [{
+                    label: 'Average Points',
+                    data: weekday_points,
+                    backgroundColor: has_sufficient_weekday_data ? 'rgba(0, 212, 255, 0.6)' : 'rgba(0, 212, 255, 0.2)',
+                    borderColor: has_sufficient_weekday_data ? '#00d4ff' : 'rgba(0, 212, 255, 0.3)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Average Points',
+                            color: '#ffffff'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#ffffff'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Day of Week',
+                            color: '#ffffff'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#ffffff'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        // Apply visual effects for insufficient data
+        if (!has_sufficient_weekday_data) {
+            // The overlay will handle the visual blocking, chart stays visible but dimmed
+            this.weekday_chart.canvas.style.opacity = '0.3';
+            this.weekday_chart.canvas.style.pointerEvents = 'none';
+        }
+    }
+
+    init_goal_category_chart() {
+        const goal_stats_data = window.progress_data.goal_stats_data;
+        if (!goal_stats_data || !goal_stats_data.has_stats) {
+            return;
+        }
+
+        const category_stats = goal_stats_data.category_stats;
+        const labels = Object.keys(category_stats);
+        const completed_data = labels.map(label => category_stats[label].completed);
+        const failed_data = labels.map(label => category_stats[label].failed);
+
+        const ctx = document.getElementById('goalCategoryChart').getContext('2d');
+        this.goal_category_chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Completed',
+                        data: completed_data,
+                        backgroundColor: 'rgba(0, 255, 127, 0.6)',
+                        borderColor: '#00ff7f',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Not Completed',
+                        data: failed_data,
+                        backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                        borderColor: '#ff6384',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        stacked: true,
+                        title: {
+                            display: true,
+                            text: 'Category',
+                            color: '#ffffff'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#ffffff'
+                        }
+                    },
+                    y: {
+                        stacked: true,
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Number of Goals',
+                            color: '#ffffff'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#ffffff',
+                            stepSize: 1
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            color: '#ffffff'
+                        }
+                    }
+                }
+            }
+        });
+    }
+}
+
+// Export for use in other modules
+window.ProgressCharts = ProgressCharts; 

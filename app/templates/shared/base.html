@@ -134,7 +134,7 @@
             </small>
         </div>
     </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
     {% if session['user_id'] %}
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
@@ -151,8 +151,26 @@
     <div id="server-time-data" data-server-time="{{ server_time }}" data-timezone="{{ server_timezone }}" style="display: none;"></div>
     
     {% block scripts %}
-        <script src="{{ url_for('static', filename='js/shared/cookie_consent.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/shared/server_clock.js') }}"></script>
+        <!-- WebP Support Detection (must run immediately) -->
+        <script>
+            // Detect WebP support and add class to html element
+            function supportsWebP() {
+                return new Promise(resolve => {
+                    const webP = new Image();
+                    webP.onload = webP.onerror = () => resolve(webP.height === 2);
+                    webP.src = 'data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA';
+                });
+            }
+            supportsWebP().then(supported => {
+                if (supported) {
+                    document.documentElement.classList.add('webp');
+                } else {
+                    document.documentElement.classList.add('no-webp');
+                }
+            });
+        </script>
+        <script defer src="{{ url_for('static', filename='js/shared/cookie_consent.js') }}"></script>
+        <script defer src="{{ url_for('static', filename='js/shared/server_clock.js') }}"></script>
     {% endblock %}
 </body>
 </html> 

@@ -59,7 +59,12 @@ body {
     position: fixed;
     top: 0; left: 0; width: 100vw; height: 100vh;
     z-index: -2;
+    /* WebP with fallback */
     background: url("{{ url_for('static', filename='assets/starry_sky.jpg') }}") center center/cover no-repeat !important;
+}
+/* WebP support - browsers that support WebP will use this */
+.webp .hero-bg {
+    background: url("{{ url_for('static', filename='assets/starry_sky.webp') }}") center center/cover no-repeat !important;
 }
 .hero-gradient {
     position: fixed;
@@ -360,9 +365,12 @@ body {
                     </ul>
                 </div>
                 <div class="feature-image">
-                    <img src="{{ url_for('static', filename='assets/DIARY_ENTRY.png') }}" 
-                         alt="Daily diary entry interface showing reflection writing and behavior rating" 
-                         class="app-screenshot">
+                    <picture>
+                        <source srcset="{{ url_for('static', filename='assets/DIARY_ENTRY.webp') }}" type="image/webp">
+                        <img src="{{ url_for('static', filename='assets/DIARY_ENTRY.png') }}" 
+                             alt="Daily diary entry interface showing reflection writing and behavior rating" 
+                             class="app-screenshot">
+                    </picture>
                 </div>
             </div>
         </div>
@@ -373,9 +381,12 @@ body {
         <div class="feature-container">
             <div class="feature-row">
                 <div class="feature-image">
-                    <img src="{{ url_for('static', filename='assets/PROGRESS_OVERVIEW.png') }}" 
-                         alt="Progress tracking dashboard showing points, streaks, and behavior analytics" 
-                         class="app-screenshot">
+                    <picture>
+                        <source srcset="{{ url_for('static', filename='assets/PROGRESS_OVERVIEW.webp') }}" type="image/webp">
+                        <img src="{{ url_for('static', filename='assets/PROGRESS_OVERVIEW.png') }}" 
+                             alt="Progress tracking dashboard showing points, streaks, and behavior analytics" 
+                             class="app-screenshot">
+                    </picture>
                 </div>
                 <div class="feature-text">
                     <h3 class="feature-title">See your growth in real-time</h3>
@@ -410,9 +421,12 @@ body {
                     </ul>
                 </div>
                 <div class="feature-image">
-                    <img src="{{ url_for('static', filename='assets/GOALS_OVERVIEW.png') }}" 
-                         alt="Goals dashboard showing completion rates and category performance" 
-                         class="app-screenshot">
+                    <picture>
+                        <source srcset="{{ url_for('static', filename='assets/GOALS_OVERVIEW.webp') }}" type="image/webp">
+                        <img src="{{ url_for('static', filename='assets/GOALS_OVERVIEW.png') }}" 
+                             alt="Goals dashboard showing completion rates and category performance" 
+                             class="app-screenshot">
+                    </picture>
                 </div>
             </div>
         </div>
@@ -423,9 +437,12 @@ body {
         <div class="feature-container">
             <div class="feature-row">
                 <div class="feature-image">
-                    <img src="{{ url_for('static', filename='assets/GRAPH_OVERVIEW.png') }}" 
-                         alt="Progress chart showing upward growth trend over time" 
-                         class="app-screenshot">
+                    <picture>
+                        <source srcset="{{ url_for('static', filename='assets/GRAPH_OVERVIEW.webp') }}" type="image/webp">
+                        <img src="{{ url_for('static', filename='assets/GRAPH_OVERVIEW.png') }}" 
+                             alt="Progress chart showing upward growth trend over time" 
+                             class="app-screenshot">
+                    </picture>
                 </div>
                 <div class="feature-text">
                     <h3 class="feature-title">Watch your progress trend upward</h3>
@@ -460,9 +477,12 @@ body {
                     </ul>
                 </div>
                 <div class="feature-image">
-                    <img src="{{ url_for('static', filename='assets/WORDCLOUD_OVERVIEW.png') }}" 
-                         alt="Word cloud visualization showing frequently used words in reflections" 
-                         class="app-screenshot">
+                    <picture>
+                        <source srcset="{{ url_for('static', filename='assets/WORDCLOUD_OVERVIEW.webp') }}" type="image/webp">
+                        <img src="{{ url_for('static', filename='assets/WORDCLOUD_OVERVIEW.png') }}" 
+                             alt="Word cloud visualization showing frequently used words in reflections" 
+                             class="app-screenshot">
+                    </picture>
                 </div>
             </div>
         </div>

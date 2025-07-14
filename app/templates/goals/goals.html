@@ -207,6 +207,6 @@ window.tour_config = {
 </script>
 
 {% block extra_js %}
-<script src="{{ url_for('static', filename='js/goals/goals.js') }}"></script>
-<script src="{{ url_for('static', filename='js/shared/tour-controller.js') }}"></script>
+<script defer src="{{ url_for('static', filename='js/goals/goals.js') }}"></script>
+<script defer src="{{ url_for('static', filename='js/shared/tour-controller.js') }}"></script>
 {% endblock %} 

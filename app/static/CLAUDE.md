@@ -1,6 +1,6 @@
 # app/static/ Directory
 
-This directory contains static assets for the "Aim for the Stars" web application frontend.
+This directory contains static assets for the "My Inner Scope" web application frontend.
 
 ## Directory Structure
 
@@ -19,9 +19,16 @@ static/
 
 ## Asset Organization
 
-### `assets/` - Media Files
+### `assets/` - Media Files ⭐ **ENHANCED**
 - **Images**: Application imagery and visual assets
 - **starry_sky.jpg**: Main background/header image for the space theme
+- **SEO Assets**: Favicon system and social media assets
+  - **favicon.ico**: Main favicon (16x16 and 32x32 pixels)
+  - **favicon-16x16.png**: Small favicon for browser tabs
+  - **favicon-32x32.png**: Standard favicon for bookmarks
+  - **apple-touch-icon.png**: Apple device home screen icon (180x180)
+  - **social-preview.jpg**: Social media preview image (1200x630)
+  - **site.webmanifest**: Web app manifest for PWA support
 - **Purpose**: Static media files served directly by Flask
 
 ### `css/` - Feature-Organized Stylesheets

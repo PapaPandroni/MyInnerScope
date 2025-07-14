@@ -1,8 +1,8 @@
-Aim for the Stars 🌟
+My Inner Scope 🌟
 A self-reflection web application that helps users track their personal growth through daily diary entries and behavioral reflection.
 
 Overview
-Aim for the Stars is a Flask-based web application designed to encourage self-improvement through daily reflection. Users write short diary entries about their actions and behaviors, then categorize them as either "encouraged behavior" or "something to change." The app gamifies the self-reflection process with points, streaks, and progress tracking.
+My Inner Scope is a Flask-based web application designed to encourage self-improvement through daily reflection. Users write short diary entries about their actions and behaviors, then categorize them as either "encouraged behavior" or "something to change." The app gamifies the self-reflection process with points, streaks, and progress tracking.
 
 Features
 Current Functionality
@@ -19,6 +19,12 @@ Weekly trend analysis
 Day-of-week performance patterns
 Top performing days with entry details
 Diary Reading: Chronological diary view with navigation between entries
+SEO & Analytics: ⭐ **NEW**
+Comprehensive search engine optimization with meta tags, Open Graph, and structured data
+Google Analytics 4 integration with GDPR-compliant cookie consent
+Social media sharing optimization with Twitter Cards and Open Graph
+XML sitemap and robots.txt for search engine crawling
+Multi-format favicon system for all devices and platforms
 Technical Stack
 Backend: Flask, SQLAlchemy
 Database: SQLite

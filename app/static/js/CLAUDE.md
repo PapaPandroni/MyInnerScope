@@ -1,6 +1,6 @@
 # app/static/js/ Directory
 
-This directory contains JavaScript files for the "Aim for the Stars" application, organized by feature for maintainability.
+This directory contains JavaScript files for the "My Inner Scope" application, organized by feature for maintainability.
 
 ## Directory Structure
 
@@ -39,15 +39,19 @@ JavaScript is organized into feature directories to maintain clear separation of
   - **main.js**: Core dashboard functionality with API integration
 - **Features**: Clickable progress cards, points breakdown modals, real-time updates
 
-### `shared/` - Shared Utilities ⭐ **NEW**
+### `shared/` - Shared Utilities ⭐ **ENHANCED**
 - **Purpose**: Common functionality and user experience features
 - **Components**:
-  - **cookie_consent.js**: GDPR cookie consent and preferences (moved from legal/)
+  - **cookie_consent.js**: GDPR cookie consent and preferences with analytics integration
   - **tour-controller.js**: Interactive user onboarding tour system
+  - **server_clock.js**: Server time synchronization
 - **Features**: 
   - Multi-page guided tours with localStorage persistence
   - Progressive disclosure of application features
   - First-visit detection and user guidance
+  - **GDPR Compliance**: Enhanced cookie consent with granular controls
+  - **Analytics Integration**: Google Analytics 4 consent management
+  - **Privacy Controls**: Essential vs analytics cookie separation
 
 ## Development Patterns
 

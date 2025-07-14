@@ -338,7 +338,7 @@ window.tour_config = {
 </script>
 
 {% if is_new_user %}
-<script src="{{ url_for('static', filename='js/shared/tour-controller.js') }}"></script>
+<script defer src="{{ url_for('static', filename='js/shared/tour-controller.js') }}"></script>
 {% endif %}
 
 {% endblock %}

@@ -33,6 +33,19 @@ class Config:
     GOOGLE_ANALYTICS_ID = os.environ.get("GOOGLE_ANALYTICS_ID")
     GOOGLE_SEARCH_CONSOLE_ID = os.environ.get("GOOGLE_SEARCH_CONSOLE_ID")
 
+    # Performance optimization
+    COMPRESS_MIMETYPES = [
+        'text/html',
+        'text/css',
+        'application/javascript',
+        'application/json',
+        'text/javascript',
+        'text/xml',
+        'application/xml'
+    ]
+    COMPRESS_LEVEL = 6  # Good balance between compression and CPU usage
+    COMPRESS_MIN_SIZE = 500  # Only compress files larger than 500 bytes
+
     @staticmethod
     def validate():
         """Validate that required environment variables are set"""
