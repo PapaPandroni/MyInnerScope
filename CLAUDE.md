@@ -67,6 +67,12 @@ python data_integrity_check.py    # Check database consistency
 python backfill_points_log.py     # Backfill historical points data
 ```
 
+### Performance Optimization ⭐ **NEW**
+```bash
+python optimize_images.py         # Optimize images and create WebP versions
+python minify_assets.py           # Minify CSS and JavaScript files
+```
+
 ## Key Features & Implementation Details
 
 ### Database Schema
@@ -98,6 +104,14 @@ python backfill_points_log.py     # Backfill historical points data
 - CSRF protection on forms
 - Rate limiting on routes
 - GDPR-compliant cookie consent system
+
+### Performance Optimization ⭐ **NEW**
+- **Flask-Compress**: Automatic gzip compression for all responses (HTML/CSS/JS)
+- **Static Asset Caching**: Browser caching headers for optimal performance
+- **Image Optimization**: WebP format with fallbacks, 1.4MB total savings
+- **Minification**: CSS and JavaScript minified for production (33.5KB saved)
+- **Async Loading**: Non-blocking script execution with defer/async attributes
+- **Modern Formats**: WebP images with automatic browser detection and PNG/JPG fallbacks
 
 ### SEO & Analytics Features ⭐ **NEW**
 - **Search Engine Optimization**: Comprehensive SEO implementation with meta tags, Open Graph, and structured data

@@ -20,8 +20,15 @@ static/
 ## Asset Organization
 
 ### `assets/` - Media Files ⭐ **ENHANCED**
-- **Images**: Application imagery and visual assets
-- **starry_sky.jpg**: Main background/header image for the space theme
+- **Images**: Application imagery and visual assets optimized for performance
+- **starry_sky.jpg/.webp**: Main background/header image for the space theme (41.9% size reduction)
+- **Screenshot Images**: Application feature screenshots with WebP optimization
+  - **ADDITIONAL_INSIGHTS.png/.webp**: (80.7% size reduction)
+  - **GOALS_OVERVIEW.png/.webp**: (89.2% size reduction) 
+  - **PROGRESS_OVERVIEW.png/.webp**: (90.5% size reduction)
+  - **DIARY_ENTRY.png/.webp**: (43.7% size reduction)
+  - **GRAPH_OVERVIEW.png/.webp**: (74.6% size reduction)
+  - **WORDCLOUD_OVERVIEW.png/.webp**: (52.3% size reduction)
 - **SEO Assets**: Favicon system and social media assets
   - **favicon.ico**: Main favicon (16x16 and 32x32 pixels)
   - **favicon-16x16.png**: Small favicon for browser tabs
@@ -29,7 +36,8 @@ static/
   - **apple-touch-icon.png**: Apple device home screen icon (180x180)
   - **social-preview.jpg**: Social media preview image (1200x630)
   - **site.webmanifest**: Web app manifest for PWA support
-- **Purpose**: Static media files served directly by Flask
+- **Performance**: WebP format with PNG/JPG fallbacks, total 1.4MB savings
+- **Purpose**: Static media files served directly by Flask with optimal caching
 
 ### `css/` - Feature-Organized Stylesheets
 
@@ -108,12 +116,14 @@ static/
 - **Feature prefixes**: Files grouped by application feature
 - **Descriptive names**: Clear indication of file purpose
 
-## Performance Considerations
+## Performance Considerations ⭐ **ENHANCED**
 
-- **Minification**: Production assets should be minified
-- **Compression**: Served with gzip compression
-- **Caching**: Appropriate cache headers for static files
-- **Loading**: JavaScript loaded at end of body for performance
+- **Minification**: Production assets are automatically minified (33.5KB saved)
+- **Compression**: Served with Flask-Compress gzip compression
+- **Caching**: Appropriate cache headers configured for static files
+- **Loading**: JavaScript loaded with async/defer for non-blocking execution
+- **Image Optimization**: WebP format with fallbacks, 1.4MB total savings
+- **Modern Formats**: Automatic WebP detection with browser compatibility
 
 ## Recent Frontend Improvements
 
@@ -127,10 +137,18 @@ static/
 - **Shared Components**: Common utilities in shared/ directories
 - **API Integration**: Frontend communicates with backend via API endpoints
 
+### Performance Enhancements ⭐ **NEW**
+- **WebP Image Support**: Modern image format with automatic browser detection
+- **Asset Minification**: CSS and JavaScript optimized for production
+- **Compression**: Flask-Compress for all static assets
+- **Caching Strategy**: Optimal browser caching for performance
+- **Loading Optimization**: Async/defer script loading patterns
+
 ## Development Workflow
 
 1. **CSS Changes**: Edit feature-specific CSS files in appropriate subdirectory
 2. **JavaScript**: Add new scripts to feature-based directories (goals/, progress/, shared/)
-3. **Images**: Add to assets/ with descriptive names
+3. **Images**: Add to assets/ with descriptive names, run optimize_images.py for WebP conversion
 4. **API Integration**: Use API blueprint endpoints for dynamic content
-5. **Testing**: Verify asset loading and feature functionality in development server
+5. **Asset Optimization**: Run minify_assets.py for production builds
+6. **Testing**: Verify asset loading and feature functionality in development server

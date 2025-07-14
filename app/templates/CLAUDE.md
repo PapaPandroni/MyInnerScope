@@ -40,6 +40,8 @@ templates/
   - **Analytics Integration**: Google Analytics 4 with GDPR compliance
   - **Favicon System**: Multi-format favicon support for all devices
   - **Canonical URLs**: Duplicate content prevention
+  - **Performance Optimization**: WebP detection, async/defer script loading
+  - **Compression Ready**: Works with Flask-Compress for optimal delivery
 
 #### `shared/_navbar.html` - Navigation Component
 - **Purpose**: Reusable navigation bar included in base template
@@ -52,8 +54,11 @@ templates/
 
 ### Feature-Organized Templates
 
-#### `main/` - Landing and Information Pages
-- **index.html**: Application landing page with tour system integration
+#### `main/` - Landing and Information Pages ⭐ **ENHANCED**
+- **index.html**: Application landing page with WebP image optimization and SEO enhancements
+  - **WebP Support**: Feature screenshots use WebP format with PNG fallbacks  
+  - **Performance**: Optimized background images with automatic format detection
+  - **SEO Ready**: Enhanced structured data and social media integration
 - **about.html**: Application description and feature overview
 - **donate.html**: Support and donation information
 
