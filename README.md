@@ -19,12 +19,14 @@ Weekly trend analysis
 Day-of-week performance patterns
 Top performing days with entry details
 Diary Reading: Chronological diary view with navigation between entries
-SEO & Analytics: ⭐ **NEW**
-Comprehensive search engine optimization with meta tags, Open Graph, and structured data
-Google Analytics 4 integration with GDPR-compliant cookie consent
+SEO & Analytics: ⭐ **ACTIVE**
+Comprehensive search engine optimization with keyword-rich titles and optimized meta descriptions
+Google Analytics 4 integration with GDPR-compliant cookie consent (live tracking)
+Google Search Console integration for performance monitoring
 Social media sharing optimization with Twitter Cards and Open Graph
 XML sitemap and robots.txt for search engine crawling
 Multi-format favicon system for all devices and platforms
+External authority links for E-A-T (Expertise, Authoritativeness, Trustworthiness) signals
 Technical Stack
 Backend: Flask, SQLAlchemy
 Database: SQLite
@@ -56,9 +58,20 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 Install dependencies:
 bash
 pip install -r requirements.txt
+Create a `.env` file for environment variables:
+```
+SECRET_KEY=your-secret-key-here
+DATABASE_URL=sqlite:///users.db
+FLASK_ENV=development
+
+# Optional: Analytics Integration
+GOOGLE_ANALYTICS_ID=your-google-analytics-id
+GOOGLE_SEARCH_CONSOLE_ID=your-search-console-id
+```
+
 Run the application:
 bash
-python app.py
+python run.py
 Open your browser to http://localhost:5000
 The SQLite database (users.db) will be created automatically on first run.
 
