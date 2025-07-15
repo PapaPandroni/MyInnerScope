@@ -6,19 +6,23 @@ This directory contains comprehensive tests for the My Inner Scope application.
 
 ```
 tests/
-├── __init__.py              # Makes tests a Python package
-├── conftest.py              # Test configuration and fixtures
-├── test_basic.py            # Basic functionality tests
-├── test_models/             # Database model tests
+├── __init__.py                      # Makes tests a Python package
+├── conftest.py                      # Test configuration and fixtures
+├── test_basic.py                    # Basic functionality tests
+├── test_seo.py                      # SEO implementation tests
+├── test_legal_compliance.py         # Legal document compliance tests
+├── test_analytics_integration.py    # Analytics infrastructure tests
+├── test_seo_integration_summary.py  # Core SEO/compliance summary tests
+├── test_models/                     # Database model tests
 │   ├── __init__.py
-│   └── test_user.py         # User model tests
-├── test_routes/             # Web route tests
+│   └── test_user.py                 # User model tests
+├── test_routes/                     # Web route tests
 │   ├── __init__.py
-│   └── test_auth.py         # Authentication route tests
-├── test_utils/              # Utility function tests
+│   └── test_auth.py                 # Authentication route tests
+├── test_utils/                      # Utility function tests
 │   ├── __init__.py
-│   └── test_goal_helpers.py # Goal helper function tests
-└── test_forms/              # Form validation tests
+│   └── test_goal_helpers.py         # Goal helper function tests
+└── test_forms/                      # Form validation tests
     └── __init__.py
 ```
 
@@ -39,6 +43,15 @@ python3 -m pytest tests/test_routes/ -v
 
 # Utility tests only
 python3 -m pytest tests/test_utils/ -v
+
+# SEO and compliance tests only
+python3 -m pytest tests/test_seo_integration_summary.py -v
+
+# All SEO-related tests
+python3 -m pytest tests/test_seo.py tests/test_legal_compliance.py tests/test_analytics_integration.py -v
+
+# Legal compliance tests only
+python3 -m pytest tests/test_legal_compliance.py -v
 ```
 
 ### Run with coverage:
@@ -67,6 +80,12 @@ python3 -m pytest tests/test_basic.py::test_app_creation -v
 - Test form validation and submission
 - Test user interface behavior
 
+### 4. **SEO & Compliance Tests** (`test_seo.py`, `test_legal_compliance.py`, `test_analytics_integration.py`)
+- Test SEO meta tags, structured data, robots.txt, sitemap.xml
+- Test legal document compliance and privacy disclosures
+- Test analytics infrastructure and GDPR compliance
+- Test favicon accessibility and social media integration
+
 ## 🔧 **Fixtures**
 
 The `conftest.py` file provides these fixtures:
@@ -86,6 +105,11 @@ Current test coverage includes:
 - ✅ User model operations
 - ✅ Basic route functionality
 - ✅ Authentication routes (partial)
+- ✅ SEO meta tags and structured data
+- ✅ robots.txt and sitemap.xml functionality
+- ✅ Legal document compliance
+- ✅ Analytics infrastructure and GDPR compliance
+- ✅ Favicon and social media integration
 
 ## 🎯 **Adding New Tests**
 
@@ -103,6 +127,12 @@ Current test coverage includes:
 1. Create `tests/test_utils/test_[util_name].py`
 2. Import utility functions directly
 3. Test with mock data
+
+### For SEO/Compliance:
+1. Add tests to existing SEO files or create new specific test files
+2. Use `client` fixture for HTTP requests to test pages
+3. Use BeautifulSoup for HTML parsing and validation
+4. Test both positive cases (elements present) and negative cases (security)
 
 ## 🔒 **Safety Features**
 
