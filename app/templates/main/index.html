@@ -1,8 +1,8 @@
 {% extends "shared/base.html" %}
 
-{% block title %}Personal Development App - Daily Reflection & Goal Setting | My Inner Scope{% endblock %}
+{% block title %}Daily Journaling & Self-Reflection App - Mindful Writing | My Inner Scope{% endblock %}
 
-{% block meta_description %}Personal development app for daily reflection, goal setting, and habit tracking. Discover patterns, track progress, and grow through mindful journaling.{% endblock %}
+{% block meta_description %}Daily journaling app for self-reflection and mindful writing. Discover thought patterns, track personal growth, and develop self-awareness through daily diary entries.{% endblock %}
 
 {% block structured_data %}
 <script type="application/ld+json">
@@ -10,7 +10,7 @@
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "name": "My Inner Scope",
-  "description": "Personal growth and self-reflection web application for tracking daily progress and achieving meaningful goals",
+  "description": "Daily journaling and self-reflection web application for mindful writing, pattern discovery, and personal growth through diary entries",
   "url": "{{ request.url_root }}",
   "applicationCategory": "HealthApplication",
   "operatingSystem": "Web",
@@ -24,13 +24,13 @@
     "priceCurrency": "USD"
   },
   "featureList": [
-    "Daily reflection and diary entries",
-    "Progress tracking with points and streaks",
-    "Goal setting and achievement tracking",
-    "Behavioral pattern analysis",
+    "Daily journaling and reflective writing",
+    "Thought pattern discovery and analysis",
+    "Personal growth tracking through writing",
+    "Behavioral insight development",
     "Interactive analytics dashboard",
-    "Word cloud visualization",
-    "Growth mindset development"
+    "Word cloud visualization of reflections",
+    "Self-awareness through mindful writing"
   ],
   "screenshot": "{{ url_for('static', filename='assets/social-preview.jpg', _external=True) }}",
   "aggregateRating": {

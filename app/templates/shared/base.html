@@ -7,8 +7,8 @@
     
     <!-- SEO Meta Tags -->
     <title>{% block title %}My Inner Scope{% endblock %}{% if self.title() != 'My Inner Scope' %} - My Inner Scope{% endif %}</title>
-    <meta name="description" content="{% block meta_description %}My Inner Scope - Transform your life through daily reflection and personal growth tracking. Track your progress, set meaningful goals, and develop positive habits with our self-reflection web application.{% endblock %}">
-    <meta name="keywords" content="{% block meta_keywords %}personal growth, self-reflection, diary, goal tracking, habit formation, mindfulness, personal development, life improvement, daily reflection, progress tracking{% endblock %}">
+    <meta name="description" content="{% block meta_description %}My Inner Scope - Transform your life through daily journaling and mindful self-reflection. Discover patterns in your thoughts, track personal growth, and develop self-awareness through daily writing.{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}personal growth, self-reflection, diary, journaling, daily writing, mindfulness, personal development, life improvement, self-awareness, thought patterns{% endblock %}">
     <meta name="author" content="My Inner Scope">
     <meta name="robots" content="{% block meta_robots %}index, follow{% endblock %}">
     
@@ -48,7 +48,7 @@
       "@context": "https://schema.org",
       "@type": "WebApplication",
       "name": "My Inner Scope",
-      "description": "Personal growth and self-reflection web application for tracking daily progress and achieving meaningful goals",
+      "description": "Personal growth and self-reflection web application for daily journaling, mindful writing, and discovering thought patterns",
       "url": "{{ request.url_root }}",
       "applicationCategory": "HealthApplication",
       "operatingSystem": "Web",

@@ -32,6 +32,9 @@ class Config:
     # Analytics
     GOOGLE_ANALYTICS_ID = os.environ.get("GOOGLE_ANALYTICS_ID")
     GOOGLE_SEARCH_CONSOLE_ID = os.environ.get("GOOGLE_SEARCH_CONSOLE_ID")
+    
+    # URL generation
+    PREFERRED_URL_SCHEME = 'https'
 
     # Performance optimization
     COMPRESS_MIMETYPES = [
