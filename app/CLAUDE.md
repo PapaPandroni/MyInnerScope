@@ -55,7 +55,7 @@ This Flask application follows the **Application Factory Pattern** with:
 
 ## Development Notes
 
-- **Environment configuration**: Uses `.env` file for secrets and database URLs
+- **Environment configuration**: Uses `.env` file for secrets, database URLs, and HTTPS URL scheme configuration
 - **Hot-reloading**: Development mode with automatic file change detection
 - **Database migrations**: Flask-Migrate with PostgreSQL/SQLite compatibility patterns
 - **Error handling**: Custom error pages (403, 404, 500) with user-friendly messages
@@ -71,6 +71,8 @@ This Flask application follows the **Application Factory Pattern** with:
 - **Frontend modularization**: Feature-based organization of templates and static assets
 - **User experience**: Interactive onboarding tour and clickable analytics
 - **Performance optimization**: Comprehensive performance enhancements (SEO, compression, image optimization)
-- **SEO infrastructure**: Complete search engine optimization with structured data
+- **SEO infrastructure**: Complete search engine optimization with structured data **REFOCUSED ON DAILY JOURNALING & SELF-REFLECTION**
 - **Analytics integration**: Google Analytics 4 and Search Console active via environment variables
 - **Authority linking**: External links to reputable sources for E-A-T signals
+- **SEO Strategy Update**: Comprehensive refocus from goal-setting to daily journaling, reflective writing, and mindful introspection
+- **HTTPS Configuration**: PREFERRED_URL_SCHEME=https for proper sitemap URL generation

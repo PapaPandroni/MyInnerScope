@@ -35,14 +35,15 @@ templates/
   - CSRF token meta tag for JavaScript/AJAX
   - Chart.js and feature-specific JavaScript includes
   - Mobile-responsive navigation
-  - **SEO Infrastructure**: Comprehensive meta tags, Open Graph, Twitter Cards
-  - **Structured Data**: JSON-LD schema markup with customizable blocks
+  - **SEO Infrastructure**: Comprehensive meta tags, Open Graph, Twitter Cards **REFOCUSED ON DAILY JOURNALING & SELF-REFLECTION**
+  - **Structured Data**: JSON-LD schema markup with customizable blocks **UPDATED TO EMPHASIZE JOURNALING FEATURES**
   - **Analytics Integration**: Google Analytics 4 with GDPR compliance (ACTIVE)
   - **Search Console**: Google Search Console integration for performance monitoring
   - **Favicon System**: Multi-format favicon support for all devices
   - **Canonical URLs**: Duplicate content prevention
   - **Performance Optimization**: WebP detection, async/defer script loading
   - **Compression Ready**: Works with Flask-Compress for optimal delivery
+  - **HTTPS Configuration**: PREFERRED_URL_SCHEME=https for proper sitemap URLs
 
 #### `shared/_navbar.html` - Navigation Component
 - **Purpose**: Reusable navigation bar included in base template
@@ -56,11 +57,11 @@ templates/
 ### Feature-Organized Templates
 
 #### `main/` - Landing and Information Pages ⭐ **ENHANCED**
-- **index.html**: Application landing page with WebP image optimization and SEO enhancements
+- **index.html**: Application landing page with WebP image optimization and SEO enhancements **REFOCUSED ON DAILY JOURNALING**
   - **WebP Support**: Feature screenshots use WebP format with PNG fallbacks  
   - **Performance**: Optimized background images with automatic format detection
-  - **SEO Optimized**: Keyword-rich title and 160-character meta description for search engines
-  - **Structured Data**: Enhanced JSON-LD markup for rich snippets
+  - **SEO Optimized**: Keyword-rich title and meta description **NOW EMPHASIZING DAILY JOURNALING & SELF-REFLECTION**
+  - **Structured Data**: Enhanced JSON-LD markup for rich snippets **UPDATED TO HIGHLIGHT JOURNALING FEATURES**
 - **about.html**: Application description and feature overview with authority links
   - **External Links**: High-quality outbound links to reputable sources (APA, Harvard Business Review, Psychology Today, Wikipedia)
   - **E-A-T Signals**: Authority links demonstrate expertise and trustworthiness
@@ -213,6 +214,13 @@ templates/
 - **API Integration**: AJAX-ready templates for dynamic content
 - **Points Integration**: Templates show detailed transaction history
 - **Mobile Optimization**: Improved responsive design patterns
+
+### Recent SEO Strategy Updates ⭐ **NEW**
+- **SEO Refocus**: All templates updated to emphasize daily journaling and self-reflection over goal-setting
+- **Meta Tag Updates**: Comprehensive update across base template, homepage, about page, and auth pages
+- **Keyword Strategy**: Shifted from goal-focused to journaling-focused keywords throughout all templates
+- **Positioning**: Templates now position app as daily journaling platform first, with goals as supporting feature
+- **HTTPS Integration**: Template URLs now use HTTPS scheme via PREFERRED_URL_SCHEME configuration
 
 ## Development Workflow
 

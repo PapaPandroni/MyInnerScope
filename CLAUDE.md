@@ -113,15 +113,30 @@ python minify_assets.py           # Minify CSS and JavaScript files
 - **Async Loading**: Non-blocking script execution with defer/async attributes
 - **Modern Formats**: WebP images with automatic browser detection and PNG/JPG fallbacks
 
-### SEO & Analytics Features ⭐ **FULLY ACTIVE**
-- **Search Engine Optimization**: ✅ **OPTIMIZED** - Complete SEO implementation with keyword-rich titles, optimized meta descriptions, and structured data
+### SEO & Analytics Features ⭐ **FULLY ACTIVE & RECENTLY OPTIMIZED**
+- **Search Engine Optimization**: ✅ **REFOCUSED** - Complete SEO implementation with keyword-rich titles, optimized meta descriptions, and structured data **NOW EMPHASIZING DAILY JOURNALING & SELF-REFLECTION**
 - **Google Analytics 4**: ✅ **ACTIVE** - Live analytics tracking with GDPR-compliant consent management via environment variables
 - **Google Search Console**: ✅ **CONFIGURED** - Search performance monitoring and sitemap management active
 - **Social Media Ready**: ✅ **VERIFIED** - Open Graph and Twitter Cards for enhanced social sharing with working preview images
-- **Search Engine Tools**: ✅ **VALIDATED** - robots.txt, XML sitemap, and canonical URLs all functioning correctly
+- **Search Engine Tools**: ✅ **VALIDATED** - robots.txt, XML sitemap, and canonical URLs all functioning correctly (HTTPS sitemap URL configured)
 - **Rich Snippets**: ✅ **TESTED** - Schema.org structured data (WebApplication, FAQ) for enhanced search results
 - **Favicon System**: ✅ **CONFIRMED** - Multi-format favicon support for all devices and platforms working perfectly
 - **Authority Links**: ✅ **IMPLEMENTED** - External links to reputable sources for E-A-T signals and user value
+
+## Recent SEO Strategy Changes ⭐ **NEW**
+
+### SEO Refocus: From Goals to Daily Journaling (Latest Update)
+- **Strategy Shift**: Comprehensive refocus from goal-setting to daily journaling and self-reflection as primary USP
+- **Meta Tag Updates**: All meta descriptions, titles, and keywords updated across:
+  - Base template (`shared/base.html`): Core meta tags and structured data
+  - Homepage (`main/index.html`): Title, description, and feature list reordered
+  - About page (`main/about.html`): Positioning as "daily journaling platform"
+  - Auth pages (`login.html`, `register.html`): Emphasis on "reflective writing journey"
+- **Keyword Strategy**: Replaced goal-focused terms with journaling-focused keywords:
+  - **Removed**: "goal tracking, goal setting, meaningful goals, achievement tracking"
+  - **Added**: "daily journaling, reflective writing, mindful introspection, thought patterns, self-awareness"
+- **Positioning**: App now positioned as daily journaling and self-reflection platform first, with goals as supporting feature
+- **HTTPS Configuration**: Added PREFERRED_URL_SCHEME=https for proper sitemap URL generation
 
 ## Configuration
 
@@ -135,6 +150,9 @@ FLASK_ENV=development            # or production
 # SEO & Analytics (Optional)
 GOOGLE_ANALYTICS_ID=G-XXXXXXXXXX    # Google Analytics 4 Measurement ID
 GOOGLE_SEARCH_CONSOLE_ID=your-id    # Google Search Console Property ID
+
+# URL Configuration for HTTPS
+PREFERRED_URL_SCHEME=https          # Ensures HTTPS URLs in sitemap and external links
 ```
 
 ### Database Configuration
@@ -210,20 +228,22 @@ Uses pytest with Flask-testing integration, coverage reporting, and custom marke
 - **Enum Conversion**: Handle both enum objects and string values in queries
 - **Database Agnostic**: All new features work with SQLite (dev) and PostgreSQL (prod)
 
-## SEO Implementation Details ⭐ **NEW**
+## SEO Implementation Details ⭐ **RECENTLY UPDATED**
 
 ### Search Engine Optimization
-- **Meta Tags**: Dynamic title, description, keywords, and robots directives
+- **Meta Tags**: Dynamic title, description, keywords, and robots directives **REFOCUSED ON DAILY JOURNALING & SELF-REFLECTION**
+- **SEO Strategy Update**: Comprehensive refocus from goal-setting to daily journaling, reflective writing, and mindful introspection as primary USP
 - **Open Graph**: Full Facebook, LinkedIn, and general social media sharing support
 - **Twitter Cards**: Enhanced Twitter sharing with large image cards
 - **Canonical URLs**: Prevent duplicate content issues with proper canonical tags
-- **Structured Data**: JSON-LD schema markup for WebApplication and FAQ types
+- **Structured Data**: JSON-LD schema markup for WebApplication and FAQ types **UPDATED TO EMPHASIZE JOURNALING FEATURES**
 
 ### Technical SEO
-- **robots.txt**: Located at `/robots.txt` - guides search engine crawlers
+- **robots.txt**: Located at `/robots.txt` - guides search engine crawlers **WITH HTTPS SITEMAP URL CONFIGURED**
 - **XML Sitemap**: Auto-generated at `/sitemap.xml` - includes all public pages with priorities
 - **Favicons**: Complete favicon system with multiple formats (ICO, PNG, Apple Touch)
 - **Web App Manifest**: PWA-ready manifest file for app installation
+- **HTTPS Configuration**: PREFERRED_URL_SCHEME=https ensures all external URLs use HTTPS protocol
 
 ### Analytics & Privacy
 - **Google Analytics 4**: Optional integration via environment variable
