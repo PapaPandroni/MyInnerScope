@@ -81,13 +81,15 @@ All routes are organized as Flask Blueprints for modularity and maintainability.
 - **Key Routes**:
   - `/` - Home page
   - `/about` - About page
+  - `/faq` - Frequently Asked Questions page ⭐ **NEW**
   - `/donate` - Donation page
   - `/robots.txt` - Search engine crawler guidance
   - `/sitemap.xml` - XML sitemap generation for search engines
 - **SEO Features**: 
-  - Dynamic sitemap generation with page priorities
+  - Dynamic sitemap generation with page priorities (includes FAQ)
   - Robots.txt with public/private area distinction
   - Search engine optimization support
+  - FAQ page with structured data for rich snippets
 
 #### `api.py` - API Blueprint (`api_bp`) ⭐ **NEW**
 - **Purpose**: RESTful API endpoints for frontend-backend communication

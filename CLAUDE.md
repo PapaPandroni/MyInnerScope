@@ -255,7 +255,8 @@ Uses pytest with Flask-testing integration, coverage reporting, and custom marke
 
 ### Page-Specific SEO
 - **Homepage**: Enhanced with WebApplication structured data and feature highlights
-- **About Page**: FAQ structured data for rich snippets
+- **About Page**: FAQ structured data for rich snippets, links to FAQ page
+- **FAQ Page**: Comprehensive FAQ with structured data, collapsible sections, and SEO optimization
 - **Legal Pages**: Privacy and terms pages properly optimized
 - **Auth Pages**: Login and registration pages with appropriate meta descriptions
 

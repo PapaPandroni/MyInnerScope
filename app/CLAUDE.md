@@ -76,3 +76,4 @@ This Flask application follows the **Application Factory Pattern** with:
 - **Authority linking**: External links to reputable sources for E-A-T signals
 - **SEO Strategy Update**: Comprehensive refocus from goal-setting to daily journaling, reflective writing, and mindful introspection
 - **HTTPS Configuration**: PREFERRED_URL_SCHEME=https for proper sitemap URL generation
+- **FAQ System**: Comprehensive FAQ page with structured data, accordion interface, and SEO optimization
