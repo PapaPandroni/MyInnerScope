@@ -1,0 +1,495 @@
+{% extends "shared/base.html" %}
+
+{% block title %}Frequently Asked Questions - My Inner Scope{% endblock %}
+
+{% block meta_description %}Get answers to common questions about My Inner Scope - daily journaling app for self-reflection. Learn about privacy, pricing, features, Valued Direction philosophy, and how to get started with mindful writing.{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why do you need my email address?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Your email address is used only for account creation and login. We need it to create your secure personal account and ensure only you can access your diary entries and personal data. We never share your email with third parties or send marketing emails."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does My Inner Scope cost?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "My Inner Scope is completely free to use. There are no subscription fees, premium features, or hidden costs. We believe personal growth tools should be accessible to everyone."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the purpose of My Inner Scope?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "My Inner Scope helps you develop self-awareness through daily journaling and reflection. By writing about your experiences and rating your behaviors, you can identify patterns, celebrate positive actions, and recognize opportunities for growth. It's designed to make self-reflection a consistent, engaging part of your daily routine."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is 'Valued Direction' (Värderad Riktning)?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Valued Direction is a core philosophy from Acceptance and Commitment Therapy. Unlike specific goals with finish lines, valued directions are ongoing aspirational paths like 'being a better parent' or 'living more kindly.' Every action moves you either closer to or further from your valued direction. This continuous evaluation helps guide meaningful personal growth."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is my data safe and private?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, your privacy is our top priority. Your diary entries and personal data are stored securely and never shared with third parties. You have full control over your data - you can download everything or permanently delete your account at any time. We only collect essential data needed for the app to function."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do points and streaks work?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Points help gamify your self-reflection journey. You earn points for diary entries (5 for positive behaviors, 2 for growth opportunities), daily logins, and achieving goals. Streaks track consecutive days of diary writing and unlock bonus points at milestones (7 days: +10 points, 30 days: +50 points). These elements encourage consistent reflection while celebrating your progress."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I export or delete my data?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Absolutely. You can download all your data (diary entries, goals, statistics) in JSON or CSV format from your settings page. If you want to leave, you can permanently delete your account and all associated data - this action is irreversible and removes everything from our systems."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I get started?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Getting started is simple: register with your email, write your first diary entry about your day, and rate it based on whether you're proud of your behavior or see it as an opportunity to grow. The app includes an interactive tour to guide you through all features, and you'll start earning points right away."
+      }
+    }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.faq-section {
+    margin-bottom: 2rem;
+}
+
+.faq-section h3 {
+    color: #00d4ff;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.accordion-button {
+    background-color: #2a2d3a;
+    color: #fff;
+    border: none;
+    font-weight: 500;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: #00d4ff;
+    color: #171A25;
+    box-shadow: none;
+}
+
+.accordion-button:focus {
+    border-color: #00d4ff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 212, 255, 0.25);
+}
+
+.accordion-body {
+    background-color: #1e2128;
+    color: #cce6ff;
+    border-top: 1px solid #00d4ff;
+}
+
+.accordion-item {
+    background-color: transparent;
+    border: 1px solid #444;
+    margin-bottom: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+.accordion-item:last-of-type .accordion-button.collapsed {
+    border-bottom-right-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+}
+
+.accordion-item:first-of-type .accordion-button {
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            <div class="card bg-dark text-white border-0 shadow">
+                <div class="card-body p-4">
+                    <h1 class="text-center mb-4">Frequently Asked Questions</h1>
+                    <hr class="bg-secondary">
+                    
+                    <p class="text-center mb-5" style="color: #cce6ff;">
+                        Have questions about My Inner Scope? Find answers to the most common questions below. 
+                        If you don't find what you're looking for, feel free to <a href="mailto:peremilsoderstrom2@hotmail.com" style="color: #00d4ff;">contact us</a>.
+                    </p>
+
+                    <!-- Getting Started Section -->
+                    <div class="faq-section">
+                        <h3>🚀 Getting Started</h3>
+                        <div class="accordion" id="gettingStartedAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gettingStarted1" aria-expanded="false">
+                                        How do I get started?
+                                    </button>
+                                </h2>
+                                <div id="gettingStarted1" class="accordion-collapse collapse" data-bs-parent="#gettingStartedAccordion">
+                                    <div class="accordion-body">
+                                        Getting started is simple:
+                                        <ol>
+                                            <li><strong>Register</strong> with your email address</li>
+                                            <li><strong>Write your first diary entry</strong> about your day</li>
+                                            <li><strong>Rate your behavior</strong> - choose "I'm Proud of This" for positive behaviors or "I'll Grow from This" for areas to improve</li>
+                                            <li><strong>Follow the interactive tour</strong> to discover all features</li>
+                                        </ol>
+                                        You'll start earning points immediately and can begin tracking your self-reflection journey!
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gettingStarted2" aria-expanded="false">
+                                        Why do you need my email address?
+                                    </button>
+                                </h2>
+                                <div id="gettingStarted2" class="accordion-collapse collapse" data-bs-parent="#gettingStartedAccordion">
+                                    <div class="accordion-body">
+                                        Your email address is used <strong>only</strong> for account creation and login. We need it to:
+                                        <ul>
+                                            <li>Create your secure personal account</li>
+                                            <li>Ensure only you can access your diary entries and personal data</li>
+                                            <li>Allow you to log in securely</li>
+                                        </ul>
+                                        <strong>We never:</strong> Share your email with third parties, send marketing emails, or use it for anything beyond authentication.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gettingStarted3" aria-expanded="false">
+                                        What does My Inner Scope cost?
+                                    </button>
+                                </h2>
+                                <div id="gettingStarted3" class="accordion-collapse collapse" data-bs-parent="#gettingStartedAccordion">
+                                    <div class="accordion-body">
+                                        <strong>My Inner Scope is completely free to use.</strong> There are no:
+                                        <ul>
+                                            <li>Subscription fees</li>
+                                            <li>Premium features locked behind paywalls</li>
+                                            <li>Hidden costs or charges</li>
+                                            <li>Ads or sponsored content</li>
+                                        </ul>
+                                        We believe personal growth tools should be accessible to everyone. If you find value in the app, you can optionally <a href="/donate" style="color: #00d4ff;">support development</a>, but it's never required.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Philosophy & Purpose Section -->
+                    <div class="faq-section">
+                        <h3>🎯 Philosophy & Purpose</h3>
+                        <div class="accordion" id="philosophyAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#philosophy1" aria-expanded="false">
+                                        What is the purpose of My Inner Scope?
+                                    </button>
+                                </h2>
+                                <div id="philosophy1" class="accordion-collapse collapse" data-bs-parent="#philosophyAccordion">
+                                    <div class="accordion-body">
+                                        My Inner Scope helps you develop <strong>self-awareness through daily journaling and reflection</strong>. The core purpose is to:
+                                        <ul>
+                                            <li><strong>Identify patterns</strong> in your thoughts and behaviors</li>
+                                            <li><strong>Celebrate positive actions</strong> and build on your strengths</li>
+                                            <li><strong>Recognize growth opportunities</strong> without self-judgment</li>
+                                            <li><strong>Make self-reflection a consistent habit</strong> through gamification</li>
+                                            <li><strong>Track your personal growth journey</strong> over time</li>
+                                        </ul>
+                                        Most people go through life on autopilot. This app helps you become more intentional about who you're becoming.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#philosophy2" aria-expanded="false">
+                                        What is "Valued Direction" (Värderad Riktning)?
+                                    </button>
+                                </h2>
+                                <div id="philosophy2" class="accordion-collapse collapse" data-bs-parent="#philosophyAccordion">
+                                    <div class="accordion-body">
+                                        <strong>Valued Direction</strong> is a core philosophy from <a href="https://www.psychologytoday.com/us/therapy-types/acceptance-and-commitment-therapy" target="_blank" rel="noopener noreferrer" style="color: #00d4ff;">Acceptance and Commitment Therapy</a>. Unlike specific goals with finish lines, valued directions are <strong>ongoing aspirational paths</strong>, such as:
+                                        <ul>
+                                            <li>"Being a better parent"</li>
+                                            <li>"Living more kindly"</li>
+                                            <li>"Becoming more self-aware"</li>
+                                            <li>"Acting with greater integrity"</li>
+                                        </ul>
+                                        There's no "completion" of such directions, but every action you take either moves you <strong>closer to or further from</strong> your valued direction. This continuous evaluation is the key mindset we aim to foster.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#philosophy3" aria-expanded="false">
+                                        How does daily journaling help with personal growth?
+                                    </button>
+                                </h2>
+                                <div id="philosophy3" class="accordion-collapse collapse" data-bs-parent="#philosophyAccordion">
+                                    <div class="accordion-body">
+                                        Daily journaling creates powerful benefits for personal growth:
+                                        <ul>
+                                            <li><strong>Pattern Recognition:</strong> Writing regularly helps you notice recurring thoughts and behaviors</li>
+                                            <li><strong>Emotional Processing:</strong> Putting experiences into words helps process emotions and gain clarity</li>
+                                            <li><strong>Self-Awareness:</strong> Regular reflection increases understanding of your motivations and reactions</li>
+                                            <li><strong>Progress Tracking:</strong> You can see how you've grown by looking back at earlier entries</li>
+                                            <li><strong>Mindful Living:</strong> Knowing you'll reflect on your day makes you more intentional about your choices</li>
+                                        </ul>
+                                        <a href="https://hbr.org/2017/03/why-you-should-make-time-for-self-reflection-even-if-you-hate-doing-it" target="_blank" rel="noopener noreferrer" style="color: #00d4ff;">Research shows</a> that self-reflection significantly improves decision-making and life satisfaction.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Privacy & Data Section -->
+                    <div class="faq-section">
+                        <h3>🔒 Privacy & Data</h3>
+                        <div class="accordion" id="privacyAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#privacy1" aria-expanded="false">
+                                        Is my data safe and private?
+                                    </button>
+                                </h2>
+                                <div id="privacy1" class="accordion-collapse collapse" data-bs-parent="#privacyAccordion">
+                                    <div class="accordion-body">
+                                        <strong>Yes, your privacy is our top priority.</strong> Here's how we protect your data:
+                                        <ul>
+                                            <li><strong>Secure Storage:</strong> All data is encrypted and stored securely</li>
+                                            <li><strong>No Third-Party Sharing:</strong> Your diary entries and personal data are never shared with anyone</li>
+                                            <li><strong>Minimal Data Collection:</strong> We only collect what's essential for the app to function</li>
+                                            <li><strong>Full Control:</strong> You can download or delete all your data at any time</li>
+                                            <li><strong>Optional Analytics:</strong> Usage analytics are anonymous and require your consent</li>
+                                        </ul>
+                                        Read our full <a href="/privacy" style="color: #00d4ff;">Privacy Policy</a> for complete details.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#privacy2" aria-expanded="false">
+                                        Can I export or delete my data?
+                                    </button>
+                                </h2>
+                                <div id="privacy2" class="accordion-collapse collapse" data-bs-parent="#privacyAccordion">
+                                    <div class="accordion-body">
+                                        <strong>Absolutely.</strong> You have full control over your data:
+                                        
+                                        <h6 class="mt-3 mb-2" style="color: #00d4ff;">Data Export:</h6>
+                                        <ul>
+                                            <li>Download all your data from your settings page</li>
+                                            <li>Available in JSON or CSV format</li>
+                                            <li>Includes diary entries, goals, statistics, and points history</li>
+                                            <li>Export anytime, as often as you want</li>
+                                        </ul>
+
+                                        <h6 class="mt-3 mb-2" style="color: #00d4ff;">Account Deletion:</h6>
+                                        <ul>
+                                            <li>Permanently delete your account from the settings page</li>
+                                            <li>This action is <strong>irreversible</strong></li>
+                                            <li>Removes <strong>all</strong> your data from our systems</li>
+                                            <li>No backups or traces remain after deletion</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Features & Technical Section -->
+                    <div class="faq-section">
+                        <h3>⚙️ Features & Technical</h3>
+                        <div class="accordion" id="featuresAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#features1" aria-expanded="false">
+                                        How do points and streaks work?
+                                    </button>
+                                </h2>
+                                <div id="features1" class="accordion-collapse collapse" data-bs-parent="#featuresAccordion">
+                                    <div class="accordion-body">
+                                        Points and streaks help <strong>gamify your self-reflection journey</strong>:
+
+                                        <h6 class="mt-3 mb-2" style="color: #00d4ff;">Points System:</h6>
+                                        <ul>
+                                            <li><strong>+5 points:</strong> "I'm Proud of This" diary entries</li>
+                                            <li><strong>+2 points:</strong> "I'll Grow from This" diary entries</li>
+                                            <li><strong>+10 points:</strong> Completing goals</li>
+                                            <li><strong>+1 point:</strong> Daily login bonus</li>
+                                            <li><strong>Milestone bonuses:</strong> Extra points for streak achievements</li>
+                                        </ul>
+
+                                        <h6 class="mt-3 mb-2" style="color: #00d4ff;">Streaks:</h6>
+                                        <ul>
+                                            <li>Track consecutive days of diary writing</li>
+                                            <li><strong>7-day milestone:</strong> +10 bonus points</li>
+                                            <li><strong>30-day milestone:</strong> +50 bonus points</li>
+                                            <li>Visible in your progress dashboard with detailed analytics</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#features2" aria-expanded="false">
+                                        What browsers are supported?
+                                    </button>
+                                </h2>
+                                <div id="features2" class="accordion-collapse collapse" data-bs-parent="#featuresAccordion">
+                                    <div class="accordion-body">
+                                        My Inner Scope works on all modern browsers:
+                                        <ul>
+                                            <li><strong>Desktop:</strong> Chrome, Firefox, Safari, Edge (latest versions)</li>
+                                            <li><strong>Mobile:</strong> Safari (iOS), Chrome (Android), Samsung Internet</li>
+                                            <li><strong>Responsive Design:</strong> Optimized for phones, tablets, and desktops</li>
+                                            <li><strong>Progressive Enhancement:</strong> Core features work even with JavaScript disabled</li>
+                                        </ul>
+                                        For the best experience, we recommend using an updated browser with JavaScript enabled.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#features3" aria-expanded="false">
+                                        What's the difference between this and regular journaling?
+                                    </button>
+                                </h2>
+                                <div id="features3" class="accordion-collapse collapse" data-bs-parent="#featuresAccordion">
+                                    <div class="accordion-body">
+                                        While traditional journaling is valuable, My Inner Scope adds <strong>structure and motivation</strong>:
+
+                                        <h6 class="mt-3 mb-2" style="color: #00d4ff;">Enhanced Features:</h6>
+                                        <ul>
+                                            <li><strong>Behavioral Rating:</strong> Categorize experiences as proud moments or growth opportunities</li>
+                                            <li><strong>Progress Tracking:</strong> Visual analytics show your growth over time</li>
+                                            <li><strong>Gamification:</strong> Points and streaks encourage consistent reflection</li>
+                                            <li><strong>Daily Prompts:</strong> Rotating reflection questions provide inspiration</li>
+                                            <li><strong>Search & Analysis:</strong> Find patterns in your thoughts and experiences</li>
+                                            <li><strong>Goal Integration:</strong> Connect journaling with personal development goals</li>
+                                        </ul>
+
+                                        <h6 class="mt-3 mb-2" style="color: #00d4ff;">Benefits:</h6>
+                                        <ul>
+                                            <li>Makes reflection more engaging and habit-forming</li>
+                                            <li>Provides structure for those new to journaling</li>
+                                            <li>Offers insights through data visualization</li>
+                                            <li>Encourages growth-focused thinking</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Support Section -->
+                    <div class="faq-section">
+                        <h3>💬 Support & Contact</h3>
+                        <div class="accordion" id="supportAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#support1" aria-expanded="false">
+                                        How do I contact support?
+                                    </button>
+                                </h2>
+                                <div id="support1" class="accordion-collapse collapse" data-bs-parent="#supportAccordion">
+                                    <div class="accordion-body">
+                                        We're here to help! Here are the best ways to reach us:
+                                        <ul>
+                                            <li><strong>Email:</strong> <a href="mailto:peremilsoderstrom2@hotmail.com" style="color: #00d4ff;">peremilsoderstrom2@hotmail.com</a></li>
+                                            <li><strong>Response Time:</strong> We typically respond within 24-48 hours</li>
+                                            <li><strong>What to Include:</strong> Describe your issue clearly and include any error messages</li>
+                                        </ul>
+                                        
+                                        <h6 class="mt-3 mb-2" style="color: #00d4ff;">Before contacting support:</h6>
+                                        <ul>
+                                            <li>Check this FAQ for answers to common questions</li>
+                                            <li>Try refreshing the page or clearing your browser cache</li>
+                                            <li>Make sure you're using a supported browser</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#support2" aria-expanded="false">
+                                        Can I request new features?
+                                    </button>
+                                </h2>
+                                <div id="support2" class="accordion-collapse collapse" data-bs-parent="#supportAccordion">
+                                    <div class="accordion-body">
+                                        <strong>Absolutely!</strong> We love hearing from users about how to improve My Inner Scope:
+                                        <ul>
+                                            <li><strong>Email your ideas</strong> to <a href="mailto:peremilsoderstrom2@hotmail.com" style="color: #00d4ff;">peremilsoderstrom2@hotmail.com</a></li>
+                                            <li><strong>Be specific:</strong> Describe the feature and how it would help your self-reflection journey</li>
+                                            <li><strong>We read everything:</strong> Every suggestion is considered, though we can't implement them all</li>
+                                            <li><strong>Community-driven:</strong> Features that help the most users get priority</li>
+                                        </ul>
+                                        Your feedback helps shape the future of My Inner Scope!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="bg-secondary mt-5">
+                    <div class="text-center">
+                        <p style="color: #cce6ff;">
+                            Still have questions? <a href="mailto:peremilsoderstrom2@hotmail.com" style="color: #00d4ff;">Get in touch</a> and we'll be happy to help!
+                        </p>
+                        <p class="text-center small mt-3">
+                            <a href="/about" style="color: #00d4ff;">Learn more about My Inner Scope</a> | 
+                            <a href="/privacy" style="color: #00d4ff;">Privacy Policy</a> | 
+                            <a href="/terms" style="color: #00d4ff;">Terms of Service</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

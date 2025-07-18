@@ -19,6 +19,11 @@ def about() -> str:
     return render_template("main/about.html")
 
 
+@main_bp.route("/faq")
+def faq() -> str:
+    return render_template("main/faq.html")
+
+
 @main_bp.route("/robots.txt")
 def robots_txt() -> Response:
     """Serve robots.txt file for search engine crawlers."""
@@ -69,6 +74,12 @@ def sitemap_xml() -> Response:
             'lastmod': current_date,
             'changefreq': 'monthly',
             'priority': '0.8'
+        },
+        {
+            'url': url_for('main.faq', _external=True),
+            'lastmod': current_date,
+            'changefreq': 'monthly',
+            'priority': '0.7'
         },
         {
             'url': url_for('legal.privacy', _external=True),
