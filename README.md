@@ -28,11 +28,13 @@ XML sitemap and robots.txt for search engine crawling
 Multi-format favicon system for all devices and platforms
 External authority links for E-A-T (Expertise, Authoritativeness, Trustworthiness) signals
 Technical Stack
-Backend: Flask, SQLAlchemy
-Database: SQLite
-Frontend: Bootstrap 5, Chart.js
-Authentication: Werkzeug password hashing
-Visualization: Chart.js with Luxon for time handling
+Backend: Flask with application factory pattern, SQLAlchemy ORM, Flask-Migrate
+Database: SQLite (development), PostgreSQL (production)
+Frontend: Bootstrap 5, Chart.js for visualizations, wordcloud2.js
+Authentication: Werkzeug password hashing with session-based auth
+Security: Flask-WTF CSRF protection, Flask-Limiter rate limiting
+Testing: Pytest with Flask-testing integration and coverage reporting
+Deployment: Gunicorn WSGI server with Railway/Heroku support
 Installation & Setup
 Requirements
 Python 3.x

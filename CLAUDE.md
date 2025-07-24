@@ -8,6 +8,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Core Architecture
 
+### Technology Stack
+- **Backend Framework**: Flask with application factory pattern
+- **Database ORM**: SQLAlchemy with Flask-Migrate for schema management
+- **Form Handling**: Flask-WTF with CSRF protection
+- **Authentication**: Werkzeug password hashing with session-based auth
+- **Security**: Flask-Limiter for rate limiting, comprehensive input validation
+- **Frontend**: Bootstrap 5, Chart.js for visualizations, wordcloud2.js
+- **Testing**: Pytest with Flask-testing integration, coverage reporting
+- **Deployment**: Gunicorn WSGI server with Nixpacks configuration
+
 ### Application Structure
 - **Flask Application Factory**: `app/__init__.py` uses `create_app()` factory pattern
 - **Configuration**: Environment-based config in `app/config.py` (development/production/testing)
@@ -102,16 +112,28 @@ python minify_assets.py           # Minify CSS and JavaScript files
 - Session security (secure, httponly, samesite cookies)
 - Input validation and sanitization
 - CSRF protection on forms
-- Rate limiting on routes
+- Rate limiting on routes (200/day, 50/hour applied to all sensitive blueprints)
 - GDPR-compliant cookie consent system
 
-### Performance Optimization ⭐ **NEW**
-- **Flask-Compress**: Automatic gzip compression for all responses (HTML/CSS/JS)
-- **Static Asset Caching**: Browser caching headers for optimal performance
-- **Image Optimization**: WebP format with fallbacks, 1.4MB total savings
-- **Minification**: CSS and JavaScript minified for production (33.5KB saved)
-- **Async Loading**: Non-blocking script execution with defer/async attributes
-- **Modern Formats**: WebP images with automatic browser detection and PNG/JPG fallbacks
+### Security Audit Results ⭐ **COMPLETED JULY 2025**
+- **Dependency Vulnerabilities**: All resolved - upgraded `gunicorn` from 21.2.0 to 22.0.0 (CVE-2024-1135, CVE-2024-6827)
+- **Package Security**: Redis dependency pinned to version 5.0.7 for vulnerability prevention
+- **Production Security**: Confirmed secure configuration with proper host binding disabled in production
+- **Development Utilities**: Removed vulnerable development scripts from version control
+- **Static Analysis**: Comprehensive bandit scan completed with all critical issues addressed
+- **Testing Security**: Test environment isolated with appropriate security boundaries
+
+### Performance Optimization ⭐ **COMPLETED**
+- **Flask-Compress**: Automatic gzip compression for all responses (HTML/CSS/JS) with optimized compression level (6) and 500-byte minimum size
+- **Static Asset Caching**: Browser caching headers for optimal performance via Flask configuration
+- **Image Optimization**: WebP format with fallbacks achieving **1.4MB total savings (70% average reduction)**
+  - Individual savings: ADDITIONAL_INSIGHTS (80.7%), GOALS_OVERVIEW (89.2%), PROGRESS_OVERVIEW (90.5%), starry_sky (41.9%)
+  - Automatic browser detection with progressive enhancement and PNG/JPG fallbacks
+- **Minification**: CSS and JavaScript minified for production with **33.5KB savings (39.2% reduction)**
+  - Source maps included for debugging purposes
+- **Async Loading**: Non-blocking script execution with defer/async attributes in base.html
+- **Modern Format Support**: JavaScript-based WebP detection with .webp CSS class and `<picture>` elements
+- **SEO Benefits**: Improved Core Web Vitals, PageSpeed scores, and mobile performance ratings
 
 ### SEO & Analytics Features ⭐ **FULLY ACTIVE & RECENTLY OPTIMIZED**
 - **Search Engine Optimization**: ✅ **REFOCUSED** - Complete SEO implementation with keyword-rich titles, optimized meta descriptions, and structured data **NOW EMPHASIZING DAILY JOURNALING & SELF-REFLECTION**
@@ -269,3 +291,21 @@ Uses pytest with Flask-testing integration, coverage reporting, and custom marke
 - **Google Search Console**: Infrastructure ready for property verification
 - **Analytics Dashboard**: Track organic traffic, search queries, and user behavior
 - **Performance Monitoring**: Core Web Vitals integration with Google Analytics
+
+### SEO Setup & Troubleshooting Guide
+**Required Setup Steps:**
+1. **Replace Placeholder Assets**: favicon.ico, favicon-16x16.png, favicon-32x32.png, apple-touch-icon.png, social-preview.jpg
+2. **Google Analytics**: Add GOOGLE_ANALYTICS_ID to .env (format: G-XXXXXXXXXX)
+3. **Search Console**: Submit sitemap at https://yourdomain.com/sitemap.xml
+
+**Performance Timeline:**
+- 1-2 weeks: Search engine discovery and indexing
+- 2-4 weeks: Initial branded search rankings  
+- 1-3 months: Measurable organic traffic growth
+- 3-6 months: 40-60% increase in search visibility
+
+**Testing Tools:**
+- Facebook Sharing Debugger for Open Graph validation
+- Twitter Card Validator for Twitter Cards setup
+- Google Rich Results Test for structured data
+- PageSpeed Insights for Core Web Vitals monitoring
