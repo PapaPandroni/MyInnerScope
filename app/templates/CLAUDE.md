@@ -56,12 +56,17 @@ templates/
 
 ### Feature-Organized Templates
 
-#### `main/` - Landing and Information Pages ⭐ **ENHANCED**
+#### `main/` - Landing and Information Pages ⭐ **RECENTLY ENHANCED**
 - **index.html**: Application landing page with WebP image optimization and SEO enhancements **REFOCUSED ON DAILY JOURNALING**
   - **WebP Support**: Feature screenshots use WebP format with PNG fallbacks  
   - **Performance**: Optimized background images with automatic format detection
   - **SEO Optimized**: Keyword-rich title and meta description **NOW EMPHASIZING DAILY JOURNALING & SELF-REFLECTION**
   - **Structured Data**: Enhanced JSON-LD markup for rich snippets **UPDATED TO HIGHLIGHT JOURNALING FEATURES**
+  - **"How It Works" Section**: ⭐ **NEW** - Process-focused bridge between hero and features with cosmic-themed 3-step flow
+    - Elegant horizontal layout with connecting arrows and hover animations
+    - Emotionally resonant copy: "Pause and reflect" → "Notice patterns" → "Watch growth emerge"
+    - Responsive design with enhanced visual presence (100px icons, enhanced shadows)
+    - Maintains cosmic aesthetic while improving user comprehension of the process
 - **about.html**: Application description and feature overview with authority links
   - **External Links**: High-quality outbound links to reputable sources (APA, Harvard Business Review, Psychology Today, Wikipedia)
   - **E-A-T Signals**: Authority links demonstrate expertise and trustworthiness
